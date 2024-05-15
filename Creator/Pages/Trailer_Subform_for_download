@@ -1,0 +1,408 @@
+<%{
+	%>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+	</head>
+	<body>
+	<style>
+	h4{
+	margin-bottom:3px;
+	margin-top:3px;
+	}
+	</style>
+<%
+	getTrailerqoute = TrailerQuote[ID == input.recID];
+	if(getTrailerqoute.count() > 0)
+	{
+		%>
+<div class="container-fluid">
+<div class="row" style="padding-top:2%;">
+<div class = "col"style= "margin-left:30px">
+<img align="left" style="width: 20%;padding: 0;" src="https://previewengine-accl.zoho.com/image/WD/rnhg746db378696bc41c7851cb4cefe42823c?version=1.0&width=2046&height=1536" alt="logo">
+<h2 style = "font-size: 15px; text-align:center;padding-top:5%"><b>RECREATIONAL/FIFTH WHEEL TRAILER <br>APPLICATION</b></h2>
+</div>
+</div>
+<h4 style = "background-color:#8ADAB2;margin-left:30px;margin-right:30px;padding:10px;font-size: 13px;">Trailer Information - <%=getTrailerqoute.Quote_ID%> - Trailer - <%=getTrailerqoute.Deal_Type%> </h4>
+<br>
+<h6 style= "background-color:#dbd7d2;margin-left:30px;margin-right:30px;padding:10px;font-size: 12px;"><b>BROKER AND INSURER NAME AND ADDRESS</b></h6>     	    
+<div class="row"style="margin-top:1%;margin-left:20px;margin-right:20px">
+<div class = "col" style="padding-top:1%;">
+<div class="row">
+<div class="col" >
+<p style = "font-size: 12px;"><%=getTrailerqoute.Insured_First_Name%>  <%=getTrailerqoute.Insured_Last_Name%>,<br>
+<%=getTrailerqoute.Address%>,
+<%=getTrailerqoute.City%>,
+<%=getTrailerqoute.Province%>,
+<%=getTrailerqoute.Postal_code_ZIP_Code%><br>
+<b>Email</b> <%=getTrailerqoute.Email%><br>
+<b>Phone</b> <%=getTrailerqoute.Phone_Number.toString().remove("+")%></p>
+</div>
+</div>
+</div>
+<div class = "col"style="padding-top:1%;">
+<div class="row">
+<div class="col">
+<p  style = "font-size: 12px;">Underwritten by Four Points Insurance Company Ltd.
+A Subsidiary of the Mutual Fire Insurance Company of British,
+Columbia 9366 200A Street<br>
+Langley, BC V1M 4B3 Canada<br>
+<b>Phone:</b> 866 417 2272 <br></p>
+</div>
+</div>
+</div>
+</div>	
+<h6 style= "background-color:#dbd7d2;margin-left:30px;margin-right:30px;padding:10px;font-size: 12px;"><b>POLICY PERIOD INFORMATION</b></h6>     	
+<div class="row"style="margin-top:1%;margin-left:30px;margin-right:30px">
+<div class = "col" style="padding-top:1%;">
+<div class="row">
+<P  style = "font-size: 12px;"><b>From:</b> (MM/DD/YYYY) <%=getTrailerqoute.Inception_Date.toString("MM/dd/yyyy")%></p>
+</div>
+</div>
+<div class = "col"style="padding-top:1%;">
+<div class="row">
+<p  style = "font-size: 12px;"><b>To: </b> (MM/DD/YYYY) <%=getTrailerqoute.Expiry_Date.toString("MM/dd/yyyy")%></p>
+</div>
+</div>		
+</div>
+<h6 style= "background-color:#dbd7d2;margin-left:30px;margin-right:30px;padding:10px;font-size: 12px;"><b>APPLICANT INFORMATION</b></h6>     	
+<div class="row"style="margin-top:1%;margin-left:30px;margin-right:30px">
+<div class = "col" style="padding-top:1%;">
+<div class="row">
+<div class="col">
+<p style = "font-size: 12px;">
+<b>First Name 1:</b> <%=getTrailerqoute.Customer_ID.First_Name%> ,<br>
+<b>Address:</b> <%=getTrailerqoute.Customer_ID.Address_Line1%>  <%=getTrailerqoute.Customer_ID.Address_Line2%>,<br>
+<b>City:</b> <%=getTrailerqoute.Customer_ID.City%>,<br>
+<b>Phone:</b><%=getTrailerqoute.Customer_ID.Phone_Number%>
+</p>
+</div>
+</div>
+</div>
+<div class = "col"style="padding-top:1%;">
+<div class="row">
+<div class="col">
+<p style = "font-size: 12px;">
+	<b>Last Name 1:</b> <%=getTrailerqoute.Customer_ID.Last_Name%>,<br>
+	<b>Province:</b> <%=getTrailerqoute.Customer_ID.Province%>,<br>
+	<b>Email Address:</b> <%=getTrailerqoute.Customer_ID.Email%>,<br>
+</p>
+</div>
+<div class="col">
+	<p style = "font-size: 12px;"><b>Postal Code:</b> <%=getTrailerqoute.Customer_ID.Postal_Code%></p>
+</div>
+</div>
+</div>	
+</div>
+<%
+		count = 0;
+		for each  rec in getTrailerqoute.Trailer
+		{
+			count = count + 1;
+			%>
+<h4 style = "background-color:#5C8374;margin-left:30px;margin-right:30px;padding:10px;font-size: 13px;"> <%=count%>.TRAILER DETAILS - <%=rec.Select_Trailer_Type%> </h4>
+<br>
+<h6 style= "background-color:#dbd7d2;margin-left:30px;margin-right:30px;padding:10px;font-size: 12px;"><b>PARK NAME AND ADDRESS (if applicable)</b></h6>     	
+<div class="row"style="margin-top:1%;margin-left:30px;margin-right:30px">
+<div class = "col" style="padding-top:1%;">
+<div class="row">
+<div class="col">
+<p style = "font-size: 12px;"><b>Is the unit permanently parked?</b> <%=rec.Is_the_trailer_permanently_or_seasonally_parked_at_an_accredited_campground%></p>
+<p><b>Park Name:</b> <%=rec.Park_Name%><br>
+<b>Address:</b> <%=rec.Address_Lines1%><br>
+<b>City:</b> <%=rec.City%>
+<br></p>
+</div>
+</div>
+</div>
+<div class = "col"style="padding-top:1%;">
+<div class="row">
+<div class="col">
+<p style = "font-size: 12px;">
+<b>Province:</b> <%=rec.Province%><br>
+<b>Site:</b> <%=rec.Site_Number%>
+</p>
+</div>
+<div class="col">
+<p style = "font-size: 12px;"><b>Postal Code:</b> <%=getTrailerqoute.Customer_ID.Postal_Code%></p>
+</div>
+</div>
+</div>	
+</div>
+<h6 style= "background-color:#dbd7d2;margin-left:30px;margin-right:30px;padding:10px;font-size: 12px;"><b>TRAILER DETAILS</b></h6>     	
+<div class="row"style="margin-top:1%;margin-left:30px;margin-right:30px">
+<div class = "col" style="padding-top:1%;">
+<div class="row">
+<p style = "font-size: 12px;">
+<b>Trailer Type:</b><%=rec.Select_Trailer_Type%><br>
+<b>Manufacturer:</b><%=rec.Trailer_Manufacturer%><br>
+<b>Serial/VIN #: </b> <%=rec.VIN%><br>
+<b>Purchase Price: </b> <%=rec.Actual_Cash_Value%>
+<br></p>
+</div>
+</div>
+<div class = "col"style="padding-top:1%;">
+<p style = "font-size: 12px;"><b>Year Built:</b> <%=rec.Trailer_Model_Year%><br>
+<b>Model:</b> <%=rec.Trailer_Model%><br>
+<b>Replacement Cost:</b> <%=rec.Replacement_Cost%><br>
+</p>
+</div>
+<div class="col" style="padding-top:1%;">
+<p style = "font-size: 12px;"><b> Length:</b> <%=rec.Trailer_Length.round(0)%>
+</p>
+</div>
+</div>
+<hr style="margin-left:30px;margin-right:30px;">
+<div class="row"style="margin-top:1%;margin-left:30px;margin-right:30px">
+<div class = "col" style="padding-top:1%;">
+<div class="row">
+<p style = "font-size: 12px;"><b>Address:</b><%=rec.Address_line1%> <%=rec.Address_line2%>,<br>
+<b>City: </b> <%=rec.City%>,<br>
+</p>
+</div>
+</div>
+<div class = "col"style="padding-top:1%;">
+<div class="row">
+<p style = "font-size: 12px;"><b>
+Country:</b> <%=rec.Country%><br>
+<b>Province:</b> <%=rec.Province1%></b></p>
+</div>
+</div>
+<div class="col" style="padding-top:1%;">
+<p style = "font-size: 12px;"><b> Postal/Zip Code:</b> <%=rec.Postal_Code%>
+</p>
+</div>
+
+</div>
+<h6 style= "background-color:#dbd7d2;margin-left:30px;margin-right:30px;padding:10px;font-size: 12px"><b>ADDITIONAL INFORMATION</b></h6>     	
+<div class="row"style="margin-top:1%;margin-left:30px;margin-right:30px">
+<div class = "col" style="padding-top:1%;">
+<div class="row">
+
+<p style = "font-size: 12px;"><b> Is the unit used strictly for pleasure purposes with no rental or business use of any kind?:</b>  <%=rec.Is_the_unit_used_strictly_for_pleasure_purposes_with_no_rental_or_business_use_of_any_kind%><br></p>
+<p style = "font-size: 12px;"><b> Is there any heating that wasn't factory installed? (wood stove, pellet stove, etc.)</b> <%=rec.Is_there_any_heating_that_wasn_t_factory_installed_wood_stove_pellet_stove_etc%> <br></p>
+<p style = "font-size: 12px;"><b> Is this a dual purpose trailer? (toy hauler/horse trailer)</b> <%=rec.Is_this_a_dual_purpose_trailer_toy_hauler_horse_trailer%><br></p>
+			<p style = "font-size: 12px;"><b> Would you like to insure a golf cart?:</b><%=rec.Would_you_like_to_insure_a_golf_cart%><br></p>
+			<p style = "font-size: 12px;"><b> Is your trailer parked within 50 feet of a body of water?:</b>  <%=rec.Is_your_trailer_parked_within_500_feet_of_a_body_of_water%><br></p>
+
+	<p style = "font-size: 12px;"><b> Are you the original owner of the trailer?:</b> <%=rec.Are_you_the_original_owner_of_the_trailer%><br></p>
+<%
+			//-----------------Additional Information newly added fields------------------
+			%>
+<p style = "font-size: 12px;"><b>Do you live in the trailer full time, all year round as a principal residence?:</b><%=rec.Do_you_live_in_the_trailer_full_time_all_year_round_as_a_principal_residence%><br></p>
+<p style = "font-size: 12px;"><b>Are there any modifications to the trailer? (ie. Addition of permanently installed solar panels):</b>  <%=rec.Are_there_any_modifications_to_the_trailer_ie_Addition_of_permanently_installed_solar_panels%><br></p>
+<p style = "font-size: 12px;"><b>Are the solar panels factory/dealer installed?:</b> <%=rec.Are_the_solar_panels_factory_dealer_installed%><br></p>
+<p style = "font-size: 12px;"><b>Is there any pre-existing damage on the trailer?:</b> <%=rec.Is_there_any_pre_existing_damage_on_the_trailer%> <br></p>
+<p style = "font-size: 12px;"><b>This insurance policy does not cover aftermarket solar panels or any damage arising from the installation or use of such solar panels on the trailer. Would you like to proceed?:</b> <%=rec.This_insurance_policy_does_not_cover_aftermarket_solar_panels_or_any_damage_arising_from_the_insta%><br></p>
+<p style = "font-size: 12px;"><b>Is the trailer motorized and able to travel on its own without a towing vehicle:</b>  <%=rec.Is_the_trailer_motorized_and_able_to_travel_on_its_own_without_a_towing_vehicle%><br></p>
+<p style = "font-size: 12px;"><b>
+<%
+			if(rec.Non_Domestic_Address != null)
+			{
+				%>
+<b>Non-Domestic Address:</b> <%=rec.Non_Domestic_Address%><br>
+<%
+			}
+			if(rec.Non_Domestic_Address != null)
+			{
+				%>
+<b>Please add details on interior upgrades: </b><%=rec.Please_add_details_on_interior_upgrades%><br>
+<%
+			}
+			if(rec.Describe_Damage != "")
+			{
+				%>
+<b>Describe Damage: </b><%=rec.Describe_Damage%></b>
+<%
+			}
+			if(rec.Describe_modifications != null)
+			{
+				%>
+<b>Describe modifications: </b><%=rec.Describe_modifications%></b></p>
+<%
+			}
+			%>
+</div>
+</div>
+</div>	
+<h6 style= "background-color:#dbd7d2;margin-left:30px;margin-right:30px;padding:10px;font-size: 12px"><b>Leinholder</b></h6>     	
+<div class="row"style="margin-top:1%;margin-left:30px;margin-right:30px">
+<div class = "col" style="padding-top:1%;">
+<div class="row">
+<%
+			if(rec.Is_this_trailer_financed == "Yes")
+			{
+				%>
+<p style = "font-size: 12px;"><b><input type="checkbox" checked  disabled> Is this trailer financed</b></p>
+<%
+			}
+			else
+			{
+				%>
+<p style = "font-size: 12px;"><b><input type="checkbox"  disabled> Is this trailer financed</b></p>
+<%
+			}
+			%>
+<p style = "font-size: 12px;"><b>
+Lein holder: </b> <%=rec.Lein_holder.Name_of_Financier%><br>
+<b>Name of Financier : </b> <%=rec.Name_of_Financier%><br>
+<b>Address line1 : </b> <%=rec.Address_line1%><br>
+<b>Address line2 : </b> <%=rec.Address_line2%><br>
+<b>City : </b> <%=rec.City1%><br>
+<b>Province : </b> <%=rec.Province1%><br>
+<b>Postal Code : </b> <%=rec.Postal_Code%><br>
+<b>Country : </b> <%=rec.Country%>
+</p>
+</div>
+</div>
+</div>	
+<h6 style= "background-color:#dbd7d2;margin-left:30px;margin-right:30px;padding:10px;font-size: 12px"><b>Trailer Specs</b></h6>     	
+<div class="row"style="margin-top:1%;margin-left:30px;margin-right:30px">
+<div class = "col" style="padding-top:1%;">
+<div class="row">
+<p style = "font-size: 12px;">
+<b>Trailer Manufacturer:</b>  <%=rec.Trailer_Manufacturer%><br>
+<b>Trailer Width:</b>  <%=rec.Trailer_Width%><br>
+<b> Deck Length(ft):</b> <%=rec.Trailer_Width%> <br>
+<b> Deck Width(ft): </b>  <%=rec.Deck_Width%> <br>
+<b>Screened in room or Florida room Length(ft) : </b>  <%=rec.Screened_in_room_or_Florida_room_Length%> <br>
+<b>Screened in room or Florida room Width(ft) : </b>  <%=rec.Screened_in_room_or_Florida_room_Width%> <br>
+<b>Hard Awning Length(ft) : </b>  <%=rec.Hard_Awning_Length%> <br>
+<b>Hard Awning Width(ft) : </b>  <%=rec.Hard_Awning_Width%> <br>
+</p>
+</div>
+</div>
+</div>	
+
+<h6 style= "background-color:#dbd7d2;margin-left:30px;margin-right:30px;padding:10px;font-size: 12px"><b>PAYMENT INFORMATION AND PREMIUM SUMMARY</b></h6>     	
+<div class="row"style="margin-top:1%;margin-left:30px;margin-right:30px">
+<div class = "col" style="padding-top:1%;">
+<div class="row">
+<p style = "font-size: 12px;">
+<b>Risk Type:</b> <%=rec.Coverage_Type%> - <%=rec.Select_coverage_for_policy%><br>
+<b>Deductible:</b> <%=rec.Deductible%><br>
+<b>Liability:</b> <%=rec.Premises_Liability%><br>
+</p>
+</div>
+</div>
+</div>
+<div class="row"style="margin-top:1%;margin-left:30px;margin-right:30px">
+<div class = "col" style="padding-top:1%;">
+<div class="row">
+<p style = "font-size: 12px;">
+<b>Trailer Value:</b> All Risk - Replacement Value<br>
+<b>Detached Private Structures:</b> $<%=rec.Detached_Private_Structure_Coverage_Sheds_etc%><br>
+<b>Personal Property:</b> $<%=rec.Personal_Property_Coverage_T_V_Furniture_etc%><br>
+<%
+			// 			if(rec.Ol_Water_Protection_Prem == null)
+			// 			{
+			%>
+<b>Overland Water Protection:</b> Included<br>
+<%
+			// 			}
+			// 			if(rec.Golf_Prem_Base == null)
+			// 			{
+			if(rec.Would_you_like_to_insure_a_golf_cart == "Yes")
+			{
+				%>
+<b>Golf Cart Coverage:</b> Included<br>
+<%
+			}
+			else
+			{
+				%>
+<b>Golf Cart Coverage:</b> excluded<br>
+<%
+			}
+			%>
+</p>
+</div>
+</div>
+</div>
+<hr>
+<%
+		}
+		%>
+<div class="row" >
+		<div class = "col"></div>
+		<div class = "col"></div>
+		<div class = "col"></div>
+		<div class = "col" >
+		<p style = "font-size: 12px;"><b>BASE PREMIUM:</b></p> 
+		<p style = "font-size: 12px;"><b>POLICY FEE:</b></p> 
+		<p style = "font-size: 12px;"><b>TOTAL:</b></p> 
+		</div>
+		<div class = "col"></div>
+		<div class = "col" >
+		<p style = "font-size: 12px;"><%=getTrailerqoute.Total_Premium_before_tax%></p> 
+		<p style = "font-size: 12px;"><%=getTrailerqoute.Fee%></p> 
+		<p style = "font-size: 12px;"><%=getTrailerqoute.Total_Payable_Premium_after_tax%></p> 
+		</div>
+		</div>
+		<br>
+		<br>
+<h6 style= "background-color:#dbd7d2;margin-left:30px;margin-right:30px;padding:10px;font-size: 12px"><b>CONSENT AND DISCLOSURE</b></h6>     			
+		<p style = "margin-left:30px;margin-right:30px;font-size: 12px;text-align: justify;text-justify: inter-word;"> Where (a) an applicant for this contract gives false particulars to prejudice of the insurer or misrepresents or fails to disclose any fact in any part of this application required to be stated therein; or (b) the insured contravenes a term of the contract or commits a fraud; or (c) the insured makes a false statement in respect of a claim, a claim will become invalid and the insured's right to recovery is forfeited.<br>
+		The applicants have reviewed all parts and attachments of this application and acknowledge that all information is true and correct and under-stand that this application for insurance is based on the truth and completeness of this information.I have provided personal information in this document and otherwise and I may in the future provide  further  personal information. Some of this personal information may include, but is not limited to, my credit information and claims history. I authorize my broker/agent or insurance company  to collect,  use and disclose any  of this personal information,  subject to the law and to my broker's  agent or  insurance company's  policy  regarding personal information,  for  the purposes  of communicating with me,  assessing my  application for  insurance  and underwriting my  policies,  evaluating claims,  detecting and preventing fraud, and analyzing business results. I conﬁrm that all individuals  whose  personal information is  contained in this document have authorized that I agree to the above on their behalf.
+ </p>	
+</div>
+<div class="row" style="margin-left:30px;margin-right:30px;padding:10px;">
+	<div class = "col-md-6">
+	<p style="float:left;font-size: 17px;padding-top: 6%;">Signature of Applicant</p>
+	<img style="width: 30%;float:left;border-bottom: solid;" src="https://workdrive.zohoexternal.com/external/3fd5b0ac95e4af040e6e69d1e3c5d6f129786cf0125afd0882bcb8a867db3533/download?directDownload=true" alt="sign">
+	</div>
+	<div class = "col-md-6">
+	<p style="float:right;font-size: 17px;margin-right:2%;">Date (MM/DD/YYYY)<u><%=zoho.currentdate.toString("MM/dd/yyyy")%></u></p>
+	</div>
+	
+</div>
+<!--<div class="row" style="margin-left:30px;margin-right:30px;padding:10px;">
+	<div class = "col-md-6">
+	<p style="float:left;font-size: 17px;padding-top: 6%;">Signature of Applicant__________________________</p>
+	
+	</div>
+	<div class = "col-md-6">
+	<p style="float:right;font-size: 17px;margin-right:2%;">Date (MM/DD/YYYY)____________________</p>
+	</div>
+	
+</div>-->
+
+<h6 style= "background-color:#dbd7d2;margin-left:48px;margin-right:40px;padding:10px;font-size: 15px;text-align:center;"><b>ABSOLUTELY NO COVERAGE IF THE TRAILER IS RENTED TO OTHERS</b></h6> 
+ 
+<p style="margin-top:1%;margin-left:48px;margin-right:40px;font-size: 12px;text-align: justify;text-justify: inter-word;">I understand and agree that any failure or omission to disclose any fact, circumstance, situation, or claim known to me may
+void the policy. Furthermore, any claim or action arising out of any fact, situation, or claim known to me not disclosed herein
+will not be covered under this policy.</p>
+<p style="margin-left:48px;margin-right:40px;font-size: 12px;text-align: justify;text-justify: inter-word;">I understand and agree that if the policy is registered in two names, via Procuration I have the express authority to sign the
+policy on behalf of both named insureds in order to bind and issue the policy subject to all terms, conditions, coverages and
+limits on policy.</p>
+<p style="margin-left:48px;margin-right:40px;font-size: 12px;text-align: justify;text-justify: inter-word;">I declare that after proper enquiry the statements and particulars given in the application are true and that I have not
+misstated or suppressed any material facts.</p>
+<p style="margin-left:48px;margin-right:40px;font-size: 12px;text-align: justify;text-justify: inter-word;">I agree to inform the insurer immediately of any change to the information provided in this application which occurs between
+the date of the application and the effective date of the policy.</p>
+<p style="margin-left:48px;margin-right:40px;font-size: 12px;text-align: justify;text-justify: inter-word;">In the event of a claim, I agree to authorize the insurer to provide the information contained in this application to loss
+adjusters, lawyers or other service providers for the purpose of investigating, defending, negotiating or settling any claims as
+required.</p>
+<p style="margin-left:48px;margin-right:40px;font-size: 12px;text-align: justify;text-justify: inter-word;">I agree that completing this application does not bind me to purchase this insurance, nor does it bind the Insurer to issue this
+insurance. However, should the Insurer issue a policy, this application together with any other material information supplied
+by me/us shall form the basis of any contract of insurance effected thereon.</p>
+<p style="margin-left:48px;margin-right:40px;font-size: 12px;text-align: justify;text-justify: inter-word;">I confirm that all individuals whose personal information is contained in this document have authorized that I agree to the
+above on their behalf.</p>
+<p style="margin-left:48px;margin-right:40px;font-size: 12px;text-align: justify;text-justify: inter-word;">I understand at the time of a claim proof of ownership via a bill of sale and/or registration will need to be provided prior to
+payment.</p>
+<p style="margin-left:48px;margin-right:40px;font-size: 12px;text-align: justify;text-justify: inter-word;">I understand, acknowledge and agree that the security measures instituted by Coburn Insurance Brokers Ltd. RecProtect
+Program to prevent unauthorized access to the confidential information are reasonable and adequate. I also understand and
+acknowledge that notwithstanding the use of security measures, Coburn Insurance Brokers Ltd. RecProtect Program cannot
+guarantee the security of information that is transmitted over the Internet and unauthorized access to the Information may
+occur.</p>
+<%
+	}
+	%>
+</body>
+	<html>
+<%
+
+}%>

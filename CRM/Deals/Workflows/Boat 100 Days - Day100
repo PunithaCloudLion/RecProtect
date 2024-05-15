@@ -1,0 +1,172 @@
+// info "test";
+getBoatandTrailer = zoho.crm.getRecordById("Deals",DealID);
+// info getBoat;
+creatorID = getBoatandTrailer.get("Creator_ID").toLong();
+//info "creatorID"+creatorID;
+getAllBoats = zoho.creator.getRecordById("service_recprotect","quotation","Boats_Report1",creatorID,"creator");
+// info getAllBoats;
+if(getBoatandTrailer.get("Contact_Name") != null)
+{
+	contactName = getBoatandTrailer.get("Contact_Name").get("name");
+	get_ContactInfo = zoho.crm.getRecordById("Contacts",getBoatandTrailer.get("Contact_Name").get("id").toLong());
+	Email = get_ContactInfo.get("Email");
+	//Email="rajapiran@cloudlion.org";
+}
+else
+{
+	contactName = "";
+}
+//--autocharge boat	
+PolicyNUM = getBoatandTrailer.get("Policy_Number") + " - FUTURE";
+getAllBoatsRecords = zoho.creator.getRecords("service_recprotect","quotation","Boats_Report1","Zoho_Crm_ID == \"" + DealID + "\" &&  Policy_Number == \"" + PolicyNUM + "\"",1,200,"creator");
+getEndPointfromCreatorBoat = zoho.creator.getRecords("service_recprotect","quotation","All_Api_Configurations","Name_Process == \"Boat AutoCharge API\"",1,200,"creator");
+AutoChargeAPIENDPOINTBoat = getEndPointfromCreatorBoat.get("data").get(0).get("End_Point");
+Layout = getBoatandTrailer.get("Layout").get("name");
+if(Layout == "Boat Policy")
+{
+	if(getBoatandTrailer.get("Creator_ID") != "")
+	{
+		if(getAllBoats.get("Stripe_Payment_Method_Details") != "" || getAllBoats.get("Stripe_Payment_Method_Details") != null)
+		{
+			data = {{"from":{"email":zoho.adminuserid},"to":{{"email":"ananth@cloudlion.org"}},"subject":"100th Day Renewal","content":"mail for 100th day","mail_format":"html"}};
+			json_data = Map();
+			json_data.put("data",data);
+			send_mail = invokeurl
+			[
+				url :"https://www.zohoapis.com/crm/v3/Deals/" + DealID + "/actions/send_mail"
+				type :POST
+				parameters:json_data.toString()
+				connection:"crm"
+			];
+			info send_mail;
+			// 			creatorID = getBoatandTrailer.get("Creator_ID").toLong();
+			// 			//-------autocharge
+			// 			//getTrailer quotations		
+			// 			for each  allBoatQuote in getAllBoatsRecords.get("data")
+			// 			{
+			// 				parammap = Map();
+			// 				parammap.put("organization_id","RECPROTECT1");
+			// 				parammap.put("quote_record_id",ifNull(allBoatQuote.get("Quote_Record_ID_Server"),""));
+			// 				parammap.put("policy_change_balance",0);
+			// 				parammap.put("payment_for","RENEWAL");
+			// 				parammap.put("stripe_customer_id",ifNull(allBoatQuote.get("Stripe_Customer_ID"),""));
+			// 				parammap.put("payment_method_id",ifNull(allBoatQuote.get("Stripe_Payment_Method_ID"),""));
+			// 				//    info parammap;
+			// 				//----------------- code belong to thisapp.Server_Side.callServer function 
+			// 				headerMap = Map();
+			// 				headerMap.put("Content-Type","application/json");
+			// 				Boatresp = invokeurl
+			// 				[
+			// 					url :AutoChargeAPIENDPOINTBoat
+			// 					type :POST
+			// 					parameters:parammap.toString()
+			// 					headers:headerMap
+			// 				];
+			// 			}
+			// 			// ----------autocharge api ends
+			// 			if(Boatresp.get("success") == true)
+			// 			{
+			// 				paymentStatusUpdateMap = Map();
+			// 				paymentStatusUpdateMap.put("Payment_Status","Paid");
+			// 				updatePaymentStatusUpdate = zoho.crm.updateRecord("Deals",DealID,paymentStatusUpdateMap);
+			// 			}
+			// 			else if(Boatresp.get("success") == false)
+			// 			{
+			// 				//Send Mail for Invalid card details
+			// 				//To Update the card details web page link needs to be provided.
+			// 				// 				data = {{"from":{"email":zoho.adminuserid},"to":{{"email":Email}},"subject":modifiedSubject,"content":modifiedContent,"mail_format":"html"}};
+			// 				// 				json_data = Map();
+			// 				// 				json_data.put("data",data);
+			// 				// 				send_mail = invokeurl
+			// 				// 				[
+			// 				// 					url :"https://www.zohoapis.com/crm/v3/Deals/" + DealID + "/actions/send_mail"
+			// 				// 					type :POST
+			// 				// 					parameters:json_data.toString()
+			// 				// 					connection:"crm"
+			// 				// 				];
+			// 				// 				info send_mail;
+			// 			}
+		}
+		else
+		{
+			//Need to send mail to customer for Webpage Link
+		}
+	}
+}
+else if(Layout == "Trailer Policy")
+{
+	//Trailer
+	getAllTrailer = zoho.creator.getRecordById("service_recprotect","quotation","All_Trailer_Quotations",creatorID,"creator");
+	newTrailer = getAllTrailer.get("data");
+	if(getAllTrailer.get("Stripe_Payment_Method_Details") != "" || getAllTrailer.get("Stripe_Payment_Method_Details") != null)
+	{
+		data = {{"from":{"email":zoho.adminuserid},"to":{{"email":"ananth@cloudlion.org"}},"subject":"100th Day Renewal","content":"mail for 100th day","mail_format":"html"}};
+		json_data = Map();
+		json_data.put("data",data);
+		send_mail = invokeurl
+		[
+			url :"https://www.zohoapis.com/crm/v3/Deals/" + DealID + "/actions/send_mail"
+			type :POST
+			parameters:json_data.toString()
+			connection:"crm"
+		];
+		info send_mail;
+		//	info newTrailer.get("Customer_ID.Server_Customer_ID") ;
+		// autocharge
+		// --------- Autocharge API 	
+		// 		getEndPointfromCreator = zoho.creator.getRecords("service_recprotect","quotation","All_Api_Configurations","Name_Process == \"Trailer AutoCharge API\"",1,200,"creator");
+		// 		AutoChargeAPIENDPOINT = getEndPointfromCreator.get("data").get(0).get("End_Point");
+		// 		// 		apiEndPoint = "https://recprotectbackend-10073292108.development.catalystappsail.com/recprotect/api/trailer/stripe/auto_charge";
+		// 		parammap = Map();
+		// 		// 	balance = fetchTrailer.Total_Payable_Premium_after_tax ; //for renewals
+		// 		// balance = fetchPolicyChangeRequest.Total;// for policy change
+		// 		getOrg = invokeurl
+		// 		[
+		// 			url :"https://www.zohoapis.com/creator/custom/service_recprotect/Org_Info?publickey=UsNgXbMvJ3pYHuDGtsgdsbhCR"
+		// 			type :GET
+		// 		];
+		// 		// info "Org " + getOrg.get("result");
+		// 		parammap.put("organization_id",getOrg.get("result"));
+		// 		// 			parammap.put("organization_id","RECPROTECT1");
+		// 		parammap.put("quote_record_id",ifNull(newTrailer.get("Quote_Record_ID_Server"),""));
+		// 		parammap.put("policy_change_balance",0);
+		// 		parammap.put("payment_for","RENEWAL");
+		// 		parammap.put("stripe_customer_id",ifNull(newTrailer.get("Stripe_Customer_ID"),""));
+		// 		parammap.put("payment_method_id",ifNull(newTrailer.get("Stripe_Payment_Method_ID"),""));
+		// 		info parammap;
+		// 		//     resp = thisapp.Server_Side.callServer("POST",apiEndPoint,parammap);
+		// 		//     info resp;
+		// 		//----------------- code belong to thisapp.Server_Side.callServer function 
+		// 		apiMethod = "POST";
+		// 		if(apiMethod == "POST")
+		// 		{
+		// 			headerMap = Map();
+		// 			headerMap.put("Content-Type","application/json");
+		// 			resp = invokeurl
+		// 			[
+		// 				url :AutoChargeAPIENDPOINT
+		// 				type :POST
+		// 				parameters:parammap.toString()
+		// 				headers:headerMap
+		// 			];
+		// 		}
+		// 		info "Custom api response " + resp;
+		// 		if(resp.get("success") == "true")
+		// 		{
+		// 			paymentStatusUpdateMap = Map();
+		// 			paymentStatusUpdateMap.put("Payment_Status","Paid");
+		// 			updatePaymentStatusUpdate = zoho.crm.updateRecord("Deals",DealID,paymentStatusUpdateMap);
+		// 		}
+		// 		else if(resp.get("success") == "false")
+		// 		{
+		// 			//Need to send mail for update the Card details
+		// 			paymentStatusUpdateMap = Map();
+		// 			paymentStatusUpdateMap.put("Payment_Status","UnPaid");
+		// 			updatePaymentStatusUpdate = zoho.crm.updateRecord("Deals",DealID,paymentStatusUpdateMap);
+		// 		}
+	}
+	else
+	{
+		//we need to trigger email with webapp with payment link(0 charge)
+	}
+}

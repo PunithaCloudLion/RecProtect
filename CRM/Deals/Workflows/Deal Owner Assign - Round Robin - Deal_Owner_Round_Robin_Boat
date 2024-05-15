@@ -1,0 +1,48 @@
+
+//-------------Get Current Deal----
+get_deal = zoho.crm.getRecordById("Deals",deal_id);
+if(get_deal.size() > 0)
+{
+	//-------------Get Other Deal Aossiated with Current Deal Customer--------
+	if(get_deal.get("Deal_s_Lead") != null)
+	{
+		get_deal_list = zoho.crm.searchRecords("Deals","((Deal_s_Lead:equals:" + get_deal.get("Deal_s_Lead").get("id") + ") AND (Layout.id:equals:5778486000007672001))");
+	}
+	if(get_deal.get("Contact_Name") != null)
+	{
+		get_deal_list = zoho.crm.searchRecords("Deals","((Contact_Name:equals:" + get_deal.get("Contact_Name").get("id") + ") AND (Layout.id:equals:5778486000007672001))");
+	}
+	//-------------If Assosiated Deals are Available--------
+	if(get_deal_list.size() > 1)
+	{
+		//-------------Owner of Current Deal and Other Deal is Same-------
+		if(get_deal_list.get(1).get("Owner").get("id") == get_deal.get("Owner").get("id"))
+		{
+			//---------------Get Current Deal Owner-----------
+			get_deal_owner = zoho.crm.searchRecords("Deal_Owner_Assign_Table","((Deal_Owner:equals:" + get_deal.get("Owner").get("id") + ") AND (Type:equals:Boat))");
+			if(get_deal_owner.size() == 1)
+			{
+				priority = get_deal_owner.get(0).get("Priority_Number") + 1;
+				//---------------Get The Next Deal Owner-----------
+				get_next_deal_owner = zoho.crm.searchRecords("Deal_Owner_Assign_Table","((Priority_Number:equals:" + priority + ") AND (Type:equals:Boat))");
+				if(get_next_deal_owner.size() == 1)
+				{
+					owner_id = get_next_deal_owner.get(0).get("Deal_Owner").get("id");
+				}
+				//--------------If the Next Deal Owner are not available assign most priority owner----------
+				if(get_next_deal_owner.size() == 0)
+				{
+					get_mostpriority_deal_owner = zoho.crm.searchRecords("Deal_Owner_Assign_Table","((Priority_Number:equals:1) AND (Type:equals:Boat))");
+					if(get_mostpriority_deal_owner.size() == 1)
+					{
+						owner_id = get_mostpriority_deal_owner.get(0).get("Deal_Owner").get("id");
+					}
+				}
+				//---------------Update Deal Owner-----------
+				updatemap = Map();
+				updatemap.put("Owner",owner_id);
+				update_deal = zoho.crm.updateRecord("Deals",deal_id,updatemap);
+			}
+		}
+	}
+}

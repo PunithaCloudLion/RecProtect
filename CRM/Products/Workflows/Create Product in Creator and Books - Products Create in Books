@@ -1,0 +1,39 @@
+getProducts = zoho.crm.getRecordById("Products",productID);
+dataMap = Map();
+if(getProducts.size() > 0)
+{
+	dataMap.put("name",getProducts.get("Product_Name"));
+	dataMap.put("rate",getProducts.get("Commission_Rate"));
+	dataMap.put("description",getProducts.get("Description"));
+	dataMap.put("is_taxable",getProducts.get("Taxable"));
+	dataMap.put("sku",ifnull(getProducts.get("Product_Code"),""));
+	dataMap.put("manufacturer",getProducts.get("Manufacturer"));
+	dataMap.put("unit",ifnull(getProducts.get("Usage_Unit"),""));
+	dataMap.put("tax_type",getProducts.get("Tax"));
+	dataMap.put("initial_stock",getProducts.get("Qty_in_Stock"));
+	dataMap.put("reorder_level",getProducts.get("Reorder_Level"));
+	customMap = Map();
+	customList = list();
+	CRM_ID = {"label":"Zoho Crm ID","value":productID.toString()};
+	//Creator_ID = {"label":"zoho creator ID","value":CreateProductinCreator.get("data").get("ID").toString()};
+	//customList.add(Creator_ID);
+	customList.add(CRM_ID);
+	dataMap.put("custom_fields",customList);
+	response = zoho.books.createRecord("items",830242518,dataMap,"zbooks");
+	info response;
+	if(response.get("code") == 0)
+	{
+		Creator_DataMap = Map();
+		Creator_DataMap.put("Product_Name",getProducts.get("Product_Name"));
+		Creator_DataMap.put("CRM_ID",productID);
+		Creator_DataMap.put("Books_ID",response.get("item").get("item_id"));
+		CreateProductinCreator = zoho.creator.createRecord("service_recprotect","quotation","Product",Creator_DataMap,Map(),"creator");
+		if(CreateProductinCreator.get("code") == 3000)
+		{
+			updateMap = Map();
+			updateMap.put("Zoho_Books_ID",response.get("item").get("item_id"));
+			updateMap.put("Zoho_Creator_ID",CreateProductinCreator.get("data").get("ID"));
+			updateres = zoho.crm.updateRecord("Products",getProducts.get("id"),updateMap);
+		}
+	}
+}

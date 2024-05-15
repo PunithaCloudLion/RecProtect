@@ -1,0 +1,71 @@
+/*CL - Trailer/Boat 45 Days Before Expiry Date - CL : Trailer 45 Days Before Renewal*/
+
+getTariler = zoho.crm.getRecordById("Deals",TrailerID);
+info getTariler;
+if(getTariler.get("Creator_ID") != "")
+{
+	//CL - Day 60, Day 45 Boat
+	if(getTariler.get("Contact_Name") != null)
+	{
+		contactName = getTariler.get("Contact_Name").get("name");
+		get_ContactInfo = zoho.crm.getRecordById("Contacts",getTariler.get("Contact_Name").get("id").toLong());
+		Email = get_ContactInfo.get("Email");
+	}
+	else
+	{
+		contactName = "";
+	}
+	getTemplateCRM = invokeurl
+	[
+		url :"https://www.zohoapis.com/crm/v6/settings/email_templates/5778486000007471053"
+		type :GET
+		connection:"crm"
+	];
+	//info getTemplateCRM.get("email_templates").get(0).get("content");
+	creatorID = getTariler.get("Creator_ID").toLong();
+	EligibleCount = 0;
+	NeedCount = 0;
+	TrailerCount = 0;
+	msg = "";
+	getAllTrailers = zoho.creator.getRecords("service_recprotect","quotation","All_Trailers","TrailerQuote == " + creatorID,1,200,"creator");
+	for each  trailer in getAllTrailers.get("data")
+	{
+		getTrailerFromCreator = zoho.creator.getRecordById("service_recprotect","quotation","All_Trailers",trailer.get("ID"),"creator");
+		// 		info "getTrailerFromCreator " + getTrailerFromCreator;
+		TrailerCount = TrailerCount + 1;
+		if(getTrailerFromCreator.get("data").get("Trailer_Age") < 35)
+		{
+			EligibleCount = EligibleCount + 1;
+			msg = msg + "<br>" + getTrailerFromCreator.get("data").get("Trailer_Model_Year") + "," + getTrailerFromCreator.get("data").get("Trailer_Manufacturer") + "," + getTrailerFromCreator.get("data").get("Trailer_Model") + "," + getTrailerFromCreator.get("data").get("Select_Trailer_Type") + "";
+		}
+	}
+	if(EligibleCount > 0)
+	{
+		Day30 = getTariler.get("Expiry_Date").subDay(30);
+		//Day35 = getTariler.get("Expiry_Date").subDay(35);
+		RenewalDate = getTariler.get("Expiry_Date").addDay(1);
+		modifiedContent = getTemplateCRM.get("email_templates").get(0).get("content").replaceAll("&lt;Trailer Details&gt;",msg).replaceAll("&lt;Day 30&gt;",Day30).replaceAll("&lt;Renewal Date&gt;",RenewalDate).replaceAll("&lt;Contact Name&gt;",contactName).replaceAll("&lt;Total&gt;",getTariler.get("Total")).replaceAll("&lt;Policy Number&gt;",getTariler.get("Policy_Number")).replaceAll("#UPOCARDNUMBER#",UPOCardNumber);
+		modifiedSubject = getTemplateCRM.get("email_templates").get(0).get("subject");
+		//.replaceAll("deal name",getTariler.get("Deal_Name"));
+		info modifiedContent;
+		//,"template":{"id":"4516886000014770109"}
+		data = {{"from":{"email":zoho.adminuserid},"to":{{"email":Email}},"subject":modifiedSubject,"content":modifiedContent,"mail_format":"html"}};
+		json_data = Map();
+		json_data.put("data",data);
+		send_mail = invokeurl
+		[
+			url :"https://www.zohoapis.com/crm/v3/Deals/" + TrailerID + "/actions/send_mail"
+			type :POST
+			parameters:json_data.toString()
+			connection:"crm"
+		];
+		info "send mail--->" + send_mail;
+	}
+	//Renewal Stages update in CRM and Creator
+	creatorMap = Map();
+	creatorMap.put("Renewal_Stage","45th Day");
+	creatorUpdate = zoho.creator.updateRecord("service_recprotect","quotation","All_Trailer_Quotations",getTariler.get("Creator_ID").toLong(),creatorMap,Map(),"creator");
+	crmUpdateMap = Map();
+	crmUpdateMap.put("Renewal_Stage","45th Day");
+	updateCRM = zoho.crm.updateRecord("Deals",TrailerID,crmUpdateMap);
+}

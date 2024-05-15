@@ -1,0 +1,335 @@
+/* CL - Trailer/Boat - 30 Days Before Expiry Date - CL : Boat Payment Based Mail 30 Days Before Renewal*/ 
+
+
+// 	info "Custom api response " + resp;
+getBoat = zoho.crm.getRecordById("Deals",DealID);
+// info getBoat;
+UPOCardNumber = "";
+if(getBoat.get("Contact_Name") != null)
+{
+	contactName = getBoat.get("Contact_Name").get("name");
+	get_ContactInfo = zoho.crm.getRecordById("Contacts",getBoat.get("Contact_Name").get("id").toLong());
+	Email = get_ContactInfo.get("Email");
+	//Email="rajapiran@cloudlion.org";
+}
+else
+{
+	contactName = "";
+}
+msg = "";
+TotalBoat = 0;
+//info "creatorID"+creatorID;
+getAllBoats = zoho.creator.getRecords("service_recprotect","quotation","Boats_Report","Zoho_Crm_ID == \"" + getBoat.get("id") + "\"",1,200,"creator");
+// info "workdrive" + getAllBoats.get("data").get("Combined_Doc_Workdrive_URL");
+TaxProvinceName = getAllBoats.get("data").get(0).get("Tax_Province");
+// info TaxProvinceName;
+getTaxRate = zoho.creator.getRecords("service_recprotect","quotation","All_Tax_Lists","State_Province == \"" + TaxProvinceName + "\"",1,200,"creator");
+// info getTaxRate;
+TaxPercentID = getTaxRate.get("data").get(0).get("ID");
+TaxPercent = getTaxRate.get("data").get(0).get("Tax");
+// info "getAllBoats " + getAllBoats;
+//--------------------------------------------------------------------------------------
+// info "Boat " + boatData;
+for each  newBoat in getAllBoats.get("data")
+{
+	if(newBoat.get("Added_Time") == zoho.currentdate)
+	{
+		creatorID = newBoat.get("ID").toLong();
+		getAllBoatsLines = zoho.creator.getRecords("service_recprotect","quotation","All_Boat_Lines","BoatQuote == " + newBoat.get("ID"),1,200,"creator");
+		cnt = 0;
+		subformList = List();
+		for each  boat in getAllBoatsLines.get("data")
+		{
+			cnt = cnt + 1;
+			TotalBoat = TotalBoat + 1;
+			updateMap = Map();
+			info boat.get("ID");
+			getBoatFromCreator = zoho.creator.getRecordById("service_recprotect","quotation","All_Boat_Lines",boat.get("ID"),"creator");
+			//info "getBoatFromCreator " + getBoatFromCreator;
+			info "boat renewal " + getBoatFromCreator.get("data").get("Eligible_for_Auto_Renewal");
+			msg = msg + "<br><br>" + getBoatFromCreator.get("data").get("Boat_Model_Year") + "," + getBoatFromCreator.get("data").get("Boat_Manufacturer") + "," + getBoatFromCreator.get("data").get("Boat_Model") + "," + getBoatFromCreator.get("data").get("Select_the_type_of_watercraft") + "";
+		}
+		// 		Payment = "Success";
+		Payment = getBoat.get("Policy_Payment_Status");
+		if(TotalBoat > 0)
+		{
+			//-------------Attachment Fetch and Send mail--------------------------------------
+			Carrier = "";
+			workdrive_ID = "";
+			if(getBoat.get("Carrier") == "Germania Insurance")
+			{
+				Carrier = "Germania Insurance";
+			}
+			Policy_Number = "# " + getAllBoats.get("data").get("Policy_Number") + "-Policy Declaration";
+			get_creator_contact = zoho.creator.getRecords("service_recprotect","quotation","Boat_Document_Information_Report","BoatQuote == " + creatorID + " && Document_Name == \"" + Policy_Number + "\"",1,100,"creator");
+			if(get_creator_contact.get("code") == 3000)
+			{
+				workdrive_ID = get_creator_contact.get("data").get(0).get("Workdrive_URL").getSuffixIgnoreCase("file/");
+			}
+			// 	info "Carrier"+Carrier;
+			// 	info "2"+getBoat.get("Carrier");
+			Attachmentresponse = invokeurl
+			[
+				url :"https://www.zohoapis.com/crm/v2/functions/Boat_Attachment/actions/execute?auth_type=apikey&zapikey=1003.e22f3273bb04b81989500e60afe3e5d6.99dc1d6bafbf8dd22c72d8420f043dc3"
+				type :GET
+				parameters:{"creator_ID":newBoat.get("ID"),"Carrier":Carrier,"workdrive_ID":workdrive_ID}
+				connection:"crm"
+			];
+			if(Attachmentresponse != null)
+			{
+				//info "Attachmentresponse"+Attachmentresponse;
+				Attachres = Attachmentresponse.get("details").get("output");
+				info "stta" + Attachres;
+				att_List1 = List();
+				for each  Att in Attachres
+				{
+					new_Map = Map();
+					new_Map.put("id",Att.trim());
+					att_List1.add(new_Map);
+				}
+				info "list" + att_List1;
+			}
+			//Need to add renewal dec pages
+			//------------------------------------End------------------------------------------------------	
+			//---------------Need to add API here -------------
+			creatorMap = Map();
+			crmUpdateMap = Map();
+			// 			if(Payment == "Success")
+			// 			{
+			// 				getTemplateCRM = invokeurl
+			// 				[
+			// 					url :"https://www.zohoapis.com/crm/v6/settings/email_templates/5778486000008321018"
+			// 					type :GET
+			// 					connection:"crm"
+			// 				];
+			// 				//info getTemplateCRM.get("email_templates").get(0).get("content");
+			// 				getYear = zoho.currentdate.getYear();
+			// 				termPeriod = getYear + 1;
+			// 				//replaceAll("&lt;term period&gt;",getYear + " - " + termPeriod)
+			// 				RenewalDate = getBoat.get("Expiry_Date").addDay(1);
+			// 				nextYr = zoho.currentdate.getYear() + 1;
+			// 				termPeriod = zoho.currentdate.getYear() + " - " + nextYr;
+			// 				modifiedContent = getTemplateCRM.get("email_templates").get(0).get("content").replaceAll("&lt;Boat Details&gt;",msg).replaceAll("&lt;Renewal Date&gt;",RenewalDate).replaceAll("&lt;Term Period&gt;",termPeriod).replaceAll("&lt;Contact Name&gt;",contactName).replaceAll("&lt;Total&gt;",getBoat.get("Total")).replaceAll("&lt;Policy Number&gt;",getBoat.get("Policy_Number")).replaceAll("#UPOCARDNUMBER#",UPOCardNumber);
+			// 				modifiedSubject = getTemplateCRM.get("email_templates").get(0).get("subject");
+			// 				//info modifiedContent;
+			// 				//,"template":{"id":"4516886000014770109"}
+			// 				data = {{"from":{"email":zoho.adminuserid},"to":{{"email":Email}},"subject":modifiedSubject,"content":modifiedContent,"mail_format":"html","attachments":att_List1}};
+			// 				json_data = Map();
+			// 				json_data.put("data",data);
+			// 				send_mail = invokeurl
+			// 				[
+			// 					url :"https://www.zohoapis.com/crm/v3/Deals/" + DealID + "/actions/send_mail"
+			// 					type :POST
+			// 					parameters:json_data.toString()
+			// 					connection:"crm"
+			// 				];
+			// 				info send_mail;
+			// 				creatorMap.put("Renewal_Stage","30th Day - Successful Payment");
+			// 				crmUpdateMap.put("Renewal_Stage","30th Day - Successful Payment");
+			// 				//-------------------this below snip created on 28/03/2024
+			// 				// payment URl Generate
+			// 				paymentURLMap = Map();
+			// 				// 		getBoat = BoatQuote[ID == input.BoatQuote_ID];
+			// 				// 		info "boat quote " + getBoat;
+			// 				// 		thisapp.Generate_Payment_Link_for_BoatChanges(input.ID);
+			// 				fetchEndPoint = "https://recprotectbackend-10073292108.development.catalystappsail.com/recprotect/api/boat/stripe/create_payment_url";
+			// 				// 	boatquote_data = Boat_Policy_change_Request[ID == QuoteChangeID];
+			// 				// 	info QuoteChangeID;
+			// 				paymentMap = Map();
+			// 				paymentMap.put("total_premium",if(newBoat.get("New_Total_Premium_before_tax") != null,newBoat.get("New_Total_Premium_before_tax"),0));
+			// 				paymentMap.put("total_tax",if(newBoat.get("New_Total_Tax") != null,newBoat.get("New_Total_Tax"),0));
+			// 				paymentMap.put("admin_fee",if(newBoat.get("New_Admin_Fee") != null,newBoat.get("New_Admin_Fee"),0));
+			// 				paymentURLMap.put("amount_payable",paymentMap);
+			// 				// 		paymentURLMap.put("boat_quote_record_id",getBoat.Quote_Record_ID_Server);
+			// 				uniqID = if(newBoat.get("Policy_Number") != null,newBoat.get("Policy_Number"),newBoat.get("Quote_ID"));
+			// 				paymentURLMap.put("unique_id",uniqID);
+			// 				paymentURLMap.put("payment_for","PolicyChange");
+			// 				//NewBusiness
+			// 				paymentURLMap.put("payment_type","Debit To Company");
+			// 				//Credit To Company
+			// 				paymentURLMap.put("payment_method","Credit Card");
+			// 				paymentURLMap.put("organization_id","RECPROTECT1");
+			// 				// 		customerData = Customer[ID == getBoat.Customer_ID];
+			// 				// 		info "customerData " + customerData;
+			// 				// 		info "Server cus ID  " + customerData.Server_Customer_ID;
+			// 				getCustomer = zoho.creator.getRecords("service_recprotect","quotation","All_Customers","ID == " + newBoat.get("Customer_ID").get("ID"),1,200,"creator");
+			// 				paymentURLMap.put("customer_id",getCustomer.get("data").get(0).get("Server_Customer_ID"));
+			// 				// 		info "Param a" + paymentURLMap;
+			// 				// API
+			// 				headerMap = Map();
+			// 				headerMap.put("Content-Type","application/json");
+			// 				resp = invokeurl
+			// 				[
+			// 					url :fetchEndPoint
+			// 					type :POST
+			// 					parameters:paymentURLMap.toString()
+			// 					headers:headerMap
+			// 				];
+			// 				// 		resp = thisapp.Server_Side.callServer("POST",fetchEndPoint,paramMapp);
+			// 				// 		info "response  R " + resp;
+			// 				if(resp != null)
+			// 				{
+			// 					Payment_URL = resp.get("data").get("url");
+			// 					info "URL " + input.Payment_URL;
+			// 					if(Payment_URL != null)
+			// 					{
+			// 						// 			Payment_ID = resp.get("data").get("url").getsuffix("payment_id=");
+			// 						// 			boatquote_data.Payment_ID=Payment_ID;
+			// 						// 			boatquote_data.Payment_URL=Payment_URL;
+			// 					}
+			// 				}
+			// 				// payment url ends
+			// 				//	// the below snippet is created by ranjith on 12/03/2024
+			// 				//	//--------------autocharge api
+			// 				getEndPointfromCreator = zoho.creator.getRecords("service_recprotect","quotation","All_Api_Configurations","Name_Process == \"Boat AutoCharge API\"",1,200,"creator");
+			// 				AutoChargeAPIENDPOINT = getEndPointfromCreator.get("data").get(0).get("End_Point");
+			// 				//	// 		apiEndPoint = "https://recprotectbackend-10073292108.development.catalystappsail.com/recprotect/api/boat/stripe/auto_charge";
+			// 				parammap = Map();
+			// 				// 	balance = fetchTrailer.Total_Payable_Premium_after_tax ; //for renewals
+			// 				// balance = fetchPolicyChangeRequest.Total;// for policy change  
+			// 				getOrg = invokeurl
+			// 				[
+			// 					url :"https://www.zohoapis.com/creator/custom/service_recprotect/Org_Info?publickey=UsNgXbMvJ3pYHuDGtsgdsbhCR"
+			// 					type :GET
+			// 				];
+			// 				// info "Org " + getOrg.get("result");
+			// 				parammap.put("organization_id",getOrg.get("result"));
+			// 				// 				parammap.put("organization_id","RECPROTECT1");
+			// 				parammap.put("quote_record_id",ifNull(newBoat.get("Quote_Record_ID_Server"),""));
+			// 				parammap.put("policy_change_balance",newBoat.get("Total_Payable_Premium_after_tax"));
+			// 				parammap.put("payment_for","RENEWAL");
+			// 				parammap.put("stripe_customer_id",ifNull(newBoat.get("Stripe_Customer_ID"),""));
+			// 				parammap.put("payment_method_id",ifNull(newBoat.get("Stripe_Payment_Method_ID"),""));
+			// 				//    info parammap;
+			// 				//     resp = thisapp.Server_Side.callServer("POST",apiEndPoint,parammap);
+			// 				//     info resp;
+			// 				// code belong to thisapp.Server_Side.callServer function 
+			// 				apiMethod = "POST";
+			// 				if(apiMethod == "POST")
+			// 				{
+			// 					headerMap = Map();
+			// 					headerMap.put("Content-Type","application/json");
+			// 					resp = invokeurl
+			// 					[
+			// 						url :AutoChargeAPIENDPOINT
+			// 						type :POST
+			// 						parameters:parammap.toString()
+			// 						headers:headerMap
+			// 					];
+			// 				}
+			// 				if(resp.get("success") == "true")
+			// 				{
+			// 					paymentStatusUpdateMap = Map();
+			// 					paymentStatusUpdateMap.put("Payment_Status","Paid");
+			// 					updatePaymentStatusUpdate = zoho.crm.updateRecord("Deals",DealID,paymentStatusUpdateMap);
+			// 					// || resp.contains("Cannot POST") == true    getBoat.get("Total")
+			// 					if(newBoat.get("Total_Payable_Premium_after_tax") > 0)
+			// 					{
+			// 						// invoice
+			// 						dataMap = Map();
+			// 						dataMap.put("Business_Process","Renewal");
+			// 						dataMap.put("Type_of_Transaction","Invoice");
+			// 						dataMap.put("Tracking_of_creation_of_Charge","Auto-Charge");
+			// 						dataMap.put("Policy_Type","Boat Policy");
+			// 						dataMap.put("Date_field",zoho.currentdate.todate("dd-MMM-yyyy"));
+			// 						dataMap.put("Deal_Name",DealID);
+			// 						getContactDet = zoho.crm.getRecordById("Contacts",getBoat.get("Contact_Name").get("id"));
+			// 						// 				info "cont det  " + getContactDet.get("Zoho_Creator_ID");
+			// 						dataMap.put("Customer_Name",getContactDet.get("Zoho_Creator_ID"));
+			// 						transacDetaSubform = list();
+			// 						subformMap = Map();
+			// 						subformMap.put("Product_Name",5778486000017783005);
+			// 						subformMap.put("Amount",newBoat.get("Total_Premium_before_tax"));
+			// 						totalAmnt = newBoat.get("Total_Premium_before_tax");
+			// 						TaxAmnt = (totalAmnt.toDecimal() * TaxPercent.toDecimal()) / 100;
+			// 						AmntWithTax = totalAmnt + TaxAmnt;
+			// 						subformMap.put("Tax",TaxPercentID);
+			// 						subformMap.put("Tax_Amount",TaxAmnt.round(2));
+			// 						subformMap.put("Amount_With_Tax",AmntWithTax.round(2));
+			// 						transacDetaSubform.add(subformMap);
+			// 						dataMap.put("Transaction_Details",transacDetaSubform);
+			// 						dataMap.put("Total_Amount_Without_Tax",newBoat.get("Total_Premium_before_tax"));
+			// 						dataMap.put("Tax_Amount",TaxAmnt.round(2));
+			// 						dataMap.put("Total_Amount_With_Tax",AmntWithTax.round(2));
+			// 						createTransactionRecInvoice = zoho.creator.createRecord("service_recprotect","quotation","Transaction_Table",dataMap,Map(),"creator");
+			// 						info "Invoice " + createTransactionRecInvoice;
+			// 					}
+			// 					else
+			// 					{
+			// 						// credit note
+			// 						dataMap = Map();
+			// 						dataMap.put("Business_Process","Renewal");
+			// 						dataMap.put("Type_of_Transaction","Credit Note");
+			// 						dataMap.put("Tracking_of_creation_of_Charge","Auto-Charge");
+			// 						dataMap.put("Policy_Type","Boat Policy");
+			// 						dataMap.put("Date_field",zoho.currentdate.todate("dd-MMM-yyyy"));
+			// 						dataMap.put("Deal_Name",DealID);
+			// 						getContactDet = zoho.crm.getRecordById("Contacts",getBoat.get("Contact_Name").get("id"));
+			// 						// 				info "cont det  " + getContactDet.get("Zoho_Creator_ID");
+			// 						dataMap.put("Customer_Name",getContactDet.get("Zoho_Creator_ID"));
+			// 						transacDetaSubform = list();
+			// 						subformMap = Map();
+			// 						subformMap.put("Product_Name",5778486000017783005);
+			// 						subformMap.put("Amount",newBoat.get("Total_Premium_before_tax"));
+			// 						totalAmnt = newBoat.get("Total_Premium_before_tax");
+			// 						TaxAmnt = (totalAmnt * TaxPercent) / 100;
+			// 						AmntWithTax = totalAmnt + TaxAmnt;
+			// 						subformMap.put("Tax",TaxPercentID);
+			// 						subformMap.put("Tax_Amount",TaxAmnt);
+			// 						subformMap.put("Amount_With_Tax",AmntWithTax);
+			// 						transacDetaSubform.add(subformMap);
+			// 						dataMap.put("Transaction_Details",transacDetaSubform);
+			// 						dataMap.put("Total_Amount_Without_Tax",newBoat.get("Total_Premium_before_tax"));
+			// 						dataMap.put("Tax_Amount",TaxAmnt.round(2));
+			// 						dataMap.put("Total_Amount_With_Tax",AmntWithTax.round(2));
+			// 						createTransactionRecInvoice = zoho.creator.createRecord("service_recprotect","quotation","Transaction_Table",dataMap,Map(),"creator");
+			// 						info "Credit Note  " + createTransactionRecInvoice;
+			// 					}
+			// 				}
+			// 				else if(resp.get("success") == "false")
+			// 				{
+			// 					paymentStatusUpdateMap = Map();
+			// 					paymentStatusUpdateMap.put("Payment_Status","UnPaid");
+			// 					updatePaymentStatusUpdate = zoho.crm.updateRecord("Deals",DealID,paymentStatusUpdateMap);
+			// 				}
+			// 				// autocharge api
+			// 			}
+			if(Payment == "UNPAID")
+			{
+				/****** Unsuccessfull*/
+				getTemplateCRM = invokeurl
+				[
+					url :"https://www.zohoapis.com/crm/v6/settings/email_templates/5778486000008321037"
+					type :GET
+					connection:"crm"
+				];
+				//info getTemplateCRM.get("email_templates").get(0).get("content");
+				Day18 = getBoat.get("Expiry_Date").subDay(18);
+				Day19 = getBoat.get("Expiry_Date").subDay(19);
+				RenewalDate = getBoat.get("Expiry_Date").addDay(1);
+				modifiedContent = getTemplateCRM.get("email_templates").get(0).get("content").replaceAll("&lt;Boat Details&gt;",msg).replaceAll("&lt;Day 18&gt;",Day18).replaceAll("&lt;Day 19&gt;",Day19).replaceAll("&lt;Renewal Date&gt;",RenewalDate).replaceAll("&lt;Contact Name&gt;",contactName).replaceAll("&lt;Total&gt;",getBoat.get("Total")).replaceAll("&lt;Policy Number&gt;",getBoat.get("Policy_Number")).replaceAll("#UPOCARDNUMBER#",UPOCardNumber);
+				modifiedSubject = getTemplateCRM.get("email_templates").get(0).get("subject");
+				//info modifiedContent;
+				//,"template":{"id":"4516886000014770109"}
+				data = {{"from":{"email":zoho.adminuserid},"to":{{"email":Email}},"subject":modifiedSubject,"content":modifiedContent,"mail_format":"html","attachments":att_List1}};
+				json_data = Map();
+				json_data.put("data",data);
+				send_mail = invokeurl
+				[
+					url :"https://www.zohoapis.com/crm/v3/Deals/" + DealID + "/actions/send_mail"
+					type :POST
+					parameters:json_data.toString()
+					connection:"crm"
+				];
+				info send_mail;
+				creatorMap.put("Renewal_Stage","30th Day - Unsuccessful Payment");
+				crmUpdateMap.put("Renewal_Stage","30th Day - Unsuccessful Payment");
+				crmUpdateMap.put("Policy_Payment_Status","UNPAID");
+			}
+			creatorUpdate = zoho.creator.updateRecord("service_recprotect","quotation","Boats_Report",getBoat.get("Creator_ID").toLong(),creatorMap,Map(),"creator");
+			info creatorUpdate;
+			updateCRM = zoho.crm.updateRecord("Deals",DealID,crmUpdateMap);
+			info updateCRM;
+		}
+	}
+}

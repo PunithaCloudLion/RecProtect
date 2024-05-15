@@ -1,0 +1,44 @@
+getContacts = zoho.crm.getRecordById("Contacts",contactID);
+// info getContacts;
+if(getContacts.get("Zoho_Books_ID") != "" || getContacts.get("Zoho_Books_ID") != null)
+{
+	contList = list();
+	contactMap = Map();
+	parametersMap = Map();
+	parametersMap.put("contact_type","customer");
+	parametersMap.put("company_name",ifNull(getContacts.get("Full_Name"),""));
+	contactMap.put("first_name",getContacts.get("First_Name"));
+	contactMap.put("last_name",getContacts.get("Last_Name"));
+	// 	contName = getContacts.get("First_Name") + " " + getContacts.get("Last_Name");
+	// 	parametersMap.put("contact_name",contName);
+	parametersMap.put("contact_name",getContacts.get("Customer_Display_Name"));
+	// if(getContacts.get("First_Name") != null || getContacts.get("Last_Name") != null){
+	// }
+	// else{
+	// }
+	contactMap.put("email",getContacts.get("Email"));
+	contactMap.put("mobile",getContacts.get("Mobile"));
+	contactMap.put("phone",getContacts.get("Phone"));
+	contactMap.put("is_primary_contact",true);
+	billingAddressMap = Map();
+	billingAddressMap.put("address",getContacts.get("Mailing_Address"));
+	billingAddressMap.put("street2",getContacts.get("Mailing_Street"));
+	billingAddressMap.put("city",getContacts.get("Mailing_City"));
+	billingAddressMap.put("state",getContacts.get("Mailing_State"));
+	billingAddressMap.put("country",getContacts.get("Mailing_Country"));
+	billingAddressMap.put("zip",getContacts.get("Mailing_Zip"));
+	parametersMap.put("billing_address",billingAddressMap);
+	contList.add(contactMap);
+	parametersMap.put("contact_persons",contList);
+	// 	optList = list();
+	// 	optionalMap = Map();
+	// 	parametersMap.put("trigger",optList);
+	updateContact = invokeurl
+	[
+		url :"https://www.zohoapis.com/books/v3/contacts/" + getContacts.get("Zoho_Books_ID") + "?organization_id=830242518"
+		type :PUT
+		parameters:parametersMap.toString()
+		connection:"zbooks"
+	];
+	info "Update Contact " + updateContact;
+}

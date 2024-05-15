@@ -1,0 +1,79 @@
+try 
+{
+	alertmsg = "";
+	get_Contact = zoho.crm.getRecordById("Contacts",contactId);
+	datamap = Map();
+	if(get_Contact.size() > 0)
+	{
+		//--------------------Data Map---------------
+		datamap.put("Zoho_Crm_ID",contactId);
+		datamap.put("First_Name",get_Contact.get("First_Name"));
+		datamap.put("Last_Name",get_Contact.get("Last_Name"));
+		datamap.put("DOB",get_Contact.get("Date_of_Birth").toDate());
+		datamap.put("Phone_Number",get_Contact.get("Phone"));
+		datamap.put("Email",get_Contact.get("Email"));
+		datamap.put("Where_Did_You_Find_Us",get_Contact.get("Referral_Type"));
+		if(get_Contact.get("Referral_Type") == "Friend or Family")
+		{
+			datamap.put("Name",get_Contact.get("Referral_Friend"));
+		}
+		if(get_Contact.get("Referral_Type") == "Dealership")
+		{
+			datamap.put("Name_of_Dealership",get_Contact.get("Referral_Friend"));
+		}
+		if(get_Contact.get("Referral_Type") == "Campground")
+		{
+			datamap.put("Name_of_Campground",get_Contact.get("Referral_Friend"));
+		}
+		if(get_Contact.get("Referral_Type") == "Marina")
+		{
+			datamap.put("Name_of_Marina",get_Contact.get("Referral_Friend"));
+		}
+		if(get_Contact.get("Referral_Type") == "Other")
+		{
+			datamap.put("Tell_us_more",get_Contact.get("Referral_Friend"));
+		}
+		datamap.put("Address_Line1",get_Contact.get("Mailing_Address"));
+		datamap.put("City",get_Contact.get("Mailing_City"));
+		datamap.put("Country",get_Contact.get("Mailing_Country"));
+		datamap.put("Province",get_Contact.get("Mailing_State"));
+		datamap.put("Address_Line2",get_Contact.get("Mailing_Street"));
+		datamap.put("Postal_Code",get_Contact.get("Mailing_Zip"));
+		datamap.put("Workdrive_Folder_ID",get_Contact.get("Workdrive_Folder_ID"));
+		datamap.put("Workdrive_URL",get_Contact.get("Workdrive_URL"));
+		//-------------Data Map End----------
+		search_customer = zoho.creator.getRecords("service_recprotect","quotation","All_Customers","Email == \"" + get_Contact.get("Email") + "\"",1,200,"creator");
+		info search_customer;
+		if(search_customer.get("code") == 3000)
+		{
+			response = zoho.creator.updateRecord("service_recprotect","quotation","All_Customers",search_customer.get("data").get(0).get("ID"),datamap,Map(),"creator");
+		}
+		else
+		{
+			response = zoho.creator.createRecord("service_recprotect","quotation","Customer",datamap,Map(),"creator");
+		}
+		if(response.get("code") == 3000)
+		{
+			alertmsg = "Data Sync Successfully";
+			updateMAp = Map();
+			updateMAp.put("Zoho_Creator_ID",response.get("data").get("ID"));
+			updateCrm = zoho.crm.updateRecord("Contacts",contactId,updateMAp);
+		}
+		else
+		{
+			alertmsg = "Error on Sync";
+		}
+	}
+}
+catch (e)
+{
+	developerlog = Map();
+	developerlog.put("Product","CRM");
+	developerlog.put("Module","Contacts");
+	developerlog.put("Action_Flow","Button function --https://crm.zoho.com/crm/org810798353/settings/modules/Contacts/links-and-buttons/5778486000015755037?component=buttons");
+	developerlog.put("Description","Create/Update cusotmer in Creator");
+	developerlog.put("Request",contactId.toString());
+	developerlog.put("Response",e);
+	dev_log_resp = zoho.creator.createRecord("service_recprotect","quotation","Developer_Logs",developerlog,Map(),"creator");
+}
+return alertmsg;

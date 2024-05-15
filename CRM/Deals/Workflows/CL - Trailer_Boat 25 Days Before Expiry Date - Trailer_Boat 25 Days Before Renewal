@@ -1,0 +1,301 @@
+/* CL - Trailer/Boat 25 Days Before Expiry Date - CL : Trailer/Boat 25 Days Before Renewal*/ 
+
+
+// getAllTrailers = zoho.creator.getRecords("service_recprotect","quotation","All_Trailers","TrailerQuote == 4564627000001425135",1,200,"creator");
+// // info "Trailer " + getAllTrailers;
+// getTrailerFromCreator = zoho.creator.getRecordById("service_recprotect","quotation","All_Trailers",4564627000001524040,"creator");
+// info getTrailerFromCreator;
+// getTarilerQotations = zoho.creator.getRecords("service_recprotect","quotation","All_Trailer_Quotations","ID == 4564627000001425135",1,200,"creator");
+// info 2;
+getBoatandTrailer = zoho.crm.getRecordById("Deals",DealID);
+PolicyNUM = getBoatandTrailer.get("Policy_Number") + " - FUTURE";
+getAllBoats = zoho.creator.getRecords("service_recprotect","quotation","Boats_Report","Zoho_Crm_ID == \"" + DealID + "\" &&  Policy_Number == \"" + PolicyNUM + "\"",1,200,"creator");
+info "getAll boats " + getAllBoats;
+Layout = getBoatandTrailer.get("Layout").get("name");
+if(getBoatandTrailer.get("Contact_Name") != null)
+{
+	contactName = getBoatandTrailer.get("Contact_Name").get("name");
+	get_ContactInfo = zoho.crm.getRecordById("Contacts",getBoatandTrailer.get("Contact_Name").get("id").toLong());
+	//Email = get_ContactInfo.get("Email");
+	Email = "rajapiran@cloudlion.org";
+}
+else
+{
+	contactName = "";
+}
+msg = "";
+//-- autocharge Trailer 
+PolicyNUM = getBoatandTrailer.get("Policy_Number") + " - FUTURE";
+getTarilerQotations = zoho.creator.getRecords("service_recprotect","quotation","All_Trailer_Quotations","Zoho_Crm_ID == \"" + DealID + "\"&& Policy_Number == \"" + PolicyNUM + "\"",1,200,"creator");
+// 			info getTarilerQotations;
+getEndPointfromCreatorTrailer = zoho.creator.getRecords("service_recprotect","quotation","All_Api_Configurations","Name_Process == \"Trailer AutoCharge API\"",1,200,"creator");
+AutoChargeAPIENDPOINTTrailer = getEndPointfromCreatorTrailer.get("data").get(0).get("End_Point");
+//--autocharge boat	
+getAllBoatsQuote = zoho.creator.getRecords("service_recprotect","quotation","Boats_Report","Zoho_Crm_ID == \"" + DealID + "\" &&  Policy_Number == \"" + PolicyNUM + "\"",1,200,"creator");
+getEndPointfromCreatorBoat = zoho.creator.getRecords("service_recprotect","quotation","All_Api_Configurations","Name_Process == \"Boat AutoCharge API\"",1,200,"creator");
+AutoChargeAPIENDPOINTBoat = getEndPointfromCreatorBoat.get("data").get(0).get("End_Point");
+getOrg = invokeurl
+[
+	url :"https://www.zohoapis.com/creator/custom/service_recprotect/Org_Info?publickey=UsNgXbMvJ3pYHuDGtsgdsbhCR"
+	type :GET
+];
+OrgID = getOrg.get("result");
+// 			parammap.put("organization_id",getOrg.get("result"));
+if(Layout == "Trailer Policy")
+{
+	getTemplateCRM = invokeurl
+	[
+		url :"https://www.zohoapis.com/crm/v6/settings/email_templates/5778486000007471078"
+		type :GET
+		connection:"crm"
+	];
+	//info getTemplateCRM.get("email_templates").get(0).get("content");
+	if(getBoatandTrailer.get("Creator_ID") != "")
+	{
+		creatorID = getBoatandTrailer.get("Creator_ID").toLong();
+		TotalTrailers = 0;
+		getAllTrailers = zoho.creator.getRecords("service_recprotect","quotation","All_Trailers","TrailerQuote == " + creatorID,1,200,"creator");
+		//info "getAllTrailers " + getAllTrailers;	
+		for each  trailer in getAllTrailers.get("data")
+		{
+			info trailer.get("ID");
+			getTrailerFromCreator = zoho.creator.getRecordById("service_recprotect","quotation","All_Trailers",trailer.get("ID"),"creator");
+			info "getTrailerFromCreator " + getTrailerFromCreator.get("data").get("Select_Trailer_Type");
+			TotalTrailers = TotalTrailers + 1;
+			msg = msg + "<br><br>" + getTrailerFromCreator.get("data").get("Trailer_Model_Year") + "," + getTrailerFromCreator.get("data").get("Trailer_Manufacturer") + "," + getTrailerFromCreator.get("data").get("Trailer_Model") + "," + getTrailerFromCreator.get("data").get("Select_Trailer_Type") + "";
+		}
+		if(TotalTrailers > 0)
+		{
+			Day18 = getBoatandTrailer.get("Expiry_Date").subDay(18);
+			Day19 = getBoatandTrailer.get("Expiry_Date").subDay(19);
+			RenewalDate = getBoatandTrailer.get("Expiry_Date").addDay(1);
+			modifiedContent = getTemplateCRM.get("email_templates").get(0).get("content").replaceAll("&lt;Trailer Details&gt;",msg).replaceAll("&lt;Day 18&gt;",Day18).replaceAll("&lt;Day 19&gt;",Day19).replaceAll("&lt;Renewal Date&gt;",RenewalDate).replaceAll("&lt;Contact Name&gt;",contactName).replaceAll("&lt;Total&gt;",getBoatandTrailer.get("Total")).replaceAll("&lt;Policy Number&gt;",getBoatandTrailer.get("Policy_Number")).replaceAll("#UPOCARDNUMBER#",UPOCardNumber);
+			modifiedSubject = getTemplateCRM.get("email_templates").get(0).get("subject");
+			//info modifiedContent;
+			//,"template":{"id":"4516886000014770109"}
+			//-------------------this below snip created on01/04/2024
+			//-------autocharge
+			//getTrailer quotations		
+			for each  allTrailerQuote in getTarilerQotations.get("data")
+			{
+				// payment URl Generate
+				paymentURLMap = Map();
+				fetchEndPointPaymentURL = "https://recprotectbackend-10073292108.development.catalystappsail.com/recprotect/api/trailer/stripe/create_payment_url";
+				paymentMap = Map();
+				paymentMap.put("total_premium",if(allTrailerQuote.get("Total_Premium_before_tax") != null,allTrailerQuote.get("Total_Premium_before_tax"),0));
+				paymentMap.put("total_tax",if(allTrailerQuote.get("Total_Tax") != null,allTrailerQuote.get("Total_Tax"),0));
+				paymentMap.put("admin_fee",if(allTrailerQuote.get("Fee") != null,allTrailerQuote.get("Fee"),0));
+				paymentURLMap.put("amount_payable",paymentMap);
+				paymentURLMap.put("trailer_quote_record_id",allTrailerQuote.get("Quote_Record_ID_Server"));
+				uniqID = if(allTrailerQuote.get("Policy_Number") != null,allTrailerQuote.get("Policy_Number"),allTrailerQuote.get("Quote_ID"));
+				paymentURLMap.put("unique_id",uniqID);
+				paymentURLMap.put("payment_for","RENEWAL");
+				paymentURLMap.put("payment_type","Credit To Company");
+				paymentURLMap.put("payment_method","Credit Card");
+				paymentURLMap.put("organization_id",OrgID);
+				getCustomer = zoho.creator.getRecords("service_recprotect","quotation","All_Customers","ID == " + allTrailerQuote.get("Customer_ID").get("ID"),1,200,"creator");
+				paymentURLMap.put("customer_id",getCustomer.get("data").get(0).get("Server_Customer_ID"));
+				// 		info "Param a" + paymentURLMap;
+				// API
+				headerMap = Map();
+				headerMap.put("Content-Type","application/json");
+				resp = invokeurl
+				[
+					url :fetchEndPointPaymentURL
+					type :POST
+					parameters:paymentURLMap.toString()
+					headers:headerMap
+				];
+				if(resp != null)
+				{
+					Payment_URL = resp.get("data").get("url");
+					info "URL " + input.Payment_URL;
+					if(Payment_URL != null)
+					{
+						// 			Payment_ID = resp.get("data").get("url").getsuffix("payment_id=");
+						// 			boatquote_data.Payment_ID=Payment_ID;
+						// 			boatquote_data.Payment_URL=Payment_URL;
+					}
+				}
+				// payment url ends
+				parammap = Map();
+				parammap.put("organization_id",OrgID);
+				parammap.put("quote_record_id",ifNull(allTrailerQuote.get("Quote_Record_ID_Server"),""));
+				parammap.put("policy_change_balance",allTrailerQuote.get("Total_Payable_Premium_after_tax"));
+				parammap.put("payment_for","RENEWAL");
+				parammap.put("stripe_customer_id",ifNull(allTrailerQuote.get("Stripe_Customer_ID"),""));
+				parammap.put("payment_method_id",ifNull(allTrailerQuote.get("Stripe_Payment_Method_ID"),""));
+				//    info parammap;
+				//----------------- code belong to thisapp.Server_Side.callServer function 
+				headerMap = Map();
+				headerMap.put("Content-Type","application/json");
+				resp = invokeurl
+				[
+					url :AutoChargeAPIENDPOINTTrailer
+					type :POST
+					parameters:parammap.toString()
+					headers:headerMap
+				];
+			}
+			// ----------autocharge api ends
+			if(resp.get("success") == true)
+			{
+				paymentStatusUpdateMap = Map();
+				paymentStatusUpdateMap.put("Policy_Payment_Status","PAID");
+				updatePaymentStatusUpdate = zoho.crm.updateRecord("Deals",DealID,paymentStatusUpdateMap);
+			}
+			else if(resp.get("success") == false)
+			{
+				data = {{"from":{"email":zoho.adminuserid},"to":{{"email":Email}},"subject":modifiedSubject,"content":modifiedContent,"mail_format":"html"}};
+				json_data = Map();
+				json_data.put("data",data);
+				send_mail = invokeurl
+				[
+					url :"https://www.zohoapis.com/crm/v3/Deals/" + DealID + "/actions/send_mail"
+					type :POST
+					parameters:json_data.toString()
+					connection:"crm"
+				];
+				info send_mail;
+			}
+		}
+		//Renewal Stage Update on Creator
+		creatorMap = Map();
+		creatorMap.put("Renewal_Stage","25th Day");
+		creatorUpdate = zoho.creator.updateRecord("service_recprotect","quotation","All_Trailer_Quotations",getBoatandTrailer.get("Creator_ID").toLong(),creatorMap,Map(),"creator");
+		info "Update Creator --->" + creatorUpdate;
+	}
+}
+else if(Layout == "Boat Policy")
+{
+	getTemplateCRM = invokeurl
+	[
+		url :"https://www.zohoapis.com/crm/v6/settings/email_templates/5778486000008321048"
+		type :GET
+		connection:"crm"
+	];
+	//info getTemplateCRM.get("email_templates").get(0).get("content");
+	TotalBoat = 0;
+	if(getBoatandTrailer.get("Creator_ID") != "")
+	{
+		creatorID = getBoatandTrailer.get("Creator_ID").toLong();
+		getAllBoats = zoho.creator.getRecords("service_recprotect","quotation","All_Boat_Lines","BoatQuote == " + creatorID,1,200,"creator");
+		info "getAllBoats " + getAllBoats;
+		CRM_StatusList = List();
+		for each  boat in getAllBoats.get("data")
+		{
+			updateMap = Map();
+			info boat.get("ID");
+			getBoatFromCreator = zoho.creator.getRecordById("service_recprotect","quotation","All_Boat_Lines",boat.get("ID"),"creator");
+			//	info "getBoatFromCreator " + getBoatFromCreator;
+			TotalBoat = TotalBoat + 1;
+			msg = msg + "<br><br>" + getBoatFromCreator.get("data").get("Boat_Model_Year") + "," + getBoatFromCreator.get("data").get("Boat_Manufacturer") + "," + getBoatFromCreator.get("data").get("Boat_Model") + "," + getBoatFromCreator.get("data").get("Select_the_type_of_watercraft") + "";
+		}
+		if(TotalBoat > 0)
+		{
+			Day18 = getBoatandTrailer.get("Expiry_Date").subDay(18);
+			Day19 = getBoatandTrailer.get("Expiry_Date").subDay(19);
+			RenewalDate = getBoatandTrailer.get("Expiry_Date").addDay(1);
+			modifiedContent = getTemplateCRM.get("email_templates").get(0).get("content").replaceAll("&lt;Boat Details&gt;",msg).replaceAll("&lt;Day 18&gt;",Day18).replaceAll("&lt;Day 19&gt;",Day19).replaceAll("&lt;Renewal Date&gt;",RenewalDate).replaceAll("&lt;Contact Name&gt;",contactName).replaceAll("&lt;Total&gt;",getBoatandTrailer.get("Total")).replaceAll("&lt;Policy Number&gt;",getBoatandTrailer.get("Policy_Number")).replaceAll("#UPOCARDNUMBER#",UPOCardNumber);
+			modifiedSubject = getTemplateCRM.get("email_templates").get(0).get("subject");
+			//info modifiedContent;
+			//,"template":{"id":"4516886000014770109"}
+			//-------autocharge
+			//getTrailer quotations		
+			for each  allBoatQuote in getAllBoatsQuote.get("data")
+			{
+				// payment URl Generate
+				paymentURLMap = Map();
+				fetchEndPointBoatPayment = "https://recprotectbackend-10073292108.development.catalystappsail.com/recprotect/api/boat/stripe/create_payment_url";
+				paymentMap = Map();
+				paymentMap.put("total_premium",if(allBoatQuote.get("Total_Premium_before_tax") != null,allBoatQuote.get("Total_Premium_before_tax"),0));
+				paymentMap.put("total_tax",if(allBoatQuote.get("Total_Tax") != null,allBoatQuote.get("Total_Tax"),0));
+				paymentMap.put("admin_fee",if(allBoatQuote.get("Fee") != null,allBoatQuote.get("Fee"),0));
+				paymentURLMap.put("amount_payable",paymentMap);
+				paymentURLMap.put("boat_quote_record_id",allBoatQuote.get("Quote_Record_ID_Server"));
+				uniqID = if(allBoatQuote.get("Policy_Number") != null,allBoatQuote.get("Policy_Number"),allBoatQuote.get("Quote_ID"));
+				paymentURLMap.put("unique_id",uniqID);
+				paymentURLMap.put("payment_for","RENEWAL");
+				//NewBusiness
+				paymentURLMap.put("payment_type","Credit To Company");
+				//Credit To Company
+				paymentURLMap.put("payment_method","Credit Card");
+				paymentURLMap.put("organization_id",OrgID);
+				getCustomer = zoho.creator.getRecords("service_recprotect","quotation","All_Customers","ID == " + allBoatQuote.get("Customer_ID").get("ID"),1,200,"creator");
+				paymentURLMap.put("customer_id",getCustomer.get("data").get(0).get("Server_Customer_ID"));
+				// 		info "Param a" + paymentURLMap;
+				// API
+				headerMap = Map();
+				headerMap.put("Content-Type","application/json");
+				resp = invokeurl
+				[
+					url :fetchEndPointBoatPayment
+					type :POST
+					parameters:paymentURLMap.toString()
+					headers:headerMap
+				];
+				if(resp != null)
+				{
+					Payment_URL = resp.get("data").get("url");
+					info "URL " + input.Payment_URL;
+					if(Payment_URL != null)
+					{
+						// 			Payment_ID = resp.get("data").get("url").getsuffix("payment_id=");
+						// 			boatquote_data.Payment_ID=Payment_ID;
+						// 			boatquote_data.Payment_URL=Payment_URL;
+					}
+				}
+				// payment url ends
+				parammap = Map();
+				parammap.put("organization_id",OrgID);
+				parammap.put("quote_record_id",ifNull(allBoatQuote.get("Quote_Record_ID_Server"),""));
+				parammap.put("policy_change_balance",allBoatQuote.get("Total_Payable_Premium_after_tax"));
+				parammap.put("payment_for","RENEWAL");
+				parammap.put("stripe_customer_id",ifNull(allBoatQuote.get("Stripe_Customer_ID"),""));
+				parammap.put("payment_method_id",ifNull(allBoatQuote.get("Stripe_Payment_Method_ID"),""));
+				//    info parammap;
+				//----------------- code belong to thisapp.Server_Side.callServer function 
+				headerMap = Map();
+				headerMap.put("Content-Type","application/json");
+				Boatresp = invokeurl
+				[
+					url :AutoChargeAPIENDPOINTBoat
+					type :POST
+					parameters:parammap.toString()
+					headers:headerMap
+				];
+			}
+			// ----------autocharge api ends
+			if(Boatresp.get("success") == true)
+			{
+				paymentStatusUpdateMap = Map();
+				paymentStatusUpdateMap.put("Policy_Payment_Status","PAID");
+				updatePaymentStatusUpdate = zoho.crm.updateRecord("Deals",DealID,paymentStatusUpdateMap);
+			}
+			else if(Boatresp.get("success") == false)
+			{
+				data = {{"from":{"email":zoho.adminuserid},"to":{{"email":Email}},"subject":modifiedSubject,"content":modifiedContent,"mail_format":"html"}};
+				json_data = Map();
+				json_data.put("data",data);
+				send_mail = invokeurl
+				[
+					url :"https://www.zohoapis.com/crm/v3/Deals/" + DealID + "/actions/send_mail"
+					type :POST
+					parameters:json_data.toString()
+					connection:"crm"
+				];
+				info send_mail;
+			}
+		}
+		//Renewal Stage update on Creator
+		creatorMap = Map();
+		creatorMap.put("Renewal_Stage","25th Day");
+		creatorUpdate = zoho.creator.updateRecord("service_recprotect","quotation","Boats_Report",getBoatandTrailer.get("Creator_ID").toLong(),creatorMap,Map(),"creator");
+		info "Update Creator --->" + creatorUpdate;
+	}
+}
+//Renewal Stage update in CRM
+updateCRM_Map = Map();
+updateCRM_Map.put("Renewal_Stage","25th Day");
+updateCRM = zoho.crm.updateRecord("Deals",DealID,updateCRM_Map);
+// 	info updateCRM;

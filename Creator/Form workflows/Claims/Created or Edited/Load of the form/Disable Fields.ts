@@ -1,0 +1,11 @@
+disable Asset;
+disable Policy_Number;
+disable Contact_Name;
+//disable Email;
+hide Desk_ID;
+hide View_Claims;
+hide Developer_Reference;
+// hide Third_Party;
+// hide Addition_Information;
+hide Claim_Loss_Damage_Photos.Workdrive_File_ID;
+hide Approved;

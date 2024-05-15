@@ -1,0 +1,996 @@
+<%{
+	%>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	</head>
+	<body>
+	<style>
+	h4{
+	margin-bottom:6px;
+	margin-top:7px;
+	font-weight: bold;
+	text-align: left;
+	margin-left: 10px;
+	 font-size: 13px;
+	 text-transform: uppercase;
+	}
+	h6{
+	margin-bottom:6px;
+	margin-top:7px;
+	font-weight: bold;
+	font-size: 12px;
+	}
+	</style>
+	  <style>
+    * {
+      box-sizing: border-box
+    }
+    
+    .column {
+      float: left;
+	  line-height: 0.5;
+    }
+    
+    .column3 {
+      float: left;
+      width: 33.33%;
+      font-size: 10px;
+	   line-height: 0.5;
+    }
+    
+    .left {
+      width: 35%;
+    }
+    
+    .right {
+      width: 35%;
+    }
+    
+    .end {
+      width: 30%;
+    }
+    
+    .header1,
+    header2 {
+      width: 100%
+    }
+    
+    .HeaderTopic {
+      background-color: rgb(187, 187, 187);
+      padding: 1px
+    }
+    
+    .paragraph {
+    }
+    
+    .row:after {
+      content: "";
+      display: table;
+      clear: both
+    }
+    
+    @media screen and (max-width: 600px) {
+      .column {
+        width: 100%
+      }
+    }
+    
+    .left1 {
+      width: 40%;
+    }
+    
+    .right1 {
+      width: 50%;
+    }
+    
+    .right2 {
+      width: 40%;
+    }
+    
+    .leftfull {
+      width: 100%;
+    }
+    
+    .spl1 {
+      width: 15%;
+    }
+    
+    .spl2 {
+      width: 10%;
+    }
+    
+    .spl3 {
+      width: 15%;
+    }
+    
+    .spl4 {
+      width: 40%;
+    }
+    
+    table,
+    th,
+    td {
+      border-collapse: collapse;
+	  font-size: 12px; 
+
+    }
+	.table tbody tr td, .table tfoot tr td, 
+	.table tbody tr td 
+	{
+    padding: 0px 0px;
+	padding-left: 1%;
+	}
+	@media print {
+  div.column {
+  line-height: 0.6;
+}
+	}
+	
+  </style>
+<%
+	// 	input.recID = 4564627000000820033;
+	fetch_Boat = BoatQuote[ID == input.recID];
+	if(fetch_Boat.count() > 0)
+	{
+		AdditionalInsuredFirstName1 = "";
+		AdditionalInsuredFirstName2 = "";
+		AdditionalInsuredLastName1 = "";
+		AdditionalInsuredLastName2 = "";
+		// 		if(fetch_Boat.Are_there_any_additional_names_on_the_boat_ownership1 == true)
+		if(fetch_Boat.Are_there_any_additional_names_on_the_boat_ownership == "Yes")
+		{
+			namescount = 0;
+			for each  rec_additionalnames in fetch_Boat.Additional_Names
+			{
+				getAdditionalNames = Additional_Names[ID == rec_additionalnames];
+				if(getAdditionalNames.count() > 0)
+				{
+					if(namescount == 0)
+					{
+						AdditionalInsuredFirstName1 = getAdditionalNames.Additional_Insured_First_Name;
+						AdditionalInsuredLastName1 = getAdditionalNames.Additional_Insured_Last_Name;
+					}
+					else
+					{
+						AdditionalInsuredFirstName2 = getAdditionalNames.Additional_Insured_First_Name;
+						AdditionalInsuredLastName2 = getAdditionalNames.Additional_Insured_Last_Name;
+					}
+					namescount = namescount + 1;
+				}
+			}
+		}
+		%>
+<div class="container-fluid" style="margin-top:3%;">
+			 <h3 style="text-align: center;">WATERCRAFT APPLICATION</h3>
+			 <table class="table" style="width:100%;">
+			 <th style = "background-color:#8ADAB2"class="mt-4" colspan="5">
+			 
+			 <h4>Boat Information - <%=fetch_Boat.Quote_ID%> - Boat - <%=fetch_Boat.Deal_Type%></h4>
+			 </th>
+			 <tr style= "height: 10px;"></tr>
+			<tr> <td style= "background-color:#d3d3d3;"colspan="5"><h6>BROKER AND INSURER NAME AND ADDRESS</h6></td> </tr>
+			<tr colspan="5">
+			 <td colspan="5">
+      <div class="column left">
+        <img src="https://previewengine-accl.zoho.com/image/WD/rnhg746db378696bc41c7851cb4cefe42823c?version=1.0&amp;width=2046&amp;height=1536"
+          alt="img" width="180" height="150">
+      </div>
+      <div class="column right" >
+        <p>RecProtect</p>
+        <p>114 Main Street S., PO Box 209</p>
+        <p>Mount Forest, Ontario N0G 2L0</p>
+        <p>Tel:1 888 887 0881 Fax: 519 323 3339</p>
+        <p>Email Address: sales@recprotect.ca </p>
+        <p>Broker Client ID: 0000 </p>
+      </div>
+      <div class="column end">
+	  <div class = "row">
+        <p>Underwritten by Four Points </p>
+        <p> Insurance Company Ltd. A </p>
+        <p>Subsidiary of the Mutual </p>
+        <p> Fire Insurance Company of British </p>
+        <p>Columbia</p>
+        <p>9366 200A Street</p>
+        <p> Langley, BC V1M 4B3 Canada </p>
+        <p>P: 866 417 2272</p>
+		 </div>
+      </div>
+			 </td>
+			 </tr>
+			 
+			
+			 <tr>	
+	        <td style= "background-color:#d3d3d3;"colspan="5"><h6>POLICY PERIOD INFORMATION</h6></td>       	    
+			</tr>
+			<tr colspan="5">
+			<td colspan="5">
+			      <div class="column left" style="padding-left: 1%;">
+        <p>From: (MM/DD/YYYY) &nbsp <%=fetch_Boat.Inception_Date.toString("MM/dd/yyyy")%></p>
+      </div>
+      <div class="column right2">
+        <p>To: (MM/DD/YYYY) &nbsp <%=fetch_Boat.Expiry_Date.toString("MM/dd/yyyy")%> </p>
+       
+		  <tr colspan="5"> <td colspan="5">  <p style="margin-right: 10px;text-align: center;">All times are local times at the applicant's postal address
+          stated hereon.</p></td></tr>
+      </div>
+			</td>
+			</tr>
+			 <tr>	
+	        <td style= "background-color:#d3d3d3;"colspan="5"><h6>REGISTERED/TITLED OWNER'S FULL NAME AND POSTAL ADDRESS</h6></td>       	    
+			</tr>
+			<tr colspan="5">
+			<td colspan="5">
+			  <div class="column left" style="padding-left: 1%;">
+        <p>
+          <span style="font-weight: bold">First Name 1&nbsp:&nbsp</span> <%=ifNull(fetch_Boat.Customer_ID.First_Name,"")%>  </p>
+        <p>
+          <span style="font-weight: bold">Additional Insured First Name 1&nbsp:&nbsp</span> <%=ifNull(AdditionalInsuredFirstName1,"")%> 
+		 </p>
+		  <p>
+          <span style="font-weight: bold">Additional Insured First Name 2&nbsp:&nbsp</span> <%=ifNull(AdditionalInsuredFirstName2,"")%> 
+		 </p>
+        <p>
+          <span style="font-weight: bold">Address&nbsp:&nbsp</span> <%=ifNull(fetch_Boat.Customer_ID.Address_Line1,"")%>  </p>
+        <p>
+          <span style="font-weight: bold">City&nbsp :&nbsp</span> <%=ifNull(fetch_Boat.Customer_ID.City,"")%></p>
+        <p>
+          <span style="font-weight: bold">Phone Number&nbsp:&nbsp</span> <%=ifNull(fetch_Boat.Customer_ID.Phone_Number,"")%></p>
+      </div>
+      <div class="column right">
+        <p>
+          <span style="font-weight: bold">Last Name 1&nbsp:&nbsp</span> <%=ifNull(fetch_Boat.Customer_ID.Last_Name,"")%>  </p>
+        <p>
+          <span style="font-weight: bold">Additional Insured Last Name 1&nbsp:&nbsp</span> <%=ifNull(AdditionalInsuredLastName1,"")%>
+		  </p>
+		   <p>
+          <span style="font-weight: bold">Additional Insured Last Name 2&nbsp:&nbsp</span> <%=ifNull(AdditionalInsuredLastName2,"")%> 
+		 </p>
+        <p>
+          <span style="font-weight: bold">Province&nbsp:&nbsp</span> <%=ifNull(fetch_Boat.Customer_ID.Province,"")%> </p>
+        <p>
+          <span style="font-weight: bold">Email Address&nbsp:&nbsp</span> <%=ifNull(fetch_Boat.Customer_ID.Email,"")%></p>
+      </div>
+      <div class="column end">
+        <p>
+          <span style="font-weight: bold">Postal Code&nbsp:&nbsp</span> <%=ifNull(fetch_Boat.Customer_ID.Postal_Code,"")%> </p>
+      </div>
+			</td>
+			</tr>
+			
+			 </table>
+	    </div>
+		<div class="container-fluid" style="margin-top:3%;">
+		 <table class="table"  style="width:100%;">
+<%
+		count = 0;
+		for each  rec in fetch_Boat.Boat
+		{
+			count = count + 1;
+			%>
+<tr>
+	<th style = "background-color:#5C8374;"class="mt-4" colspan="5"><h4 ><%=count%>. Boat Details - <%=rec.Boat_Manufacturer%></h4></th>
+</tr>
+ <tr style= "height: 10px;"></tr>
+			  <tr>	
+	        <td style= "background-color:#d3d3d3;"colspan="5"><h6> PRINCIPAL OPERATOR EXPERIENCE</h6></td>       	    
+			</tr>
+ <tr style= "height: 10px;"></tr>
+<tr>
+            <td style="width: 15%;   border-right: 1px solid rgb(221, 221, 221)">Name</td>
+            <td style="width: 15%;   border-right: 1px solid rgb(221, 221, 221)"> D.O.B.</td>
+            <td style="width: 15%;   border-right: 1px solid rgb(221, 221, 221)">Yrs operating similar vessels</td>
+            <td style="width: 40%; "colspan="2">Does the operator hold a Pleasure Craft Operator's
+              card? </td>
+          </tr>
+          <tr>
+            <td style="width: 15%;  border-top: 1px solid rgb(221, 221, 221); border-right: 1px solid rgb(221, 221, 221)">1. <%=ifNull(rec.First_Name,"")%></td>
+            <td style="width: 10%;   border-top: 1px solid rgb(221, 221, 221); border-right: 1px solid rgb(221, 221, 221)"><%=ifNull(rec.Date_of_Birth.toString("MM/dd/yyyy"),"")%> </td>
+            <td style="width: 15%;   border-top: 1px solid rgb(221, 221, 221); border-right: 1px solid rgb(221, 221, 221)"><%=ifNull(rec.Principal_operator_s_years_of_boating_experience_with_vessels_of_a_similar_size_and_type,"")%></td>
+<%
+			if(rec.Does_the_operator_hold_a_Pleasure_Craft_Operator_s_Card_PCOC == "Yes")
+			{
+				%>
+<td style="width: 40%;  border-top: 1px solid rgb(221, 221, 221)"colspan="2">Yes</td>
+<%
+			}
+			else
+			{
+				%>
+<td style="width: 40%;  border-top: 1px solid rgb(221, 221, 221)"colspan="2">No</td>
+<%
+			}
+			%>
+</tr>
+				   <tr style= "height: 10px;"></tr>
+				   			  <tr>	
+	        <td style= "background-color:#d3d3d3;"colspan="5"><h6> PREVIOUS INSURANCE</h6></td>       	    
+			</tr>
+ <tr style= "height: 10px;"></tr>
+     <tr>
+            <td style="width: 15%;" colspan="4">
+			 Has the principal operator had any motor vehicle
+              claims in the last 5 years? </td>
+<%
+			if(rec.Has_the_principal_operator_had_any_motor_vehicle_claims_in_the_last_5_years == "Yes")
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" checked disabled>&nbsp;No &nbsp;<input type="checkbox" disabled></td>
+<%
+			}
+			else
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" disabled>&nbsp;No &nbsp;<input type="checkbox" checked disabled></td>
+<%
+			}
+			%>
+</tr>
+		       <tr>
+            <td style="width: 15%; " colspan="4">
+			 Has the principal operator
+              had any motor vehicle convictions in the last 3
+              years? </td>
+<%
+			if(rec.Has_the_principal_operator_had_any_motor_vehicle_convictions_in_the_last_3_years == "Yes")
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" checked disabled>&nbsp;No &nbsp;<input type="checkbox" disabled></td>
+<%
+			}
+			else
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" disabled>&nbsp;No &nbsp;<input type="checkbox" checked disabled></td>
+<%
+			}
+			%>
+</tr>
+		  		       <tr>
+            <td style="width: 15%;" colspan="4">
+			 Has the principal operator had their driver's
+              license suspended?</td>
+<%
+			if(rec.Has_the_principal_operator_had_their_driver_s_license_suspended == "Yes")
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" checked disabled>&nbsp;No &nbsp;<input type="checkbox" disabled></td>
+<%
+			}
+			else
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" disabled>&nbsp;No &nbsp;<input type="checkbox" checked disabled></td>
+<%
+			}
+			%>
+</tr>
+		    <tr style= "height: 10px;"></tr>
+<%
+			//--------------Newly Added Fields------------------
+			%>
+<tr>
+ 	        <td style= "background-color:#d3d3d3;"colspan="5"><h6>MAIN ENGINE </h6></td>       	    
+			</tr>
+  <tr style= "height: 10px;"></tr>
+ <tr>
+              <td style="width: 15%; ">Types:&nbsp<%=ifNull(rec.Types1,"")%></td> 
+              <td style="width: 15%;  ; border-right: 1px solid rgb(221, 221, 221)" colspan="2">
+              Enter the type ?:&nbsp<%=ifNull(rec.Enter_the_type1,"")%></td>
+              <td style="width: 15%; " colspan="2">Fuel Type:&nbsp<%=ifNull(rec.Fuel_Type1,"")%></td>
+            </tr>
+			<tr>
+              <td style="width: 15%;  border-top: 1px solid rgb(221, 221, 221)">Model Year:&nbsp<%=ifNull(rec.Model_Year1,"")%></td>
+              <td style="width: 10%;   border-top: 1px solid rgb(221, 221, 221)" colspan="2">Manufacturer:&nbsp<%=ifNull(rec.Manufacturer1,"")%></td>
+              <td style="width: 15%;  border-top: 1px solid rgb(221, 221, 221)" colspan="2">Horsepower(HP) #:&nbsp<%=ifNull(rec.Horsepower1,"")%></td>
+            </tr>
+						    <tr style= "height: 10px;"></tr>
+			 <tr>	
+	        <td style= "background-color:#d3d3d3;"colspan="5"><h6>LIENHOLDER</h6></td>       	    
+			</tr>
+  <tr style= "height: 10px;"></tr>
+ <tr>
+              <td style="width: 15%; ">Lein holder:&nbsp<%=ifNull(rec.Lein_holder.Name_of_Financier,"")%></td> 
+              <td style="width: 15%;  ; border-right: 1px solid rgb(221, 221, 221)" colspan="2">
+               Address line1:&nbsp<%=ifNull(rec.Address_line1,"")%></td>
+              <td style="width: 15%; " colspan="2">Address line2:&nbsp<%=ifNull(rec.Address_line2,"")%></td>
+            </tr>
+			<tr>
+              <td style="width: 15%;  border-top: 1px solid rgb(221, 221, 221)">City:&nbsp<%=ifNull(rec.City,"")%></td>
+              <td style="width: 10%;   border-top: 1px solid rgb(221, 221, 221)" colspan="2">Province:&nbsp<%=ifNull(rec.Province,"")%></td>
+              <td style="width: 15%;  border-top: 1px solid rgb(221, 221, 221)" colspan="2">Postal Code:&nbsp<%=ifNull(rec.Postal_Code,"")%></td>
+            </tr>
+			<tr>
+              <td style="width: 15%;  border-top: 1px solid rgb(221, 221, 221); border-right: 1px solid rgb(221, 221, 221)"> Country:&nbsp<%=ifNull(rec.Country,"")%></td>
+			   </tr>
+			    <tr style= "height: 10px;"></tr>
+		  <tr>	
+	        <td style= "background-color:#d3d3d3;"colspan="5"><h6>RENEWAL INFORMATION</h6></td>       	    
+			</tr>
+ <tr style= "height: 10px;"></tr>	   
+			 <tr>
+              <td style="width: 15%; ">Boat Age:&nbsp<%=ifNull(rec.Boat_Age,"")%></td> 
+               <td style="width: 15%;  ; border-right: 1px solid rgb(221, 221, 221)" colspan="2">
+              Boat Model Age:&nbsp<%=ifNull(rec.Boat_Model_Age,"")%></td>
+<%
+			if(rec.Is_auto_approved_for_next_5_years == true)
+			{
+				%>
+<td><input type="checkbox" checked disabled> Is auto approved for next 5 years? </td>
+<%
+			}
+			else
+			{
+				%>
+<td><input type="checkbox" disabled> Is auto approved for next 5 years? </td>
+<%
+			}
+			%>
+<tr>
+              <td style="width: 15%;  border-top: 1px solid rgb(221, 221, 221)"> Approved Year :&nbsp<%=ifNull(rec.Approved_Year,"")%></td>
+              <td style="width: 10%;   border-top: 1px solid rgb(221, 221, 221)" colspan="2">Policy Coverage Type:&nbsp<%=ifNull(rec.Policy_Coverage_Type,"")%></td>
+<%
+			if(rec.Opt_In_for_RCV == true)
+			{
+				%>
+<td><input type="checkbox" checked disabled> Opt-In for RCV </td>
+<%
+			}
+			else
+			{
+				%>
+<td><input type="checkbox" disabled> Opt-In for RCV</td>
+<%
+			}
+			%>
+</tr>
+			<tr>
+			              <td style="width: 15%; ">UW Status:&nbsp<%=ifNull(rec.UW_Status,"")%></td> 
+						  <td style="width: 15%;  ; border-right: 1px solid rgb(221, 221, 221)" colspan="2">
+             
+						 
+</tr>
+ <tr style= "height: 10px;"></tr>
+
+  <tr>	
+	        <td style= "background-color:#d3d3d3;"colspan="5"><h6>  VESSEL DESCRIPTION</h6></td>       	    
+			</tr>
+ <tr style= "height: 10px;"></tr>
+ <tr>
+              <td style="width: 15%; ">Year:&nbsp<%=ifNull(rec.Boat_Model_Year,"")%></td> 
+              <td style="width: 15%;border-right: 1px solid rgb(221, 221, 221);" colspan="2">
+              Manufacturer:&nbsp<%=ifNull(rec.Boat_Manufacturer,"")%></td>
+              <td style="width: 15%; " colspan="2">Model:&nbsp<%=ifNull(rec.Boat_Model,"")%></td>
+            </tr>
+            <tr>
+              <td style="width: 15%;  border-top: 1px solid rgb(221, 221, 221)">Length:&nbsp<%=ifNull(rec.Lengths,"")%></td>
+              <td style="width: 10%;   border-top: 1px solid rgb(221, 221, 221);border-right: 1px solid rgb(221, 221, 221)" colspan="2">Hull ID:&nbsp<%=ifNull(rec.Hull_ID_Optional,"")%></td>
+              <td style="width: 15%;  border-top: 1px solid rgb(221, 221, 221)" colspan="2">Serial #:&nbsp<%=ifNull(rec.Hull_ID_Serial,"")%></td>
+            </tr>
+            <tr>
+              <td style="width: 15%;  border-top: 1px solid rgb(221, 221, 221); border-right: 1px solid rgb(221, 221, 221)">Boat Type:&nbsp<%=ifNull(rec.Select_the_type_of_watercraft,"")%></td>
+              <td style="width: 10%;  border-top: 1px solid rgb(221, 221, 221)" colspan="2">Hull Type:&nbsp<%=ifNull(rec.Hull_Type,"")%></td>
+              <td style="width: 15%;  border-top: 1px solid rgb(221, 221, 221)" colspan="2"></td>
+            </tr>
+            <tr>
+              <td style="width: 15%;   border-top: 1px solid rgb(221, 221, 221)">Max Speed (MPH):&nbsp<%=ifNull(rec.Estimated_max_speed,"0")%>mph</td>
+              <td style="width: 10%;  border-top: 1px solid rgb(221, 221, 221)" colspan="2"></td>
+              <td style="width: 15%;  border-top: 1px solid rgb(221, 221, 221)" colspan="2"></td>
+            </tr>
+  <tr style= "height: 10px;"></tr>
+ <tr>	
+	        <td style= "background-color:#d3d3d3;"colspan="5"><h6>  MOTOR DESCRIPTION </h6></td>       	    
+			</tr>
+ <tr style= "height: 10px;"></tr>
+  <tr>
+              <td style="width: 15%; ">Motor Type:&nbsp<%=ifNull(rec.Types,"")%></td>
+              <td style="width: 15%;border-right: 1px solid rgb(221, 221, 221)"  colspan="2"> </td>
+              <td style="width: 15%;" colspan="2">Fuel Type:&nbsp<%=ifNull(rec.Fuel_Type,"")%></td>
+            </tr>
+            <tr>
+              <td style="width: 15%;   border-top: 1px solid rgb(221, 221, 221); border-right: 1px solid rgb(221, 221, 221)">Motor Year:&nbsp<%=ifNull(rec.Model_Year,"")%></td>
+              <td style="width: 10%;   border-top: 1px solid rgb(221, 221, 221); border-right: 1px solid rgb(221, 221, 221)"  colspan="2">Motor Manufacturer:&nbsp<%=ifNull(rec.Manufacturer,"")%></td>
+              <td style="width: 15%;   border-top: 1px solid rgb(221, 221, 221)" colspan="2">Motor Serial #:&nbsp<%=ifNull(rec.Serial,"")%></td>
+            </tr>
+            <tr>
+              <td style="width: 15%;  border-top: 1px solid rgb(221, 221, 221); border-right: 1px solid rgb(221, 221, 221)">HP:&nbsp<%=ifNull(rec.Horsepower,"0")%>hp</td>
+              <td style="width: 10%; border-top: 1px solid rgb(221, 221, 221)"  colspan="2"></td>
+              <td style="width: 15%;  border-top: 1px solid rgb(221, 221, 221)" colspan="2"></td>
+            </tr>
+			
+			
+ <tr style= "height: 10px;"></tr>
+			  <tr>	
+	        <td style= "background-color:#d3d3d3;"colspan="5"><h6> TRAILERS AND ACCESSORIES</h6></td>       	    
+			</tr>
+ <tr style= "height: 10px;"></tr>
+<tr>
+<%
+			if(rec.Add_a_trailer == "Yes")
+			{
+				%>
+<td>1. Trailer <input type="checkbox" checked disabled></td>
+<%
+			}
+			else
+			{
+				%>
+<td>1. Trailer <input type="checkbox" disabled></td>
+<%
+			}
+			if(rec.Add_a_tender == "Yes")
+			{
+				%>
+<td>2. Tender <input type="checkbox" checked disabled></td>
+<%
+			}
+			else
+			{
+				%>
+<td>2. Tender <input type="checkbox" disabled></td>
+<%
+			}
+			if(rec.Add_an_auxiliary_motor == "Yes")
+			{
+				%>
+<td colspan="3" >3. Auxiliary Motor <input type="checkbox" checked disabled></td>
+<%
+			}
+			else
+			{
+				%>
+<td colspan="3">3. Auxiliary Motor  <input type="checkbox" disabled></td>
+<%
+			}
+			%>
+</tr>
+<tr>
+            <td style="width: 17%; border-right: 1px solid rgb(221, 221, 221); border-bottom: 1px solid rgb(221, 221, 221)">1. Year:&nbsp<%=ifNull(rec.Trailer_Model_Year,"")%></td>
+            <td style="width: 17%; border-right: 1px solid rgb(221, 221, 221); border-bottom: 1px solid rgb(221, 221, 221)">Manufacturer:  &nbsp<%=ifNull(rec.Trailer_Manufacturer,"")%> </td>
+            <td style="width: 17%; border-right: 1px solid rgb(221, 221, 221); border-bottom: 1px solid rgb(221, 221, 221)">Serial #: &nbsp<%=ifNull(rec.Trailer_VIN,"")%></td>
+            <td style="width: 17%; border-right: 1px solid rgb(221, 221, 221); border-bottom: 1px solid rgb(221, 221, 221)">Value:&nbsp$ <%=ifNull(rec.Trailer_Value,"")%> </td>
+            <td style="width: 10%; border-bottom: 1px solid rgb(221, 221, 221)">HP/Length: &nbsp<%=ifNull(rec.Trailer_Length,"")%></td>
+          </tr>
+          <tr>
+            <td style="width: 17%;  border-right: 1px solid rgb(221, 221, 221); border-bottom: 1px solid rgb(221, 221, 221)">2. Year: &nbsp<%=ifNull(rec.Tender_Model_Year,"")%></td>
+            <td style="width: 17%;  border-right: 1px solid rgb(221, 221, 221); border-bottom: 1px solid rgb(221, 221, 221)">Manufacturer:&nbsp<%=ifNull(rec.Tender_Manufacturer,"")%></td>
+            <td style="width: 17%;  border-right: 1px solid rgb(221, 221, 221); border-bottom: 1px solid rgb(221, 221, 221)">Serial #:&nbsp<%=ifNull(rec.Tender_Serial,"")%></td>
+            <td style="width: 17%;  border-right: 1px solid rgb(221, 221, 221); border-bottom: 1px solid rgb(221, 221, 221)">Value:&nbsp$ <%=ifNull(rec.Tender_Value,"")%></td>
+            <td style="width: 10%;  border-bottom: 1px solid rgb(221, 221, 221)">HP/Length: &nbsp<%=ifNull(rec.Tender_Length,"")%></td>
+          </tr>
+          <tr>
+            <td style="width: 17%;   border-right: 1px solid rgb(221, 221, 221)">3. Year:&nbsp<%=ifNull(rec.Aux_Engine_Model_Year,"")%></td>
+            <td style="width: 17%;   border-right: 1px solid rgb(221, 221, 221)">Manufacturer:&nbsp<%=ifNull(rec.Aux_Engine_Manufacturer,"")%></td>
+            <td style="width: 17%;   border-right: 1px solid rgb(221, 221, 221)">Serial #:&nbsp<%=ifNull(rec.Auxiliary_Engine_Serial,"")%></td>
+            <td style="width: 17%;   border-right: 1px solid rgb(221, 221, 221)">Value:&nbsp$<%=ifNull(rec.Aux_Engine_Value,"")%></td>
+            <td style="width: 10%;" >HP/Length: &nbsp<%=ifNull(rec.Aux_Engine_HP_Thrust,"")%></td>
+          </tr>
+ <tr style= "height: 10px;"></tr>
+			  <tr>	
+	        <td style= "background-color:#d3d3d3;"colspan="5"><h6> GENERAL INFORMATION </h6></td>       	    
+			</tr>
+ <tr style= "height: 10px;"></tr>
+         <tr>
+           <td style="width: 80%;" colspan="4">The watercraft is chartered or rented to others.</td>
+<%
+			if(rec.Do_any_of_the_above_statements_apply_to_the_watercraft_engine_Parasailing_propane == "Yes")
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" checked disabled>&nbsp;No &nbsp;<input type="checkbox" disabled></td>
+<%
+			}
+			else
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" disabled>&nbsp;No &nbsp;<input type="checkbox" checked disabled></td>
+<%
+			}
+			%>
+</tr> 
+         <tr>
+           <td style="width: 80%; " colspan="4">The watercraft is used to carry passengers or cargo
+              for compensation, or for any other commercial business
+              purpose.</td>
+<%
+			if(rec.Do_any_of_the_above_statements_apply_to_the_watercraft_engine_Parasailing_propane == "Yes")
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" checked disabled>&nbsp;No &nbsp;<input type="checkbox" disabled></td>
+<%
+			}
+			else
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" disabled>&nbsp;No &nbsp;<input type="checkbox" checked disabled></td>
+<%
+			}
+			%>
+</tr> 
+               <tr>
+           <td style="width: 80%;" colspan="4">The watercraft has existing/unrepaired damage.</td>
+<%
+			if(rec.Do_any_of_the_above_statements_apply_to_the_watercraft_engine_Parasailing_propane == "Yes")
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" checked disabled>&nbsp;No &nbsp;<input type="checkbox" disabled></td>
+<%
+			}
+			else
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" disabled>&nbsp;No &nbsp;<input type="checkbox" checked disabled></td>
+<%
+			}
+			%>
+</tr> 
+              <tr>
+           <td style="width: 80%;" colspan="4">The watercraft has been modified from the original
+              design or specs.</td>
+<%
+			if(rec.Do_any_of_the_above_statements_apply_to_the_watercraft_engine_Parasailing_propane == "Yes")
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" checked disabled>&nbsp;No &nbsp;<input type="checkbox" disabled></td>
+<%
+			}
+			else
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" disabled>&nbsp;No &nbsp;<input type="checkbox" checked disabled></td>
+<%
+			}
+			%>
+</tr> 
+        
+        <tr>
+           <td style="width: 80%;" colspan="4">The watercraft will be used in Atlantic/Pacific Coastal
+              waters such and the Atlantic, Pacific or Artic
+              Ocean including Hudson's Bay.</td>
+<%
+			if(rec.Do_any_of_the_above_statements_apply_to_the_watercraft_Atlantic_Pacific == "Yes")
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" checked disabled>&nbsp;No &nbsp;<input type="checkbox" disabled></td>
+<%
+			}
+			else
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" disabled>&nbsp;No &nbsp;<input type="checkbox" checked disabled></td>
+<%
+			}
+			%>
+</tr> 
+		   <tr>
+           <td style="width: 80%;" colspan="4">The watercraft is operated south of the 40th parallel
+              at any time.</td>
+<%
+			if(rec.Do_any_of_the_above_statements_apply_to_the_watercraft_engine_Parasailing_propane == "Yes")
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" checked disabled>&nbsp;No &nbsp;<input type="checkbox" disabled></td>
+<%
+			}
+			else
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" disabled>&nbsp;No &nbsp;<input type="checkbox" checked disabled></td>
+<%
+			}
+			%>
+</tr>
+        		   <tr>
+           <td style="width: 80%;" colspan="4">The watercraft or engine is modified or homemade
+              including jet engines boats. </td>
+<%
+			if(rec.Do_any_of_the_above_statements_apply_to_the_watercraft_engine_Parasailing_propane == "Yes")
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" checked disabled>&nbsp;No &nbsp;<input type="checkbox" disabled></td>
+<%
+			}
+			else
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" disabled>&nbsp;No &nbsp;<input type="checkbox" checked disabled></td>
+<%
+			}
+			%>
+</tr>
+        		   <tr>
+           <td style="width: 80%;" colspan="4">The watercraft is non-motorized.</td>
+<%
+			if(rec.Do_any_of_the_above_statements_apply_to_the_watercraft_engine_Parasailing_propane == "Yes")
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" checked disabled>&nbsp;No &nbsp;<input type="checkbox" disabled></td>
+<%
+			}
+			else
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" disabled>&nbsp;No &nbsp;<input type="checkbox" checked disabled></td>
+<%
+			}
+			%>
+</tr>
+                  		   <tr>
+           <td style="width: 80%;" colspan="4">The watercraft's engine horsepower exceeds the manufacturers
+              specifications.</td>
+<%
+			if(rec.Do_any_of_the_above_statements_apply_to_the_watercraft_engine_Parasailing_propane == "Yes")
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" checked disabled>&nbsp;No &nbsp;<input type="checkbox" disabled></td>
+<%
+			}
+			else
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" disabled>&nbsp;No &nbsp;<input type="checkbox" checked disabled></td>
+<%
+			}
+			%>
+</tr>
+          <tr>
+           <td style="width: 80%;" colspan="4">The watercraft is primarily moored in the USA.</td>
+<%
+			if(rec.Do_any_of_the_above_statements_apply_to_the_watercraft_engine_Parasailing_propane == "Yes")
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" checked disabled>&nbsp;No &nbsp;<input type="checkbox" disabled></td>
+<%
+			}
+			else
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" disabled>&nbsp;No &nbsp;<input type="checkbox" checked disabled></td>
+<%
+			}
+			%>
+</tr>
+          <tr>
+           <td style="width: 80%; " colspan="4">The watercraft is rented to others (bareboat charters).</td>
+<%
+			if(rec.Do_any_of_the_above_statements_apply_to_the_watercraft_engine_Parasailing_propane == "Yes")
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" checked disabled>&nbsp;No &nbsp;<input type="checkbox" disabled></td>
+<%
+			}
+			else
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" disabled>&nbsp;No &nbsp;<input type="checkbox" checked disabled></td>
+<%
+			}
+			%>
+</tr>
+          <tr>
+           <td style="width: 80%;" colspan="4">The watercraft is used for anything other than private
+              pleasure use.</td>
+<%
+			if(rec.Do_any_of_the_above_statements_apply_to_the_watercraft_engine_Parasailing_propane == "Yes")
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" checked disabled>&nbsp;No &nbsp;<input type="checkbox" disabled></td>
+<%
+			}
+			else
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" disabled>&nbsp;No &nbsp;<input type="checkbox" checked disabled></td>
+<%
+			}
+			%>
+</tr>
+                   <tr>
+           <td style="width: 80%; " colspan="4">The watercraft is used for Parasailing / Paraskiing.</td>
+<%
+			if(rec.Do_any_of_the_above_statements_apply_to_the_watercraft_engine_Parasailing_propane == "Yes")
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" checked disabled>&nbsp;No &nbsp;<input type="checkbox" disabled></td>
+<%
+			}
+			else
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" disabled>&nbsp;No &nbsp;<input type="checkbox" checked disabled></td>
+<%
+			}
+			%>
+</tr>
+         
+                   <tr>
+           <td style="width: 80%;" colspan="4">The watercraft is used for Racing.</td>
+<%
+			if(rec.Do_any_of_the_above_statements_apply_to_the_watercraft_engine_Parasailing_propane == "Yes")
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" checked disabled>&nbsp;No &nbsp;<input type="checkbox" disabled></td>
+<%
+			}
+			else
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" disabled>&nbsp;No &nbsp;<input type="checkbox" checked disabled></td>
+<%
+			}
+			%>
+</tr>
+          <tr>
+           <td style="width: 80%; " colspan="4">The watercraft has propane or compressed natural
+              gas (CNG) refrigerators.</td>
+<%
+			if(rec.Do_any_of_the_above_statements_apply_to_the_watercraft_engine_Parasailing_propane == "Yes")
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" checked disabled>&nbsp;No &nbsp;<input type="checkbox" disabled></td>
+<%
+			}
+			else
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" disabled>&nbsp;No &nbsp;<input type="checkbox" checked disabled></td>
+<%
+			}
+			%>
+</tr>
+          <tr>
+           <td style="width: 80%;border-top: 1px solid rgb(221, 221, 221)" colspan="4">Is the vessel layed up out of the water from November
+              30 - April 1 every year?</td>
+<%
+			if(rec.Do_any_of_the_above_apply_to_the_watercraft_safety_requirements == "Yes")
+			{
+				%>
+<td style="width: 10%;border-top: 1px solid rgb(221, 221, 221) " >Yes&nbsp;<input type="checkbox" checked disabled>&nbsp;No &nbsp;<input type="checkbox" disabled></td>
+<%
+			}
+			else
+			{
+				%>
+<td style="width: 10%;border-top: 1px solid rgb(221, 221, 221) " >Yes&nbsp;<input type="checkbox" disabled>&nbsp;No &nbsp;<input type="checkbox" checked disabled></td>
+<%
+			}
+			%>
+</tr>
+          <tr>
+           <td style="width: 80%;" colspan="4">Have all boat safety requirements been met as required
+              by law (i.e. life jackets, etc.) </td>
+<%
+			if(rec.Do_any_of_the_above_apply_to_the_watercraft_safety_requirements == "Yes")
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" checked disabled>&nbsp;No &nbsp;<input type="checkbox" disabled></td>
+<%
+			}
+			else
+			{
+				%>
+<td style="width: 10%; " >Yes&nbsp;<input type="checkbox" disabled>&nbsp;No &nbsp;<input type="checkbox" checked disabled></td>
+<%
+			}
+			%>
+</tr>
+          <tr>
+            <td style="width: 80%; border-top: 1px solid rgb(221, 221, 221)" colspan="4">Date of last watercraft survey (if applicable):</td>
+            <td style="width: 10%;   border-top: 1px solid rgb(221, 221, 221)">
+            </td>
+          </tr>
+<tr style= "height: 10px;"></tr>
+			  <tr>	
+	        <td style= "background-color:#d3d3d3; "colspan="5"><h6>COVERAGE LIMITS AND PREMIUM </h6></td>       	    
+			</tr>
+ <tr style= "height: 10px;"></tr>
+ <tr>
+<%
+			if(rec.Select_coverage_for_policy == "Replacement Value Coverage")
+			{
+				%>
+<td colspan="1" >1. Replacement Cost <input type="checkbox" checked disabled></td>
+<%
+			}
+			else
+			{
+				%>
+<td colspan="1" >1. Replacement Cost <input type="checkbox" disabled></td>
+<%
+			}
+			if(rec.Select_coverage_for_policy == "Current Market Value Coverage")
+			{
+				%>
+<td colspan="2" >2. Actual Cash Value <input type="checkbox" checked disabled></td>
+<%
+			}
+			else
+			{
+				%>
+<td colspan="2">2. Actual Cash Value  <input type="checkbox" disabled></td>
+<%
+			}
+			%>
+</tr>
+ 
+ <tr>
+              <td style="width: 15%; border: 1px solid rgb(221, 221, 221)" colspan="2">Watercraft (including motor(s),trailers, and accessories):</td>
+              <td style="width: 15%; border: 1px solid rgb(221, 221, 221)">Limit $<%=ifNull(rec.Boat_Coverage,"")%></td>
+              <td style="width: 15%; border: 1px solid rgb(221, 221, 221)">Deductible $<%=ifNull(rec.Deductible,"")%></td>
+              <td style="width: 15%; border: 1px solid rgb(221, 221, 221)">Premium $<%=ifNull(rec.Premium_Per_Year,"")%></td>
+            </tr>
+            <tr>
+              <td style="width: 15%;   border: 1px solid rgb(221, 221, 221)" colspan="2">Navigational Equipment:</td>
+              <td style="width: 15%;   border: 1px solid rgb(221, 221, 221)">Limit $<%=ifNull(rec.Navigational_Equipment_Coverage,"")%></td>
+              <td style="width: 15%;   border: 1px solid rgb(221, 221, 221)">Deductible $<%=ifNull(rec.Deductible,"")%></td>
+              <td style="width: 15%;   border: 1px solid rgb(221, 221, 221)">Premium $<%=ifNull(rec.Navi_eqip_prem,"")%></td>
+            </tr>
+            <tr>
+              <td style="width: 15%;   border: 1px solid rgb(221, 221, 221)" colspan="2">Liability:</td>
+              <td style="width: 15%;  border: 1px solid rgb(221, 221, 221)" colspan="2" >Limit $<%=ifNull(rec.Liability_coverage,"")%></td>
+              <td style="width: 15%;  border: 1px solid rgb(221, 221, 221)">Premium $<%=ifNull(rec.Boat_Liability_Prem,"")%></td>
+            </tr>
+            <tr>
+              <td style="width: 15%;  border: 1px solid rgb(221, 221, 221)" colspan="2">Trailer:</td>
+              <td style="width: 15%;  border: 1px solid rgb(221, 221, 221)">Limit $INCL</td>
+              <td style="width: 15%;  border: 1px solid rgb(221, 221, 221)">Deductible $<%=ifNull(rec.Deductible,"")%></td>
+              <td style="width: 15%;  border: 1px solid rgb(221, 221, 221)">Premium $INCL</td>
+            </tr>
+            <tr>
+              <td style="width: 15%;  border: 1px solid rgb(221, 221, 221)" colspan="2">Personal Effects:</td>
+              <td style="width: 15%;  border: 1px solid rgb(221, 221, 221)">Limit $<%=ifNull(rec.Personal_Effects_Coverage,"")%></td>
+              <td style="width: 15%;  border: 1px solid rgb(221, 221, 221)">Deductible $<%=ifNull(rec.Deductible,"")%></td>
+              <td style="width: 15%;  border: 1px solid rgb(221, 221, 221)">Premium $<%=ifNull(rec.Pers_eff_prem,"")%></td>
+            </tr>
+            <tr>
+              <td style="width: 15%;   border-left: 1px solid rgb(221, 221, 221)" colspan="2">Remarks:</td>
+              <td style="width: 15%;  "></td>
+              <td style="width: 15%;  "></td>
+              <td style="width: 15%;   border: 1px solid rgb(221, 221, 221)">Base Premium $<%=ifNull(rec.Boat_Base_Premium,"")%></td>
+            </tr>
+            <tr>
+              <td colspan="4" style="width: 15%;   border-left: 1px solid rgb(221, 221, 221)"></td>
+              <td style="width: 15%;   border: 1px solid rgb(221, 221, 221)">Policy Fee $20.40 </td>
+            </tr>
+            <tr>
+              <td colspan="4" style="width: 15%;  border-left: 1px solid rgb(221, 221, 221)"></td>
+              <td style="width: 15%;  border: 1px solid rgb(221, 221, 221)">Provincial Sales Tax </td>
+            </tr>
+            <tr>
+              <td colspan="4" style="width: 15%;  border-bottom: 1px solid rgb(221, 221, 221); border-left: 1px solid rgb(221, 221, 221)"></td>
+              <td style="width: 15%;  border: 1px solid rgb(221, 221, 221)"><b>Total $<%=ifNull(rec.Total_Prem,"")%></b></td>
+            </tr>
+			 <tr style= "height: 10px;"></tr>
+<%
+		}
+		%>
+</table>
+		 </div>
+		 <br>
+		<div class="container-fluid" style="">
+<table class="table"  style="width:100%;">
+	   <tr style= "height: 100px;"></tr>
+	       <tr>
+        <td style="width: 80%;   border-bottom: 1px solid rgb(221, 221, 221)">
+		Signature of Applicant
+		<img style="width: 15%;" src="https://workdrive.zohoexternal.com/external/a8c0af4de83d1cf295bfdd3ef88dc7d104f729f758da2e619c52b49b4f23cb05/download?directDownload=true" alt="sign">
+		</td>
+        <td style="width: 17%;  border-bottom: 1px solid rgb(221, 221, 221)">
+        Date : <%=zoho.currentdate.toString("MM/dd/yyyy")%></td>
+      </tr>
+      <tr>
+        <td style="width: 80%;border-bottom: 1px solid rgb(221, 221, 221)">Signature of Applicant</td>
+        <td style="width: 17%;  border-bottom: 1px solid rgb(221, 221, 221)">
+        Date (MM/DD/YYYY)</td>
+      </tr>
+	 </table>
+	 </div>
+<%
+	}
+	%>
+</body>
+	<html>
+<%
+
+}%>

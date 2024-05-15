@@ -1,0 +1,416 @@
+<%{
+	%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+  </head>
+  <style>
+  .imageClass 
+  {
+  display: block;
+  margin-top: 50px;
+  margin-bottom: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+.card-title
+{
+	text-align:center;
+}
+.card-text
+{
+	text-align:center;
+}
+button 
+{
+  background-color: #04AA6D; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  border-radius: 5px;
+}
+.btn {
+  border: 2px solid black;
+   background-color: white;
+  padding: 14px 28px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.default {
+  border-color: #A9A9A9;
+   color: black;
+}
+
+.default:hover {
+  background: #A9A9A9;
+}
+  .card-body{
+
+    transition: all 0.2s ease;
+    cursor: pointer;
+
+  }
+    
+.card-body:hover{
+
+    box-shadow: 5px 6px 6px 2px #e9ecef;
+    transform: scale(1.1);
+}
+a{
+	text-decoration:none;
+	color:black;
+}
+a:hover {
+	color: black;
+  	text-decoration: none;
+	cursor: pointer;
+}
+  </style>
+<body>
+<%
+	fetchBoatProgress = BoatQuote[Quote_Status = "In Progress"];
+	fetchBoatRef = BoatQuote[Quote_Status = "Referral"];
+	fetchBoatCompleted = BoatQuote[Quote_Status = "Completed"];
+	fetchPaymentPending = BoatQuote[Quote_Status = "Payment Pending"];
+	fetchReturnToPayment = BoatQuote[Quote_Status = "Return To Payment"];
+	if(fetchBoatRef.count() > 0)
+	{
+		inReferal = (fetchBoatRef.Quote_Status.getall()).size();
+	}
+	else
+	{
+		inReferal = 0;
+	}
+	if(fetchBoatProgress.count() > 0)
+	{
+		inProgress = (fetchBoatProgress.Quote_Status.getall()).size();
+	}
+	else
+	{
+		inProgress = 0;
+	}
+	if(fetchBoatCompleted.count() > 0)
+	{
+		Completed = (fetchBoatCompleted.Quote_Status.getall()).size();
+	}
+	else
+	{
+		Completed = 0;
+	}
+	if(fetchPaymentPending.count() > 0)
+	{
+		PaymentPending = (fetchPaymentPending.Quote_Status.getall()).size();
+	}
+	else
+	{
+		PaymentPending = 0;
+	}
+	if(fetchReturnToPayment.count() > 0)
+	{
+		ReturnToPayment = (fetchReturnToPayment.Quote_Status.getall()).size();
+	}
+	else
+	{
+		ReturnToPayment = 0;
+	}
+	fetchTrailerProgress = TrailerQuote[Quote_Status = "In Progress"];
+	fetchTrailerRef = TrailerQuote[Quote_Status = "Referral"];
+	fetchTCompleted = TrailerQuote[Quote_Status = "Completed"];
+	fetchTPaymentPending = TrailerQuote[Quote_Status = "Payment Pending"];
+	fetchTReturnToPayment = TrailerQuote[Quote_Status = "Return To Payment"];
+	if(fetchTrailerRef.count() > 0)
+	{
+		inTrailerReferal = (fetchTrailerRef.Quote_Status.getall()).size();
+	}
+	else
+	{
+		inTrailerReferal = 0;
+	}
+	if(fetchTrailerRef.count() > 0)
+	{
+		inTrailerProgress = (fetchTrailerProgress.Quote_Status.getall()).size();
+	}
+	else
+	{
+		inTrailerProgress = 0;
+	}
+	if(fetchTCompleted.count() > 0)
+	{
+		tCompleted = (fetchTCompleted.Quote_Status.getall()).size();
+	}
+	else
+	{
+		tCompleted = 0;
+	}
+	if(fetchTPaymentPending.count() > 0)
+	{
+		tPaymentPending = (fetchTPaymentPending.Quote_Status.getall()).size();
+	}
+	else
+	{
+		tPaymentPending = 0;
+	}
+	if(fetchTReturnToPayment.count() > 0)
+	{
+		tReturnToPayment = (fetchTReturnToPayment.Quote_Status.getall()).size();
+	}
+	else
+	{
+		tReturnToPayment = 0;
+	}
+	%>
+<h4 style = "padding: 10px; margin-left: 90px;  margin-top: 10px;">Products</h4>
+  <div class="container">
+ <div class="row row-cols-2 g-3">
+  <div class="col">
+    <div class="card">
+     <img class = "imageClass"  src="https://previewengine-accl.zoho.com/image/WD/tdc3266b47258b71c41e09503b1cc5550dc5d?version=1.0&width=2046&height=1536"width="55" height="68">
+      <div class="card-body">
+        <h5 class="card-title" style = "font-weight:bold">Rec Protect Boat Insurance</h5>
+		<br>
+        <p class="card-text" >
+          Recreational Boat Program By Coburn Insurance Brokers Ltd.
+        </p>
+		<div class="w3-show-inline-block" style = "margin-left:150px">
+		<div class="w3-bar">
+			<button type="button" class="btn default">Product Details</button>
+<%
+	if(zoho.loginuser == "Public")
+	{
+		%>
+<a href="https://creatorapp.zoho.com/service_recprotect/quotation/#Form:BoatQuote"  target="_blank">
+<%
+	}
+	else
+	{
+		%>
+<a href="#Form:BoatQuote">
+<%
+	}
+	%>
+<button style = "margin-left:10px"type="button">Buy Now</button>
+				</a>
+			 </div>
+			  </div>
+      </div>
+    </div>
+  </div> 
+    <div class="col">
+	<div class="card">
+     <img class = "imageClass" src="https://us-previewenginepublic.nimbuspop.com/image/WD/19w17e4004843a26a4c0e97c5c9c2f70502bd-19w17c65be554ce034d5c8c4e3dbca663ae19-tdc322cae64314158442d8aa130c148c22b81?version=1.0&width=2046&height=1536"width="55" height="68">
+      <div class="card-body">
+        <h5 class="card-title" style = "font-weight:bold">Rec Protect Trailer Insurance</h5>
+		<br>
+        <p class="card-text" >
+          Recreational Boat Program By Coburn Insurance Brokers Ltd.
+        </p>
+		<div class="w3-show-inline-block" style = "margin-left:150px">
+		<div class="w3-bar">
+			<button type="button" class="btn default">Product Details</button>
+<%
+	if(zoho.loginuser == "Public")
+	{
+		%>
+<a href="https://creatorapp.zoho.com/service_recprotect/quotation/#Form:TrailerQuote" target="_blank">
+<%
+	}
+	else
+	{
+		%>
+<a href="#Form:TrailerQuote">
+<%
+	}
+	%>
+<button style = "margin-left:10px"type="button">Buy Now</button>
+			</a>
+			 </div>
+			</div>
+      </div>
+    </div>
+  </div>
+ </div>
+<br>
+<br>
+<h5 style = "padding: 250px;display: inline;">Boat Policy Summary</h5>
+<h5 style = "padding: 185px; display: inline;">Trailer Policy Summary</h5>
+<br>
+<br>
+<div class="container">
+<div class="row row-cols-4 g-3">
+ <div class = "col">
+ <div class="card bg-light mb-3">
+      <div class="card-body">
+ <div style = "padding: 15px;">
+ <img src= "https://sevenfigurestaffing.com/wp-content/uploads/2020/02/icons9.png" width="25" height="28" >
+ <h6 style = "padding: 2px;display: inline;"><%=inProgress%></h6>
+  <br>
+ <br>
+  <h6><a href="https://creatorapp.zoho.com/service_recprotect/quotation#Report:Boats_Report?Quote_Status=In Progress" target="_blank">In Progress Quotes</a></h6>
+  </div>
+ </div>
+ </div>
+ </div>
+   <div class = "col">
+  <div class="card text-white bg-secondary mb-3">
+      <div class="card-body">
+ <div style = "padding: 15px;">
+ <img src= "https://static-00.iconduck.com/assets.00/notebook-question-mark-icon-500x512-rvbme5tj.png" width="25" height="28" >
+ <h5 style = "padding: 2px;display: inline;"><%=inReferal%></h5>
+  <br>
+ <br>
+  <h6><a href="https://creatorapp.zoho.com/service_recprotect/quotation#Report:Boats_Report?Quote_Status=Referral" target="_blank">Referral and Requests for Review</a></h6>
+  </div>
+ </div>
+ </div>
+ </div>
+ <div class = "col">
+ <div class="card bg-light mb-3">
+      <div class="card-body">
+ <div style = "padding: 15px;">
+ <img src= "https://sevenfigurestaffing.com/wp-content/uploads/2020/02/icons9.png" width="25" height="28" >
+ <h5 style = "padding: 2px;display: inline;"><%=inTrailerProgress%></h5>
+  <br>
+ <br>
+  <h6><a href="https://creatorapp.zoho.com/service_recprotect/quotation#Report:All_Trailer_Quotations?Quote_Status=In Progress" target="_blank">In Progress Quotes</a></h6>
+  </div>
+ </div>
+ </div>
+ </div>
+ <div class = "col">
+  <div class="card text-white bg-secondary mb-3">
+      <div class="card-body">
+ <div style = "padding: 15px;">
+ <img src= "https://static-00.iconduck.com/assets.00/notebook-question-mark-icon-500x512-rvbme5tj.png" width="25" height="28" >
+ <h5 style = "padding: 2px;display: inline;"><%=inTrailerReferal%></h5>
+  <br>
+ <br>
+  <h6><a href="https://creatorapp.zoho.com/service_recprotect/quotation#Report:All_Trailer_Quotations?Quote_Status=Referral" target="_blank">Referral and Requests for Review</a></h6>
+  </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ <div class="row row-cols-4 g-3">
+ <div class = "col">
+   <div class="card text-white bg-success mb-3">
+      <div class="card-body">
+ <div style = "padding: 15px;">
+ <img src= "https://cdn3.iconfinder.com/data/icons/linecons-free-vector-icons-pack/32/note-512.png" width="25" height="28">
+ <h5 style = "padding: 2px;display: inline;"><%=Completed%></h5>
+  <br>
+ <br>
+  <h6><a href="https://creatorapp.zoho.com/service_recprotect/quotation#Report:Boats_Report?Quote_Status=Completed" target="_blank">Bound Policies</a></h6>
+   </div>
+ </div>
+ </div>
+ </div>
+ <div class = "col">
+  <div class="card text-white bg-warning mb-3">
+      <div class="card-body">
+  <div style = "padding: 15px;">
+ <img src="https://img.icons8.com/fluency-systems-filled/48/repeat.png" width="25" height="28">
+ <h5 style = "padding: 2px;display: inline;">0</h5>
+  <br>
+ <br>
+  <h6>Renewing Policies</h6>
+  </div>
+ </div>
+  </div>
+ </div>
+  <div class = "col">
+   <div class="card text-white bg-success mb-3">
+      <div class="card-body">
+ <div style = "padding: 15px;">
+ <img src= "https://cdn3.iconfinder.com/data/icons/linecons-free-vector-icons-pack/32/note-512.png" width="25" height="28">
+ <h5 style = "padding: 2px;display: inline;"><%=tCompleted%></h5>
+  <br>
+ <br>
+  <h6><a href="https://creatorapp.zoho.com/service_recprotect/quotation#Report:All_Trailer_Quotations?Quote_Status=Completed" target="_blank">Bound Policies</a></h6>
+   </div>
+ </div>
+ </div>
+ </div
+ </div>
+ <div class = "col">
+ <div class="card text-white bg-warning mb-3">
+      <div class="card-body">
+  <div style = "padding: 15px;">
+ <img src="https://img.icons8.com/fluency-systems-filled/48/repeat.png" width="25" height="28">
+ <h5 style = "padding: 2px;display: inline;">0</h5>
+  <br>
+ <br>
+  <h6>Renewing Policies</h6>
+  </div>
+ </div>
+  </div>
+ </div>
+ </div>
+ <!-- new -->
+ <div class="row row-cols-4 g-3">
+ <div class = "col">
+   <div class="card bg-light mb-3">
+      <div class="card-body">
+ <div style = "padding: 15px;">
+ <img src= "https://img.icons8.com/ios/50/online-payment-.png" width="25" height="28">
+ <h5 style = "padding: 2px;display: inline;"><%=PaymentPending%></h5>
+  <br>
+ <br>
+  <h6><a href="https://creatorapp.zoho.com/service_recprotect/quotation#Report:Boats_Report?Quote_Status=Payment Pending" target="_blank">Payment Pending</a></h6>
+   </div>
+ </div>
+ </div>
+ </div>
+ <div class = "col">
+  <div class="card text-white bg-secondary mb-3">
+      <div class="card-body">
+  <div style = "padding: 15px;">
+ <img src="https://img.icons8.com/fluency-systems-filled/48/repeat.png" width="25" height="28">
+ <h5 style = "padding: 2px;display: inline;"><%=ReturnToPayment%></h5>
+  <br>
+ <br>
+  <h6><a href="https://creatorapp.zoho.com/service_recprotect/quotation#Report:Boats_Report?Quote_Status=Return To Payment" target="_blank">Return to Payment</a></h6>
+  </div>
+ </div>
+  </div>
+ </div>
+  <div class = "col">
+   <div class="card bg-light mb-3">
+      <div class="card-body">
+ <div style = "padding: 15px;">
+ <img src= "https://img.icons8.com/ios/50/online-payment-.png" width="25" height="28">
+ <h5 style = "padding: 2px;display: inline;"><%=tPaymentPending%></h5>
+  <br>
+ <br>
+  <h6><a href="https://creatorapp.zoho.com/service_recprotect/quotation#Report:All_Trailer_Quotations?Quote_Status=Payment Pending" target="_blank">Payment Pending</a></h6>
+   </div>
+ </div>
+ </div>
+ </div
+ </div>
+ <div class = "col">
+ <div class="card text-white bg-secondary mb-3">
+      <div class="card-body">
+  <div style = "padding: 15px;">
+ <img src="https://img.icons8.com/fluency-systems-filled/48/repeat.png" width="25" height="28">
+ <h5 style = "padding: 2px;display: inline;"><%=tReturnToPayment%></h5>
+  <br>
+ <br>
+  <h6><a href="https://creatorapp.zoho.com/service_recprotect/quotation#Report:All_Trailer_Quotations?Quote_Status=Return To Payment" target="_blank">Return to Payment</a></h6>
+  </div>
+ </div>
+  </div>
+ </div>
+ </div>
+</body>
+</html>
+<%
+
+}%>

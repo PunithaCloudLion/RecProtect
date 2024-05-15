@@ -1,0 +1,40 @@
+<%{
+	%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<style>
+body
+{
+overflow: hidden;
+}
+ .split_left {
+  position: relative;
+  width: 45%;
+  float: left;
+  height: 100%;
+ 
+}
+
+.split_right {
+  position: relative;
+  width: 45%;
+  float: left;
+  height: 100%;
+}
+</style>
+
+<body>
+ <div class="split_left">
+      <iframe height='2000px' width='100%' frameborder='0' allowTransparency='true' scrolling='0' src='https://creatorapp.zoho.com/service_recprotect/quotation/BoatQuote/record-edit/Boats_Report/<%=input.recID%>?Boat_quote_Page_View=true'></iframe>
+    </div>
+    <div class="split_right">
+    <div elName='zc-component' formLinkName='Policy_Change' params='zc_Header=true&amp;zc_SuccMsg=Data Added Successfully!&amp;zc_SubmitVal=Submit&amp;zc_ResetVal=Reset'>Loading Form...</div>
+  </div>
+</body>
+</html>
+<%
+
+}%>

@@ -1,0 +1,118 @@
+try 
+{
+	owner_name = "service_recprotect";
+	app_name = "quotation";
+	workdriveFolderID = "";
+	getDeal = zoho.crm.getRecordById("Deals",dealID);
+	// 	info getDeal;
+	if(getDeal.size() > 0)
+	{
+		// 		if(getDeal.get("Deal_Status") == "Quote")
+		// 		{
+		if(getDeal.get("Deal_s_Lead") != null && getDeal.get("Deal_s_Lead") != "")
+		{
+			lead_id = getDeal.get("Deal_s_Lead").get("id");
+			getlead = zoho.crm.getRecordById("Leads",lead_id);
+			workdriveFolderID = getlead.get("Workdrive_Folder_ID");
+		}
+		//}
+		//else if(getDeal.get("Deal_Status") == "Policy")
+		//{
+		if(getDeal.get("Contact_Name") != null && getDeal.get("Contact_Name") != "")
+		{
+			contactID = getDeal.get("Contact_Name").get("id");
+			info contactID;
+			getContacts = zoho.crm.getRecordById("Contacts",contactID);
+			workdriveFolderID = getContacts.get("Workdrive_Folder_ID");
+		}
+		//	}
+		info workdriveFolderID;
+		if(workdriveFolderID != null && workdriveFolderID != "")
+		{
+			//----------------------------Create Workdrive Folder --------------------------
+			FolderName = getDeal.get("Deal_Name");
+			createFolder = zoho.workdrive.createFolder(FolderName,workdriveFolderID,"workdrive");
+			info createFolder;
+			activitylog = {"Process":"CRM--" + dealID,"Description":"Create Wordrive Folder for the Deal,Creator ID--" + getDeal.get("Creator_ID"),"In_Data":"Parent Wordrive ID--" + workdriveFolderID,"Out_Data":createFolder};
+			avt_log_resp = zoho.creator.createRecord(owner_name,app_name,"Activity_Logs",activitylog,Map(),"creator");
+			//----------------------------Store the Workdrive Details-------------------------
+			if(createFolder.get("data") != null)
+			{
+				FolderID = createFolder.get("data").get("id");
+				WorkdriveURL = createFolder.get("data").get("attributes").get("permalink");
+				updateMap = Map();
+				updateMap.put("Workdrive_Folder_ID",FolderID);
+				updateMap.put("Workdrive_URL",WorkdriveURL);
+				updateRes = zoho.crm.updateRecord("Deals",dealID,updateMap);
+				info updateRes;
+				//-------------------------- Add folder as an attachments ---------------------
+				dataList = List();
+				data = Map();
+				data.put("$link_url",WorkdriveURL);
+				data.put("File_Name",FolderName);
+				data.put("$type","");
+				dataList.add(data);
+				payload = "attachments=" + zoho.encryption.urlEncode({"data":dataList});
+				resp = invokeurl
+				[
+					url :"https://www.zohoapis.com/crm/v2/Deals/" + dealID + "/Attachments"
+					type :POST
+					parameters:payload
+					connection:"crm"
+					content-type:"application/x-www-form-urlencoded"
+				];
+				info resp;
+				activitylog = {"Process":"CRM--" + dealID,"Description":"Add folder as an attachments for the Deal,Creator ID--" + getDeal.get("Creator_ID"),"In_Data":"Parameter--" + payload,"Out_Data":resp};
+				avt_log_resp = zoho.creator.createRecord(owner_name,app_name,"Activity_Logs",activitylog,Map(),"creator");
+				// ------- Create Subfolder For New Business ---------
+				subFolderCreation = zoho.workdrive.createFolder("New Business",FolderID,"workdrive");
+				activitylog = {"Process":"CRM--" + dealID,"Description":"Create Subfolder For New Business,Creator ID--" + getDeal.get("Creator_ID"),"In_Data":"Parent Folder ID--" + FolderID,"Out_Data":subFolderCreation};
+				avt_log_resp = zoho.creator.createRecord(owner_name,app_name,"Activity_Logs",activitylog,Map(),"creator");
+				subFolderID = subFolderCreation.get("data").get("id");
+				subWorkdriveURL = subFolderCreation.get("data").get("attributes").get("permalink");
+				// ------- Create Subfolder For Policy Change ---------
+				policyFolderCreation = zoho.workdrive.createFolder("Policy Change",FolderID,"workdrive");
+				activitylog = {"Process":"CRM--" + dealID,"Description":" Create Subfolder For Policy Change,Creator ID--" + getDeal.get("Creator_ID"),"In_Data":"Parent Folder ID--" + FolderID,"Out_Data":policyFolderCreation};
+				avt_log_resp = zoho.creator.createRecord(owner_name,app_name,"Activity_Logs",activitylog,Map(),"creator");
+				policyFolderID = policyFolderCreation.get("data").get("id");
+				policyWorkdriveURL = policyFolderCreation.get("data").get("attributes").get("permalink");
+				// 		//-----------Update Workdrive Details in Creator Quote--------
+				if(getDeal.get("Layout").get("name") == "Boat Policy")
+				{
+					datamap = Map();
+					datamap.put("Contact_Policy_Folder_Workdrive_Folder_ID",FolderID);
+					datamap.put("Contact_Policy_Folder_Workdrive_Link",WorkdriveURL);
+					datamap.put("NB_Workdrive_Folder_Link",subWorkdriveURL);
+					datamap.put("Policy_Change_Workdrive_Folder_Link",policyWorkdriveURL);
+					updateBoatCreator = zoho.creator.updateRecord(owner_name,app_name,"Boats_Report",getDeal.get("Creator_ID").toLong(),datamap,Map(),"creator");
+					info "Boat---" + updateBoatCreator;
+					activitylog = {"Process":"CRM--" + dealID,"Description":"Update Workdrive Details in Creator BoatQuote,Creator ID--" + getDeal.get("Creator_ID"),"In_Data":"Parameter--" + datamap,"Out_Data":updateBoatCreator};
+					avt_log_resp = zoho.creator.createRecord(owner_name,app_name,"Activity_Logs",activitylog,Map(),"creator");
+				}
+				if(getDeal.get("Layout").get("name") == "Trailer Policy")
+				{
+					trailerMap = Map();
+					trailerMap.put("Contact_Policy_Folder_Workdrive_Folder_ID",FolderID);
+					trailerMap.put("Contact_Policy_Folder_Workdrive_Link",WorkdriveURL);
+					trailerMap.put("NB_Workdrive_Folder_Link",subWorkdriveURL);
+					trailerMap.put("Policy_Change_Workdrive_Folder_Link",policyWorkdriveURL);
+					updateTrailerCreator = zoho.creator.updateRecord(owner_name,app_name,"All_Trailer_Quotations",getDeal.get("Creator_ID").toLong(),trailerMap,Map(),"creator");
+					info "Trailer---" + updateTrailerCreator;
+					activitylog = {"Process":"CRM--" + dealID,"Description":"Update Workdrive Details in Creator TrailerQuote,Creator ID--" + getDeal.get("Creator_ID"),"In_Data":"Parameter--" + trailerMap,"Out_Data":updateTrailerCreator};
+					avt_log_resp = zoho.creator.createRecord(owner_name,app_name,"Activity_Logs",activitylog,Map(),"creator");
+				}
+			}
+		}
+	}
+}
+catch (e)
+{
+	developerlog = Map();
+	developerlog.put("Product","CRM");
+	developerlog.put("Module","Deals");
+	developerlog.put("Action_Flow","On Creator Workflow --https://crm.zoho.com/crm/org810798353/settings/workflow-rules/5778486000010074007");
+	developerlog.put("Description","Create Workdrive Folder For Deal");
+	developerlog.put("Request",dealID.toString());
+	developerlog.put("Response",e);
+	dev_log_resp = zoho.creator.createRecord(owner_name,app_name,"Developer_Logs",developerlog,Map(),"creator");
+}

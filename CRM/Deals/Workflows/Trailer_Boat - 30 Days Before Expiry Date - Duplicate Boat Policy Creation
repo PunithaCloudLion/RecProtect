@@ -1,0 +1,833 @@
+/*  CL - Trailer/Boat - 30 Days Before Expiry Date - CL : Duplicate Boat Policy Creation*/
+
+getBoat = zoho.crm.getRecordById("Deals",DealID);
+creatorID = getBoat.get("Creator_ID");
+headerMap = Map();
+parammap = Map();
+parammap.put("BoatID",creatorID);
+headerMap.put("Content-Type","application/json");
+boatpost = invokeurl
+[
+	url :"https://www.zohoapis.com/creator/custom/service_recprotect/Boat_Renewal_Duplicate?publickey=9JT6jgNCmUhSEQV042weT49yw"
+	type :POST
+	parameters:parammap.toString()
+	headers:headerMap
+];
+// // info getBoat;
+// if(getBoat.get("Contact_Name") != null)
+// {
+// 	contactName = getBoat.get("Contact_Name").get("name");
+// }
+// else
+// {
+// 	contactName = "";
+// }
+// msg = "";
+// TotalBoat = 0;
+// creatorID = getBoat.get("Creator_ID").toLong();
+// //info "creatorID"+creatorID;
+// getAllBoats = zoho.creator.getRecordById("service_recprotect","quotation","Boats_Report",creatorID,"creator");
+// info "workdrive" + getAllBoats.get("data").get("Combined_Doc_Workdrive_URL");
+// newBoat = getAllBoats.get("data");
+// // info "getAllBoats " + getAllBoats;
+// TaxProvinceName = getAllBoats.get("data").get("Tax_Province");
+// info TaxProvinceName;
+// getTaxRate = zoho.creator.getRecords("service_recprotect","quotation","All_Tax_Lists","State_Province == \"" + TaxProvinceName + "\"",1,200,"creator");
+// // info getTaxRate;
+// TaxPercentID = getTaxRate.get("data").get(0).get("ID");
+// TaxPercent = getTaxRate.get("data").get(0).get("Tax");
+// boatData = Map();
+// //boatData.put("Quote_ID",getAllBoats.get("data").get("Quote_ID"));
+// // Basic Info Section
+// boatData.put("Quote_ID","Duplicate");
+// boatData.put("Organization_ID_Server",getAllBoats.get("data").get("Organization_ID_Server"));
+// boatData.put("Policy_Number",getAllBoats.get("data").get("Policy_Number") + " - FUTURE");
+// boatData.put("Quote_Status",getAllBoats.get("data").get("Quote_Status"));
+// boatData.put("Policy_Status","INACTIVE - FUTURE");
+// boatData.put("Deal_Type",getAllBoats.get("data").get("Deal_Type"));
+// boatData.put("Referral_Reason",getAllBoats.get("data").get("Referral_Reason"));
+// boatData.put("Created_Source",getAllBoats.get("data").get("Created_Source"));
+// boatData.put("Created_Source","CREATOR");
+// boatData.put("Carrier","Four Points Insurance");
+// boatData.put("Source",getAllBoats.get("data").get("Source"));
+// boatData.put("Policy_AutoRenewal_Status",getAllBoats.get("data").get("Policy_AutoRenewal_Status"));
+// // Get Started Section
+// if(getAllBoats.get("data").get("Customer_ID") != null)
+// {
+// 	boatData.put("Customer_ID",getAllBoats.get("data").get("Customer_ID").get("ID"));
+// }
+// else
+// {
+// 	boatData.put("Customer_ID",null);
+// }
+// boatData.put("Insured_First_Name",getAllBoats.get("data").get("Insured_First_Name"));
+// boatData.put("Insured_Middle_Name",getAllBoats.get("data").get("Insured_Middle_Name"));
+// boatData.put("Insured_Last_Name",getAllBoats.get("data").get("Insured_Last_Name"));
+// boatData.put("Email",getAllBoats.get("data").get("Email"));
+// boatData.put("Link_Customer",getAllBoats.get("data").get("Link_Customer"));
+// boatData.put("Phone_Number",getAllBoats.get("data").get("Phone_Number"));
+// boatData.put("Date_of_Birth",getAllBoats.get("data").get("Date_of_Birth"));
+// boatData.put("Where_Did_You_Find_Us",getAllBoats.get("data").get("Where_Did_You_Find_Us"));
+// boatData.put("Name",getAllBoats.get("data").get("Name"));
+// boatData.put("Name_of_Dealership",getAllBoats.get("data").get("Name_of_Dealership"));
+// boatData.put("Name_of_Campground",getAllBoats.get("data").get("Name_of_Campground"));
+// boatData.put("Name_of_Marina",getAllBoats.get("data").get("Name_of_Marina"));
+// boatData.put("Tell_us_more",getAllBoats.get("data").get("Tell_us_more"));
+// boatData.put("Are_there_any_additional_names_on_the_boat_ownership_ownership",getAllBoats.get("data").get("Are_there_any_additional_names_on_the_boat_ownership_ownership"));
+// // Additional Names subform
+// // Quote Information Section
+// boatData.put("Please_select_the_province_your_boat_is_used_in",getAllBoats.get("data").get("Please_select_the_province_your_boat_is_used_in"));
+// boatData.put("How_many_boats_would_you_like_to_insure",getAllBoats.get("data").get("How_many_boats_would_you_like_to_insure"));
+// // Policy Details section
+// ExpiryDate = getAllBoats.get("data").get("Expiry_Date").addDay(1);
+// //info "ExpiryDate"+ExpiryDate;
+// // info "ex2"+ExpiryDate.toString("MMM dd, yyyy hh:mm:ss z, E","EST");
+// boatData.put("Inception_Date",ExpiryDate.toString("dd-MMM-yyyy"));
+// //info "boatData 1" + boatData;
+// boatData.put("Expiry_Date",ExpiryDate.addYear(1).toDate());
+// //info "boatData 2" + boatData;
+// boatData.put("End_Date",ExpiryDate.addYear(1).toDate());
+// //info "boatData 3" + boatData;
+// boatData.put("Bind_Date",ExpiryDate.toString("dd-MMM-yyyy hh:mm:ss z, E","EST"));
+// //info "boatData 4" + boatData;
+// boatData.put("Effective_Date",ExpiryDate.toDate());
+// current_time = zoho.currenttime;
+// boatData.put("Last_Modified",current_time.toString("dd-MMM-yyyy hh:mm:ss z, E","EST"));
+// // Mailing Address section
+// boatData.put("Country",getAllBoats.get("data").get("Country"));
+// boatData.put("Address",getAllBoats.get("data").get("Address"));
+// boatData.put("Suite_Apt",getAllBoats.get("data").get("Suite_Apt"));
+// boatData.put("City",getAllBoats.get("data").get("City"));
+// boatData.put("Province",getAllBoats.get("data").get("Province"));
+// boatData.put("Postal_code_ZIP_Code",getAllBoats.get("data").get("Postal_code_ZIP_Code"));
+// // Tax Exemption section
+// boatData.put("Override_Tax_by_Admin",getAllBoats.get("data").get("Override_Tax_by_Admin"));
+// boatData.put("Overriden_Tax",getAllBoats.get("data").get("Overriden_Tax"));
+// // Premium section - ------ This section go to below subform because calculations are basec on Premium Per Year in subform field
+// boatData.put("Tax_Province",getAllBoats.get("data").get("Tax_Province"));
+// boatData.put("Fee",getAllBoats.get("data").get("Fee"));
+// boatData.put("Tax_Precent",getAllBoats.get("data").get("Tax_Precent"));
+// boatData.put("Total_Tax",getAllBoats.get("data").get("Total_Tax"));
+// boatData.put("Total_Payable_Premium_after_tax",getAllBoats.get("data").get("Total_Payable_Premium_after_tax"));
+// // Payment Information section
+// boatData.put("Enter_payment_info",getAllBoats.get("data").get("Enter_payment_info"));
+// boatData.put("Stripe_Payment_Method_Details",getAllBoats.get("data").get("Stripe_Payment_Method_Details"));
+// boatData.put("Stripe_Payment_Method_ID",getAllBoats.get("data").get("Stripe_Payment_Method_ID"));
+// boatData.put("Stripe_Customer_ID",getAllBoats.get("data").get("Stripe_Customer_ID"));
+// boatData.put("Payment_Status",getAllBoats.get("data").get("Payment_Status"));
+// boatData.put("Nuvei_Transaction_ID",getAllBoats.get("data").get("Nuvei_Transaction_ID"));
+// boatData.put("Policy_UPO_Data",getAllBoats.get("data").get("Policy_UPO_Data"));
+// //boatData.put("Payment_Date",getAllBoats.get("data").get("Payment_Date"));
+// // Adjusted Premium section ----- Need to confirm this section should be mapped or not
+// boatData.put("Outstanding",getAllBoats.get("data").get("Outstanding"));
+// boatData.put("OutStanding_Type",getAllBoats.get("data").get("OutStanding_Type"));
+// boatData.put("Prorated",getAllBoats.get("data").get("Prorated"));
+// boatData.put("Tax",getAllBoats.get("data").get("Tax"));
+// boatData.put("Total",getAllBoats.get("data").get("Total"));
+// boatData.put("Prorate_From",getAllBoats.get("data").get("Prorate_From"));
+// boatData.put("Waive_Free",getAllBoats.get("data").get("Waive_Free"));
+// boatData.put("Reason_For_Rejection1",getAllBoats.get("data").get("Reason_For_Rejection1"));
+// // Other Information section
+// boatData.put("Is_Watercraft_Ineligible_For_Coverage",getAllBoats.get("data").get("Is_Watercraft_Ineligible_For_Coverage"));
+// boatData.put("Does_Watercraft_Meet_Safety_And_Usage_Requirements",getAllBoats.get("data").get("Does_Watercraft_Meet_Safety_And_Usage_Requirements"));
+// boatData.put("Is_Applicant_Ineligible_For_Coverage",getAllBoats.get("data").get("Is_Applicant_Ineligible_For_Coverage"));
+// boatData.put("Is_Operator_Ineligible_For_Coverage",getAllBoats.get("data").get("Is_Operator_Ineligible_For_Coverage"));
+// // Document Generation Section
+// boatData.put("Combined_Doc_Status_Check_On",getAllBoats.get("data").get("Combined_Doc_Status_Check_On"));
+// boatData.put("Combined_Doc_Download_URL",getAllBoats.get("data").get("Combined_Doc_Download_URL"));
+// boatData.put("Combined_Doc_Response",getAllBoats.get("data").get("Combined_Doc_Response"));
+// boatData.put("Email_List",getAllBoats.get("data").get("Email_List"));
+// // Admin Changes section
+// boatData.put("Select_Rate",getAllBoats.get("data").get("Select_Rate"));
+// // Signature section
+// boatData.put("Signature",getAllBoats.get("data").get("Signature"));
+// boatData.put("Signature_Accept_Text",getAllBoats.get("data").get("Signature_Accept_Text"));
+// // Developer Section
+// boatData.put("Zoho_Crm_ID",DealID);
+// boatData.put("Quote_Policy_Type","Renewal");
+// boatData.put("Slave_Customer",getAllBoats.get("data").get("Slave_Customer"));
+// // renewal section
+// boatData.put("Renewal_From_Old_Policy_ID",creatorID);
+// // Missing fields section
+// boatData.put("Were_you_referred_by_a_friend_or_business",getAllBoats.get("data").get("Were_you_referred_by_a_friend_or_business"));
+// boatData.put("Product_Package",getAllBoats.get("data").get("Product_Package"));
+// // Terms section
+// boatData.put("Agree_to_terms_and_conditions",getAllBoats.get("data").get("Agree_to_terms_and_conditions"));
+// boatData.put("Total_Payable_Premium_after_tax",getAllBoats.get("data").get("Total_Payable_Premium_after_tax"));
+// boatData.put("Financier_Information",getAllBoats.get("data").get("Financier_Information"));
+// boatData.put("Is_your_boat_financed",getAllBoats.get("data").get("Is_your_boat_financed"));
+// boatData.put("Other_Financier_Information",getAllBoats.get("data").get("Other_Financier_Information"));
+// boatData.put("Section_Type",getAllBoats.get("data").get("Section_Type"));
+// // migration section
+// boatData.put("UPO_Data",getAllBoats.get("data").get("UPO_Data"));
+// //--------------------------------------------------------------------------------------
+// // info "Boat " + boatData;
+// getAllCustomers = zoho.creator.getRecords("service_recprotect","quotation","All_Additional_Names","Boats == " + creatorID,1,200,"creator");
+// //info "getAllCustomers " + getAllCustomers;
+// customerList = List();
+// for each  cus in getAllCustomers.get("data")
+// {
+// 	info "Cust";
+// 	getCust = zoho.creator.getRecordById("service_recprotect","quotation","All_Additional_Names",cus.get("ID"),"creator");
+// 	//	getCust = zoho.creator.getRecords("service_recprotect","quotation","All_Additional_Names","ID == " + cus.get("ID"),1,200,"creator");
+// 	info "Customers --> " + getCust;
+// 	customerMap = Map();
+// 	custID = getCust.get("data").get("Customer_ID");
+// 	info "ID --" + custID.get("ID");
+// 	customerMap.put("Customer_ID",custID.get("ID"));
+// 	customerMap.put("Additional_Insured_First_Name",getCust.get("data").get("Additional_Insured_First_Name"));
+// 	customerMap.put("Additional_Insured_Last_Name",getCust.get("data").get("Additional_Insured_Last_Name"));
+// 	customerMap.put("Email",getCust.get("data").get("Email"));
+// 	customerMap.put("Link_Customer",getCust.get("data").get("Link_Customer"));
+// 	customerMap.put("Phone_Number",getCust.get("data").get("Phone_Number"));
+// 	customerMap.put("DOB",getCust.get("data").get("DOB"));
+// 	// 	customerMap.put("Server_Customer_ID",getCust.get("data").get("Server_Customer_ID"));
+// 	customerList.add(customerMap);
+// }
+// boatData.put("Additional_Names",customerList);
+// getAllBoatsLines = zoho.creator.getRecords("service_recprotect","quotation","All_Boat_Lines","BoatQuote == " + creatorID,1,200,"creator");
+// cnt = 0;
+// PremiumAmount = 0;
+// subformList = List();
+// for each  boat in getAllBoatsLines.get("data")
+// {
+// 	cnt = cnt + 1;
+// 	TotalBoat = TotalBoat + 1;
+// 	updateMap = Map();
+// 	info boat.get("ID");
+// 	getBoatFromCreator = zoho.creator.getRecordById("service_recprotect","quotation","All_Boat_Lines",boat.get("ID"),"creator");
+// 	//info "getBoatFromCreator " + getBoatFromCreator;
+// 	// 	info "boat renewal " + getBoatFromCreator.get("data").get("Eligible_for_Auto_Renewal");
+// 	msg = msg + "<br><br>" + getBoatFromCreator.get("data").get("Boat_Model_Year") + "," + getBoatFromCreator.get("data").get("Boat_Manufacturer") + "," + getBoatFromCreator.get("data").get("Boat_Model") + "," + getBoatFromCreator.get("data").get("Select_the_type_of_watercraft") + "";
+// 	subformData = Map();
+// 	if(getBoatFromCreator.get("data").get("Eligible_for_Auto_Renewal") == true)
+// 	{
+// 		subformData.put("Select_the_type_of_watercraft",getBoatFromCreator.get("data").get("Select_the_type_of_watercraft"));
+// 		subformData.put("Boat_Model_Year",getBoatFromCreator.get("data").get("Boat_Model_Year"));
+// 		subformData.put("Override_For_Age_15_Or_More",getBoatFromCreator.get("data").get("Override_For_Age_15_Or_More"));
+// 		subformData.put("Boat_Manufacturer",getBoatFromCreator.get("data").get("Boat_Manufacturer"));
+// 		subformData.put("Boat_Model",getBoatFromCreator.get("data").get("Boat_Model"));
+// 		subformData.put("Replacement_Cost",getBoatFromCreator.get("data").get("Replacement_Cost"));
+// 		subformData.put("Actual_Cash_Value",getBoatFromCreator.get("data").get("Actual_Cash_Value"));
+// 		// 		Principal Operator section
+// 		subformData.put("Is_the_Principal_Operator_the_same_as_the_Applicant_Owner",getBoatFromCreator.get("data").get("Is_the_Principal_Operator_the_same_as_the_Applicant_Owner"));
+// 		subformData.put("First_Name",getBoatFromCreator.get("data").get("First_Name"));
+// 		subformData.put("Last_Name",getBoatFromCreator.get("data").get("Last_Name"));
+// 		subformData.put("Date_of_Birth",getBoatFromCreator.get("data").get("Date_of_Birth"));
+// 		subformData.put("Principal_operator_s_years_of_boating_experience_with_vessels_of_a_similar_size_and_type",getBoatFromCreator.get("data").get("Principal_operator_s_years_of_boating_experience_with_vessels_of_a_similar_size_and_type"));
+// 		subformData.put("Does_the_operator_hold_a_Pleasure_Craft_Operator_s_Card_PCOC",getBoatFromCreator.get("data").get("Does_the_operator_hold_a_Pleasure_Craft_Operator_s_Card_PCOC"));
+// 		// 		Quote Coverages section
+// 		subformData.put("Select_coverage_for_policy",getBoatFromCreator.get("data").get("Select_coverage_for_policy"));
+// 		subformData.put("Liability_coverage",getBoatFromCreator.get("data").get("Liability_coverage"));
+// 		subformData.put("Deductible",getBoatFromCreator.get("data").get("Deductible"));
+// 		subformData.put("Boat_Coverage",getBoatFromCreator.get("data").get("Boat_Coverage"));
+// 		subformData.put("Personal_Effects_Coverage",getBoatFromCreator.get("data").get("Personal_Effects_Coverage"));
+// 		subformData.put("Salvage",getBoatFromCreator.get("data").get("Salvage"));
+// 		subformData.put("Navigational_Equipment_Coverage",getBoatFromCreator.get("data").get("Navigational_Equipment_Coverage"));
+// 		subformData.put("Pollution",getBoatFromCreator.get("data").get("Pollution"));
+// 		subformData.put("Emergency_Towing_Limit",getBoatFromCreator.get("data").get("Emergency_Towing_Limit"));
+// 		subformData.put("Removal_of_Wreckage",getBoatFromCreator.get("data").get("Removal_of_Wreckage"));
+// 		subformData.put("Loss_of_Use_Limit",getBoatFromCreator.get("data").get("Loss_of_Use_Limit"));
+// 		subformData.put("Uninsured_Underinsured_Boater_Endorsement",getBoatFromCreator.get("data").get("Uninsured_Underinsured_Boater_Endorsement"));
+// 		subformData.put("Recalculate",getBoatFromCreator.get("data").get("Recalculate"));
+// 		// 		Premium section
+// 		subformData.put("Show_Premium_Breakdown",getBoatFromCreator.get("data").get("Show_Premium_Breakdown"));
+// 		subformData.put("Boat_Liability_Prem",getBoatFromCreator.get("data").get("Boat_Liability_Prem"));
+// 		subformData.put("Boat_Base_Premium",getBoatFromCreator.get("data").get("Boat_Base_Premium"));
+// 		subformData.put("Boat_Operator_age_20_25_prem",getBoatFromCreator.get("data").get("Boat_Operator_age_20_25_prem"));
+// 		subformData.put("Boat_age_gt_15_prem",getBoatFromCreator.get("data").get("Boat_age_gt_15_prem"));
+// 		subformData.put("Deductible_Prem",getBoatFromCreator.get("data").get("Deductible_Prem"));
+// 		subformData.put("Boat_operator_gt_25_lt_3years_exp_prem",getBoatFromCreator.get("data").get("Boat_operator_gt_25_lt_3years_exp_prem"));
+// 		subformData.put("Pers_eff_prem",getBoatFromCreator.get("data").get("Pers_eff_prem"));
+// 		subformData.put("Navi_eqip_prem",getBoatFromCreator.get("data").get("Navi_eqip_prem"));
+// 		subformData.put("Total_Prem",getBoatFromCreator.get("data").get("Total_Prem"));
+// 		subformData.put("Endorsement_prem",getBoatFromCreator.get("data").get("Endorsement_prem"));
+// 		// 		Eligibility section	
+// 		subformData.put("Do_any_of_the_above_statements_apply_to_the_watercraft_Atlantic_Pacific",getBoatFromCreator.get("data").get("Do_any_of_the_above_statements_apply_to_the_watercraft_Atlantic_Pacific"));
+// 		subformData.put("Do_any_of_the_above_statements_apply_to_the_watercraft_engine_Parasailing_propane",getBoatFromCreator.get("data").get("Do_any_of_the_above_statements_apply_to_the_watercraft_engine_Parasailing_propane"));
+// 		subformData.put("Do_any_of_the_above_apply_to_the_watercraft_safety_requirements",getBoatFromCreator.get("data").get("Do_any_of_the_above_apply_to_the_watercraft_safety_requirements"));
+// 		subformData.put("Do_any_of_the_above_apply_to_the_applicant_Owner_primary_residence",getBoatFromCreator.get("data").get("Do_any_of_the_above_apply_to_the_applicant_Owner_primary_residence"));
+// 		subformData.put("Has_the_principal_operator_had_any_motor_vehicle_claims_in_the_last_5_years",getBoatFromCreator.get("data").get("Has_the_principal_operator_had_any_motor_vehicle_claims_in_the_last_5_years"));
+// 		subformData.put("How_many_motor_vehicle_claims",getBoatFromCreator.get("data").get("How_many_motor_vehicle_claims"));
+// 		subformData.put("Has_the_principal_operator_had_any_motor_vehicle_convictions_in_the_last_3_years",getBoatFromCreator.get("data").get("Has_the_principal_operator_had_any_motor_vehicle_convictions_in_the_last_3_years"));
+// 		subformData.put("PO_admin_3year_Override",getBoatFromCreator.get("data").get("PO_admin_3year_Override"));
+// 		subformData.put("How_many_motor_vehicle_convictions",getBoatFromCreator.get("data").get("How_many_motor_vehicle_convictions"));
+// 		subformData.put("Has_the_principal_operator_had_their_driver_s_license_suspended",getBoatFromCreator.get("data").get("Has_the_principal_operator_had_their_driver_s_license_suspended"));
+// 		subformData.put("PO_admin_License_Override",getBoatFromCreator.get("data").get("PO_admin_License_Override"));
+// 		subformData.put("Tell_us_more",getBoatFromCreator.get("data").get("Tell_us_more"));
+// 		// 		Boat Specs section
+// 		subformData.put("Lengths",getBoatFromCreator.get("data").get("Lengths"));
+// 		subformData.put("Hull_ID_Optional",getBoatFromCreator.get("data").get("Hull_ID_Optional"));
+// 		subformData.put("Hull_ID_Serial",getBoatFromCreator.get("data").get("Hull_ID_Serial"));
+// 		subformData.put("Hull_Type",getBoatFromCreator.get("data").get("Hull_Type"));
+// 		subformData.put("Other_Hull_Type",getBoatFromCreator.get("data").get("Other_Hull_Type"));
+// 		subformData.put("Estimated_max_speed",getBoatFromCreator.get("data").get("Estimated_max_speed"));
+// 		// 		Main Engine section
+// 		subformData.put("Types",getBoatFromCreator.get("data").get("Types"));
+// 		subformData.put("Enter_the_type",getBoatFromCreator.get("data").get("Enter_the_type"));
+// 		subformData.put("Fuel_Type",getBoatFromCreator.get("data").get("Fuel_Type"));
+// 		subformData.put("Model_Year",getBoatFromCreator.get("data").get("Model_Year"));
+// 		subformData.put("Manufacturer",getBoatFromCreator.get("data").get("Manufacturer"));
+// 		subformData.put("Serial",getBoatFromCreator.get("data").get("Serial"));
+// 		subformData.put("Horsepower",getBoatFromCreator.get("data").get("Horsepower"));
+// 		// 		subformData.put("Trailer_Serial",getBoatFromCreator.get("data").get("Trailer_Serial"));
+// 		// 		Main Engine2 section
+// 		subformData.put("Types1",getBoatFromCreator.get("data").get("Types1"));
+// 		subformData.put("Enter_the_type1",getBoatFromCreator.get("data").get("Enter_the_type1"));
+// 		subformData.put("Fuel_Type1",getBoatFromCreator.get("data").get("Fuel_Type1"));
+// 		subformData.put("Model_Year1",getBoatFromCreator.get("data").get("Model_Year1"));
+// 		subformData.put("Manufacturer1",getBoatFromCreator.get("data").get("Manufacturer1"));
+// 		subformData.put("Serial1",getBoatFromCreator.get("data").get("Serial1"));
+// 		subformData.put("Horsepower1",getBoatFromCreator.get("data").get("Horsepower1"));
+// 		// 		Addons section
+// 		subformData.put("Add_a_trailer",getBoatFromCreator.get("data").get("Add_a_trailer"));
+// 		subformData.put("Trailer_Value",getBoatFromCreator.get("data").get("Trailer_Value"));
+// 		subformData.put("Trailer_Model_Year",getBoatFromCreator.get("data").get("Trailer_Model_Year"));
+// 		subformData.put("Trailer_Manufacturer",getBoatFromCreator.get("data").get("Trailer_Manufacturer"));
+// 		subformData.put("Trailer_VIN",getBoatFromCreator.get("data").get("Trailer_VIN"));
+// 		subformData.put("Trailer_Length",getBoatFromCreator.get("data").get("Trailer_Length"));
+// 		subformData.put("Add_a_tender",getBoatFromCreator.get("data").get("Add_a_tender"));
+// 		subformData.put("Tender_Value",getBoatFromCreator.get("data").get("Tender_Value"));
+// 		subformData.put("Tender_Model_Year",getBoatFromCreator.get("data").get("Tender_Model_Year"));
+// 		subformData.put("Tender_Manufacturer",getBoatFromCreator.get("data").get("Tender_Manufacturer"));
+// 		subformData.put("Tender_Serial",getBoatFromCreator.get("data").get("Tender_Serial"));
+// 		subformData.put("Tender_Length",getBoatFromCreator.get("data").get("Tender_Length"));
+// 		subformData.put("Add_an_auxiliary_motor",getBoatFromCreator.get("data").get("Add_an_auxiliary_motor"));
+// 		subformData.put("Aux_Engine_Value",getBoatFromCreator.get("data").get("Aux_Engine_Value"));
+// 		subformData.put("Aux_Engine_Model_Year",getBoatFromCreator.get("data").get("Aux_Engine_Model_Year"));
+// 		subformData.put("Aux_Engine_Manufacturer",getBoatFromCreator.get("data").get("Aux_Engine_Manufacturer"));
+// 		subformData.put("Auxiliary_Engine_Serial",getBoatFromCreator.get("data").get("Auxiliary_Engine_Serial"));
+// 		subformData.put("Aux_Engine_HP_Thrust",getBoatFromCreator.get("data").get("Aux_Engine_HP_Thrust"));
+// 		// 		LienHolder section
+// 		subformData.put("Is_this_boat_financed",getBoatFromCreator.get("data").get("Is_this_boat_financed"));
+// 		// 		subformData.put("Lein_holder",getBoatFromCreator.get("data").get("Lein_holder"));
+// 		// 		subformData.put("Name_of_Financier",getBoatFromCreator.get("data").get("Name_of_Financier"));
+// 		// 		subformData.put("Address_line1",getBoatFromCreator.get("data").get("Address_line1"));
+// 		// 		subformData.put("Address_line2",getBoatFromCreator.get("data").get("Address_line2"));
+// 		// 		subformData.put("City",getBoatFromCreator.get("data").get("City"));
+// 		// 		subformData.put("Province",getBoatFromCreator.get("data").get("Province"));
+// 		// 		subformData.put("Postal_Code",getBoatFromCreator.get("data").get("Postal_Code"));
+// 		// 		subformData.put("Country",getBoatFromCreator.get("data").get("Country"));	
+// 		// 		subformData.put("Boat_Model_Age",getBoatFromCreator.get("data").get("Boat_Model_Age"));
+// 		// 		subformData.put("Eligible_for_Auto_Renewal",getBoatFromCreator.get("data").get("Eligible_for_Auto_Renewal"));
+// 		// 		subformData.put("Is_auto_approved_for_next_5_years",getBoatFromCreator.get("data").get("Is_auto_approved_for_next_5_years"));
+// 		// 		subformData.put("Approved_Year",getBoatFromCreator.get("data").get("Approved_Year"));	
+// 		// 		subformData.put("Boat_Status",getBoatFromCreator.get("data").get("Boat_Status"));
+// 		// 		subformData.put("Underwritting_Approved",getBoatFromCreator.get("data").get("Underwritting_Approved"));
+// 		// 		subformData.put("UW_Status",getBoatFromCreator.get("data").get("UW_Status"));
+// 		// 		subformData.put("Underwritting_Approved",getBoatFromCreator.get("data").get("Underwritting_Approved"));
+// 		subformData.put("Opt_In_for_RCV",getBoatFromCreator.get("data").get("Opt_In_for_RCV"));
+// 		// 		subformData.put("Admin_Override",getBoatFromCreator.get("data").get("Admin_Override"));
+// 		//RCV to ACV
+// 		if(getBoatFromCreator.get("data").get("Boat_Age") == 15)
+// 		{
+// 			option = "ACV";
+// 		}
+// 		else if(getBoatFromCreator.get("data").get("Boat_Age") >= 10 || getBoatFromCreator.get("data").get("Boat_Age") < 15 && getBoatFromCreator.get("data").get("Opt_In_for_RCV") == false)
+// 		{
+// 			option = "ACV";
+// 		}
+// 		else
+// 		{
+// 			option = getBoatFromCreator.get("data").get("Policy_Coverage_Type");
+// 		}
+// 		subformData.put("Policy_Coverage_Type",option);
+// 		subformData.put("Referral_Status",getBoatFromCreator.get("data").get("Referral_Status"));
+// 		subformData.put("Referral_Replacement_cost",getBoatFromCreator.get("data").get("Referral_Replacement_cost"));
+// 		subformData.put("Referral_Actual_Cash_Value",getBoatFromCreator.get("data").get("Referral_Actual_Cash_Value"));
+// 		subformData.put("Referral_Boat_Model_Year",getBoatFromCreator.get("data").get("Referral_Boat_Model_Year"));
+// 		subformData.put("Referral_Principal_operator_20_years",getBoatFromCreator.get("data").get("Referral_Principal_operator_20_years"));
+// 		subformData.put("Referral_Principal_Operator",getBoatFromCreator.get("data").get("Referral_Principal_Operator"));
+// 		subformData.put("Referral_Does_the_operator_hold_a_Pleasure_Craft_Operator_Card_PCOC",getBoatFromCreator.get("data").get("Referral_Does_the_operator_hold_a_Pleasure_Craft_Operator_Card_PCOC"));
+// 		subformData.put("Referral_Watercraft_Type",getBoatFromCreator.get("data").get("Referral_Watercraft_Type"));
+// 		subformData.put("Referral_How_many_motor_vehicle_claims",getBoatFromCreator.get("data").get("Referral_How_many_motor_vehicle_claims"));
+// 		subformData.put("Referral_How_many_motor_vehicle_Convictions",getBoatFromCreator.get("data").get("Referral_How_many_motor_vehicle_Convictions"));
+// 		subformData.put("Referral_Has_the_principal_operator_had_their_driver_s_license_suspended",getBoatFromCreator.get("data").get("Referral_Has_the_principal_operator_had_their_driver_s_license_suspended"));
+// 		subformData.put("Referral_Hull_Type",getBoatFromCreator.get("data").get("Referral_Hull_Type"));
+// 		subformData.put("Referral_Tender_lenght",getBoatFromCreator.get("data").get("Referral_Tender_lenght"));
+// 		subformData.put("Referral_Length",getBoatFromCreator.get("data").get("Referral_Length"));
+// 		subformData.put("Referral_Trailer_Length",getBoatFromCreator.get("data").get("Referral_Trailer_Length"));
+// 		subformData.put("Referral_Vessel",getBoatFromCreator.get("data").get("Referral_Vessel"));
+// 		subformData.put("Referral_Do_any_of_the_above_statements_apply_to_the_watercraft",getBoatFromCreator.get("data").get("Referral_Do_any_of_the_above_statements_apply_to_the_watercraft"));
+// 		subformData.put("Referral_Do_any_of_the_above_statements_apply_to_the_watercraft1",getBoatFromCreator.get("data").get("Referral_Do_any_of_the_above_statements_apply_to_the_watercraft1"));
+// 		subformData.put("Referral_Do_any_of_the_above_apply_to_the_watercraft",getBoatFromCreator.get("data").get("Referral_Do_any_of_the_above_apply_to_the_watercraft"));
+// 		subformData.put("Referral_Do_any_of_the_above_apply_to_the_Applicant",getBoatFromCreator.get("data").get("Referral_Do_any_of_the_above_apply_to_the_Applicant"));
+// 		subformData.put("Referral_Reason",getBoatFromCreator.get("data").get("Referral_Reason"));
+// 		// 		missed fields in subform 13-03-2024
+// 		// 		
+// 		// 		subformData.put("RCV_Exceeding_Limits_UW_Approved",getBoatFromCreator.get("data").get("RCV_Exceeding_Limits_UW_Approved"));
+// 		// 		subformData.put("ACV_Exceeding_Limits_UW_Approved",getBoatFromCreator.get("data").get("ACV_Exceeding_Limits_UW_Approved"));
+// 		// 		
+// 		// 		
+// 		// 		
+// 		// 		
+// 		// 		
+// 		// 		
+// 		// 		
+// 		// 		subformData.put("Boat_Migration_ID",getBoatFromCreator.get("data").get("Boat_Migration_ID"));
+// 		// 		subformData.put("Migrated",getBoatFromCreator.get("data").get("Migrated"));
+// 		// ---------------Premium Check code	
+// 		// 			fetchEndPoint = API_Configuration[Name_Process == "Calculate Coverage Premium - Boat"].End_Point;
+// 		getEndPointfromCreator = zoho.creator.getRecords("service_recprotect","quotation","All_Api_Configurations","Name_Process == \"Calculate Coverage Premium - Boat\"",1,200,"creator");
+// 		CoveragePremiumAPIENDPOINT = getEndPointfromCreator.get("data").get(0).get("End_Point");
+// 		parammap = Map();
+// 		//thisapp.Server_Side.org_info()
+// 		getOrg = invokeurl
+// 		[
+// 			url :"https://www.zohoapis.com/creator/custom/service_recprotect/Org_Info?publickey=UsNgXbMvJ3pYHuDGtsgdsbhCR"
+// 			type :GET
+// 		];
+// 		// info "Org " + getOrg.get("result");
+// 		parammap.put("organization_id",getOrg.get("result"));
+// 		if(getBoatFromCreator.get("data").get("Select_coverage_for_policy") == "Replacement Value Coverage")
+// 		{
+// 			boatvalue = ifnull(getBoatFromCreator.get("data").get("Replacement_Cost"),0);
+// 		}
+// 		else if(getBoatFromCreator.get("data").get("Select_coverage_for_policy") == "Current Market Value Coverage")
+// 		{
+// 			boatvalue = ifnull(getBoatFromCreator.get("data").get("Actual_Cash_Value"),0);
+// 		}
+// 		else
+// 		{
+// 			boatvalue = 0;
+// 		}
+// 		parammap.put("boat_value",boatvalue);
+// 		if(!isNull(getBoatFromCreator.get("data").get("Select_the_type_of_watercraft")))
+// 		{
+// 			parammap.put("boat_type",getBoatFromCreator.get("data").get("Select_the_type_of_watercraft"));
+// 		}
+// 		check15years = false;
+// 		if(!isNull(getBoatFromCreator.get("data").get("Boat_Model_Year")))
+// 		{
+// 			calculate25Years = zoho.currentdate.getYear() - getBoatFromCreator.get("data").get("Boat_Model_Year").toNumber();
+// 			check15years = if(calculate25Years > 15,true,false);
+// 		}
+// 		parammap.put("is_boat_age_gt_15",check15years);
+// 		agecheck = false;
+// 		calculateAge = 0;
+// 		if(!isNull(getBoatFromCreator.get("data").get("Date_of_Birth")))
+// 		{
+// 			calculateAge = zoho.currentdate.getYear() - getBoatFromCreator.get("data").get("Date_of_Birth").toDate().getYear();
+// 			agecheck = if(calculateAge >= 20 && calculateAge <= 25,true,false);
+// 		}
+// 		parammap.put("is_boat_operator_age_20_25",agecheck);
+// 		expcheck = false;
+// 		if(calculateAge > 25 && !isNull(getBoatFromCreator.get("data").get("Principal_operator_s_years_of_boating_experience_with_vessels_of_a_similar_size_and_type")))
+// 		{
+// 			if(getBoatFromCreator.get("data").get("Principal_operator_s_years_of_boating_experience_with_vessels_of_a_similar_size_and_type") == "0-3 Years")
+// 			{
+// 				expcheck = true;
+// 			}
+// 		}
+// 		parammap.put("is_boat_operator_gt_25_lt_3years_exp",expcheck);
+// 		if(!isNull(getBoatFromCreator.get("data").get("Navigational_Equipment_Coverage")))
+// 		{
+// 			naviValue = getBoatFromCreator.get("data").get("Navigational_Equipment_Coverage");
+// 			if(getBoatFromCreator.get("data").get("Navigational_Equipment_Coverage").contains("$") == true)
+// 			{
+// 				naviValue = getBoatFromCreator.get("data").get("Navigational_Equipment_Coverage").remove("$").toDecimal();
+// 			}
+// 			parammap.put("navi_eqip_value",naviValue);
+// 		}
+// 		if(!isNull(getBoatFromCreator.get("data").get("Personal_Effects_Coverage")))
+// 		{
+// 			parammap.put("pers_eff_value",getBoatFromCreator.get("data").get("Personal_Effects_Coverage"));
+// 		}
+// 		if(!isNull(getBoatFromCreator.get("data").get("Liability_coverage")))
+// 		{
+// 			parammap.put("is_boat_liability_rate_2M",getBoatFromCreator.get("data").get("Liability_coverage"));
+// 		}
+// 		if(!isNull(getBoatFromCreator.get("data").get("Deductible")))
+// 		{
+// 			parammap.put("deductible_value",getBoatFromCreator.get("data").get("Deductible").toLong());
+// 		}
+// 		boatCoverage = if(getBoatFromCreator.get("data").get("Select_coverage_for_policy") == "Replacement Value Coverage","RCV","ACV");
+// 		parammap.put("coverage_type",boatCoverage);
+// 		boatAgecheck = false;
+// 		if(!isNull(getBoatFromCreator.get("data").get("Boat_Age")))
+// 		{
+// 			boatAgecheck = if(getBoatFromCreator.get("data").get("Boat_Age") >= 10 && getBoatFromCreator.get("data").get("Boat_Age") <= 15,true,false);
+// 		}
+// 		parammap.put("is_boat_age_10_to_15",boatAgecheck);
+// 		// 	boatPostData = thisapp.Server_Side.callServer("POST",fetchEndPoint,parammap);
+// 		// serverside call server function
+// 		headerMap = Map();
+// 		headerMap.put("Content-Type","application/json");
+// 		ServerResp = invokeurl
+// 		[
+// 			url :CoveragePremiumAPIENDPOINT
+// 			type :POST
+// 			parameters:parammap.toString()
+// 			headers:headerMap
+// 		];
+// 		info "ServerResp " + ServerResp;
+// 		// serverside function end
+// 		if(ServerResp.get("success") == true)
+// 		{
+// 			subformData.put("Premium_Per_Year",ServerResp.get("data").get("total_prem"));
+// 			PremiumAmount = ifnull(PremiumAmount,0) + ifnull(ServerResp.get("data").get("total_prem"),0);
+// 		}
+// 		else
+// 		{
+// 			subformData.put("Premium_Per_Year",0);
+// 		}
+// 		//getBoatFromCreator.get("data").get("Premium_Per_Year")
+// 		// ---------------Premium check code end		
+// 		subformList.add(subformData);
+// 	}
+// }
+// // Premium section
+// boatData.put("Total_Premium_before_tax",getAllBoats.get("data").get("Total_Premium_before_tax"));
+// boatData.put("Tax_Province",getAllBoats.get("data").get("Tax_Province"));
+// boatData.put("Fee",getAllBoats.get("data").get("Fee"));
+// boatData.put("Tax_Precent",getAllBoats.get("data").get("Tax_Precent"));
+// info "Data---" + getAllBoats.get("data");
+// info "---getinfo--" + getAllBoats.get("data").get("Tax_Precent");
+// if(getAllBoats.get("data").get("Fee") != null && getAllBoats.get("data").get("Fee") != "")
+// {
+// 	beforeAmnt = ifnull(PremiumAmount,0) + ifnull(getAllBoats.get("data").get("Fee"),0);
+// 	TaxAmnt = ifnull(beforeAmnt,0) * ifnull(getAllBoats.get("data").get("Tax_Precent").toDecimal(),0) / 100;
+// 	afterTax = ifnull(beforeAmnt,0) + ifnull(TaxAmnt,0);
+// }
+// else
+// {
+// 	beforeAmnt = ifnull(PremiumAmount.toDecimal(),0);
+// 	//info "Round " + beforeAmnt.toDecimal() + "------" + getAllBoats.get("data").get("Tax_Precent");
+// 	TaxAmnt = (ifnull(beforeAmnt,0) * ifnull(getAllBoats.get("data").get("Tax_Precent").toDecimal(),0)) / 100;
+// 	info "TaxAmnt " + TaxAmnt;
+// 	afterTax = ifnull(beforeAmnt,0) + ifnull(TaxAmnt,0);
+// }
+// boatData.put("Total_Tax",ifnull(TaxAmnt.round(2),0));
+// boatData.put("Total_Payable_Premium_after_tax",ifnull(afterTax.round(2),0));
+// boatData.put("Boat",subformList);
+// optionalMap = Map();
+// if(TotalBoat > 0)
+// {
+// 	createRecord = zoho.creator.createRecord("service_recprotect","quotation","BoatQuote",boatData,optionalMap,"creator");
+// 	info "createRecord " + createRecord;
+// 	info "count " + cnt;
+// }
+// if(getAllBoats.get("Stripe_Payment_Method_Details") != "" || getAllBoats.get("Stripe_Payment_Method_Details") != null)
+// {
+// 	// Autocharge
+// 	getEndPointfromCreator = zoho.creator.getRecords("service_recprotect","quotation","All_Api_Configurations","Name_Process == \"Boat AutoCharge API\"",1,200,"creator");
+// 	AutoChargeAPIENDPOINT = getEndPointfromCreator.get("data").get(0).get("End_Point");
+// 	//	// 		apiEndPoint = "https://recprotectbackend-10073292108.development.catalystappsail.com/recprotect/api/boat/stripe/auto_charge";
+// 	parammap = Map();
+// 	// 	balance = fetchTrailer.Total_Payable_Premium_after_tax ; //for renewals
+// 	// balance = fetchPolicyChangeRequest.Total;// for policy change  
+// 	getOrg = invokeurl
+// 	[
+// 		url :"https://www.zohoapis.com/creator/custom/service_recprotect/Org_Info?publickey=UsNgXbMvJ3pYHuDGtsgdsbhCR"
+// 		type :GET
+// 	];
+// 	// info "Org " + getOrg.get("result");
+// 	parammap.put("organization_id",getOrg.get("result"));
+// 	// 				parammap.put("organization_id","RECPROTECT1");
+// 	parammap.put("quote_record_id",ifNull(newBoat.get("Quote_Record_ID_Server"),""));
+// 	parammap.put("policy_change_balance",newBoat.get("Total_Payable_Premium_after_tax"));
+// 	parammap.put("payment_for","RENEWAL");
+// 	parammap.put("stripe_customer_id",ifNull(newBoat.get("Stripe_Customer_ID"),""));
+// 	parammap.put("payment_method_id",ifNull(newBoat.get("Stripe_Payment_Method_ID"),""));
+// 	// code belong to thisapp.Server_Side.callServer function 
+// 	apiMethod = "POST";
+// 	if(apiMethod == "POST")
+// 	{
+// 		headerMap = Map();
+// 		headerMap.put("Content-Type","application/json");
+// 		resp = invokeurl
+// 		[
+// 			url :AutoChargeAPIENDPOINT
+// 			type :POST
+// 			parameters:parammap.toString()
+// 			headers:headerMap
+// 		];
+// 	}
+// 	if(resp.get("success") == "true")
+// 	{
+// 		paymentStatusUpdateMap = Map();
+// 		paymentStatusUpdateMap.put("Payment_Status","Paid");
+// 		updatePaymentStatusUpdate = zoho.crm.updateRecord("Deals",DealID,paymentStatusUpdateMap);
+// 		// || resp.contains("Cannot POST") == true    getBoat.get("Total")
+// 		if(newBoat.get("Total_Payable_Premium_after_tax") > 0)
+// 		{
+// 			// invoice
+// 			dataMap = Map();
+// 			dataMap.put("Business_Process","Renewal");
+// 			dataMap.put("Type_of_Transaction","Invoice");
+// 			dataMap.put("Tracking_of_creation_of_Charge","Auto-Charge");
+// 			dataMap.put("Policy_Type","Boat Policy");
+// 			dataMap.put("Date_field",zoho.currentdate.todate("dd-MMM-yyyy"));
+// 			dataMap.put("Deal_Name",DealID);
+// 			getContactDet = zoho.crm.getRecordById("Contacts",getBoat.get("Contact_Name").get("id"));
+// 			// 				info "cont det  " + getContactDet.get("Zoho_Creator_ID");
+// 			dataMap.put("Customer_Name",getContactDet.get("Zoho_Creator_ID"));
+// 			transacDetaSubform = list();
+// 			subformMap = Map();
+// 			subformMap.put("Product_Name",5778486000017783005);
+// 			subformMap.put("Amount",newBoat.get("Total_Premium_before_tax"));
+// 			totalAmnt = newBoat.get("Total_Premium_before_tax");
+// 			TaxAmnt = (totalAmnt.toDecimal() * TaxPercent.toDecimal()) / 100;
+// 			AmntWithTax = totalAmnt + TaxAmnt;
+// 			subformMap.put("Tax",TaxPercentID);
+// 			subformMap.put("Tax_Amount",TaxAmnt.round(2));
+// 			subformMap.put("Amount_With_Tax",AmntWithTax.round(2));
+// 			transacDetaSubform.add(subformMap);
+// 			dataMap.put("Transaction_Details",transacDetaSubform);
+// 			dataMap.put("Total_Amount_Without_Tax",newBoat.get("Total_Premium_before_tax"));
+// 			dataMap.put("Tax_Amount",TaxAmnt.round(2));
+// 			dataMap.put("Total_Amount_With_Tax",AmntWithTax.round(2));
+// 			createTransactionRecInvoice = zoho.creator.createRecord("service_recprotect","quotation","Transaction_Table",dataMap,Map(),"creator");
+// 			info "Invoice " + createTransactionRecInvoice;
+// 		}
+// 		else
+// 		{
+// 			// credit note
+// 			dataMap = Map();
+// 			dataMap.put("Business_Process","Renewal");
+// 			dataMap.put("Type_of_Transaction","Credit Note");
+// 			dataMap.put("Tracking_of_creation_of_Charge","Auto-Charge");
+// 			dataMap.put("Policy_Type","Boat Policy");
+// 			dataMap.put("Date_field",zoho.currentdate.todate("dd-MMM-yyyy"));
+// 			dataMap.put("Deal_Name",DealID);
+// 			getContactDet = zoho.crm.getRecordById("Contacts",getBoat.get("Contact_Name").get("id"));
+// 			// 				info "cont det  " + getContactDet.get("Zoho_Creator_ID");
+// 			dataMap.put("Customer_Name",getContactDet.get("Zoho_Creator_ID"));
+// 			transacDetaSubform = list();
+// 			subformMap = Map();
+// 			subformMap.put("Product_Name",5778486000017783005);
+// 			subformMap.put("Amount",newBoat.get("Total_Premium_before_tax"));
+// 			totalAmnt = newBoat.get("Total_Premium_before_tax");
+// 			TaxAmnt = (totalAmnt * TaxPercent) / 100;
+// 			AmntWithTax = totalAmnt + TaxAmnt;
+// 			subformMap.put("Tax",TaxPercentID);
+// 			subformMap.put("Tax_Amount",TaxAmnt);
+// 			subformMap.put("Amount_With_Tax",AmntWithTax);
+// 			transacDetaSubform.add(subformMap);
+// 			dataMap.put("Transaction_Details",transacDetaSubform);
+// 			dataMap.put("Total_Amount_Without_Tax",newBoat.get("Total_Premium_before_tax"));
+// 			dataMap.put("Tax_Amount",TaxAmnt.round(2));
+// 			dataMap.put("Total_Amount_With_Tax",AmntWithTax.round(2));
+// 			createTransactionRecInvoice = zoho.creator.createRecord("service_recprotect","quotation","Transaction_Table",dataMap,Map(),"creator");
+// 			info "Credit Note  " + createTransactionRecInvoice;
+// 		}
+// 	}
+// 	else if(resp.get("success") == "false")
+// 	{
+// 		paymentStatusUpdateMap = Map();
+// 		paymentStatusUpdateMap.put("Payment_Status","UnPaid");
+// 		updatePaymentStatusUpdate = zoho.crm.updateRecord("Deals",DealID,paymentStatusUpdateMap);
+// 	}
+// 	// autocharge api ends
+// }
+// else
+// {
+// 	// Generate Payment url
+// 	paymentURLMap = Map();
+// 	fetchEndPointPaymentURL = "https://recprotectbackend-10073292108.development.catalystappsail.com/recprotect/api/boat/stripe/create_payment_url";
+// 	paymentMap = Map();
+// 	paymentMap.put("total_premium",if(newBoat.get("New_Total_Premium_before_tax") != null,newBoat.get("New_Total_Premium_before_tax"),0));
+// 	paymentMap.put("total_tax",if(newBoat.get("New_Total_Tax") != null,newBoat.get("New_Total_Tax"),0));
+// 	paymentMap.put("admin_fee",if(newBoat.get("New_Admin_Fee") != null,newBoat.get("New_Admin_Fee"),0));
+// 	paymentURLMap.put("amount_payable",paymentMap);
+// 	// 		paymentURLMap.put("boat_quote_record_id",getBoat.Quote_Record_ID_Server);
+// 	uniqID = if(newBoat.get("Policy_Number") != null,newBoat.get("Policy_Number"),newBoat.get("Quote_ID"));
+// 	paymentURLMap.put("unique_id",uniqID);
+// 	paymentURLMap.put("payment_for","PolicyChange");
+// 	//NewBusiness
+// 	paymentURLMap.put("payment_type","Debit To Company");
+// 	//Credit To Company
+// 	paymentURLMap.put("payment_method","Credit Card");
+// 	paymentURLMap.put("organization_id","RECPROTECT1");
+// 	getCustomer = zoho.creator.getRecords("service_recprotect","quotation","All_Customers","ID == " + newBoat.get("Customer_ID").get("ID"),1,200,"creator");
+// 	paymentURLMap.put("customer_id",getCustomer.get("data").get(0).get("Server_Customer_ID"));
+// 	// 		info "Param a" + paymentURLMap;
+// 	// API
+// 	headerMap = Map();
+// 	headerMap.put("Content-Type","application/json");
+// 	resp = invokeurl
+// 	[
+// 		url :fetchEndPointPaymentURL
+// 		type :POST
+// 		parameters:paymentURLMap.toString()
+// 		headers:headerMap
+// 	];
+// 	if(resp != null)
+// 	{
+// 		Payment_URL = resp.get("data").get("url");
+// 		info "URL " + input.Payment_URL;
+// 		if(Payment_URL != null)
+// 		{
+// 			// 			Payment_ID = resp.get("data").get("url").getsuffix("payment_id=");
+// 			// 			boatquote_data.Payment_ID=Payment_ID;
+// 			// 			boatquote_data.Payment_URL=Payment_URL;
+// 		}
+// 	}
+// 	// payment url ends
+// }
+// /*Missed fields 13-03-2024*/
+// /*
+// boatData.put("Combined_Doc_Workdrive_URL",getAllBoats.get("data").get("Combined_Doc_Workdrive_URL"));
+// boatData.put("Boat_approve_Related",getAllBoats.get("data").get("Boat_approve_Related"));
+// boatData.put("Quote_Access_URL",getAllBoats.get("data").get("Quote_Access_URL"));
+// boatData.put("Renewal_Eligibility",getAllBoats.get("data").get("Renewal_Eligibility"));
+// boatData.put("Migrated",getAllBoats.get("data").get("Migrated"));
+// boatData.put("Boat_Migration_ID",getAllBoats.get("data").get("Boat_Migration_ID"));
+// boatData.put("Migrated_Status",getAllBoats.get("data").get("Migrated_Status"));
+// boatData.put("Migrated_to_Server",getAllBoats.get("data").get("Migrated_to_Server"));
+// boatData.put("Server_Migrated_Error_Resp",getAllBoats.get("data").get("Server_Migrated_Error_Resp"));
+// boatData.put("Quote_Record_ID_Server",getAllBoats.get("data").get("Quote_Record_ID_Server"));
+// boatData.put("Email_Validation",getAllBoats.get("data").get("Email_Validation"));
+// boatData.put("Webapp_Quote_URL",getAllBoats.get("data").get("Webapp_Quote_URL"));
+// boatData.put("Contact_Policy_Folder_Workdrive_Link",getAllBoats.get("data").get("Contact_Policy_Folder_Workdrive_Link"));
+// boatData.put("Contact_Policy_Folder_Workdrive_Folder_ID",getAllBoats.get("data").get("Contact_Policy_Folder_Workdrive_Folder_ID"));
+// boatData.put("Boat_quote_Page_View",getAllBoats.get("data").get("Boat_quote_Page_View"));
+// boatData.put("Auto_Populate",getAllBoats.get("data").get("Auto_Populate"));
+// boatData.put("Add_status_Additional_Insured_Flag_to_identify",getAllBoats.get("data").get("Add_status_Additional_Insured_Flag_to_identify"));
+// getAllDocInfo = zoho.creator.getRecords("service_recprotect","quotation","Boat_Document_Information_Report","BoatQuote == " + creatorID,1,200,"creator");
+// //info "getAllCustomers " + getAllCustomers;
+// DocinfoList = List();
+// for each doc in getAllCustomers.get("data")
+// {
+// 	getDocInfo = zoho.creator.getRecordById("service_recprotect","quotation","Boat_Document_Information_Report",doc.get("ID"),"creator");
+// 	docInfoMap = Map();
+// 	docInfoMap.put("Document_Type",getDocInfo.get("data").get("Document_Type"));
+// 	docInfoMap.put("Document_Name",getDocInfo.get("data").get("Document_Name"));
+// 	docInfoMap.put("Workdrive_URL",getDocInfo.get("data").get("Workdrive_URL"));
+// 	docInfoMap.put("Download_URL",getDocInfo.get("data").get("Download_URL"));
+// 	docInfoMap.put("Created_Time",getDocInfo.get("data").get("Created_Time").toDate());
+// 	DocinfoList.add(docInfoMap);
+// }
+// boatData.put("Boat_Document_Information",DocinfoList);
+// getAllBoatTransactions = zoho.creator.getRecords("service_recprotect","quotation","All_Boat_Transaction_Histories","Quote == " + creatorID,1,200,"creator");
+// boatTransactionList = List();
+// for each trans in getAllBoatTransactions.get("data")
+// {
+// 	TransactionHistory = zoho.creator.getRecordById("service_recprotect","quotation","All_Boat_Transaction_Histories",trans.get("ID"),"creator");
+// 	transMap = Map();
+// 	transMap.put("Payment_ID",TransactionHistory.get("data").get("Payment_ID"));
+// 	transMap.put("Payment_Status",TransactionHistory.get("data").get("Payment_Status"));
+// 	transMap.put("Payment_URL",TransactionHistory.get("data").get("Payment_URL"));
+// 	transMap.put("Payment_Initiated_Date",TransactionHistory.get("data").get("Payment_Initiated_Date").toDate());
+// 	transMap.put("Amount_Payable",TransactionHistory.get("data").get("Amount_Payable"));
+// 	transMap.put("Payment_For",TransactionHistory.get("data").get("Payment_For"));
+// 	transMap.put("Payment_Type",TransactionHistory.get("data").get("Payment_Type"));
+// 	transMap.put("Payment_Method",TransactionHistory.get("data").get("Payment_Method"));
+// 	transMap.put("Payload_Sent",TransactionHistory.get("data").get("Payload_Sent"));
+// 	transMap.put("Payload_Received",TransactionHistory.get("data").get("Payload_Received"));UPO_Data
+// 	transMap.put("UPO_Data",TransactionHistory.get("data").get("UPO_Data"));
+// 	transMap.add(transMap);
+// }Stripe_Payment_Method_Details
+// boatData.put("Transaction_History",transMap);*/
+// //Moved to schedule function 
+// //349
+// // Payment = "Success";
+// // if(TotalBoat > 0)
+// // {
+// // 	//-------------Attachment Fetch and Send mail--------------------------------------
+// // 	Carrier = "";
+// // 	workdrive_ID = "";
+// // 	if(getBoat.get("Carrier") == "Germania Insurance")
+// // 	{
+// // 		Carrier = "Germania Insurance";
+// // 	}
+// // 	Policy_Number = "# " + getAllBoats.get("data").get("Policy_Number") + "-Policy Declaration";
+// // 	get_creator_contact = zoho.creator.getRecords("service_recprotect","quotation","Boat_Document_Information_Report","BoatQuote == " + creatorID + " && Document_Name == \"" + Policy_Number + "\"",1,100,"creator");
+// // 	if(get_creator_contact.get("code") == 3000)
+// // 	{
+// // 		workdrive_ID = get_creator_contact.get("data").get(0).get("Workdrive_URL").getSuffixIgnoreCase("file/");
+// // 	}
+// // 	// 	info "Carrier"+Carrier;
+// // 	// 	info "2"+getBoat.get("Carrier");
+// // 	Attachmentresponse = invokeurl
+// // 	[
+// // 		url :"https://www.zohoapis.com/crm/v2/functions/Boat_Attachment/actions/execute?auth_type=apikey&zapikey=1003.e22f3273bb04b81989500e60afe3e5d6.99dc1d6bafbf8dd22c72d8420f043dc3"
+// // 		type :GET
+// // 		parameters:{"creator_ID":getAllBoats.get("data").get("ID"),"Carrier":Carrier,"workdrive_ID":workdrive_ID}
+// // 		connection:"crm"
+// // 	];
+// // 	if(Attachmentresponse != null)
+// // 	{
+// // 		//info "Attachmentresponse"+Attachmentresponse;
+// // 		Attachres = Attachmentresponse.get("details").get("output");
+// // 		info "stta" + Attachres;
+// // 		att_List1 = List();
+// // 		for each  Att in Attachres
+// // 		{
+// // 			new_Map = Map();
+// // 			new_Map.put("id",Att.trim());
+// // 			att_List1.add(new_Map);
+// // 		}
+// // 		info "list" + att_List1;
+// // 	}
+// // 	//Need to add renewal dec pages
+// // 	//------------------------------------End------------------------------------------------------	
+// // 	creatorMap = Map();
+// // 	crmUpdateMap = Map();
+// // 	if(Payment == "Success")
+// // 	{
+// // 		getTemplateCRM = invokeurl
+// // 		[
+// // 			url :"https://www.zohoapis.com/crm/v6/settings/email_templates/5778486000008321018"
+// // 			type :GET
+// // 			connection:"crm"
+// // 		];
+// // 		//info getTemplateCRM.get("email_templates").get(0).get("content");
+// // 		getYear = zoho.currentdate.getYear();
+// // 		termPeriod = getYear + 1;
+// // 		//replaceAll("&lt;term period&gt;",getYear + " - " + termPeriod)
+// // 		RenewalDate = getBoat.get("Expiry_Date").addDay(1);
+// // 		nextYr = zoho.currentdate.getYear() + 1;
+// // 		termPeriod = zoho.currentdate.getYear() + " - " + nextYr;
+// // 		modifiedContent = getTemplateCRM.get("email_templates").get(0).get("content").replaceAll("&lt;Boat Details&gt;",msg).replaceAll("&lt;Renewal Date&gt;",RenewalDate).replaceAll("&lt;Term Period&gt;",termPeriod).replaceAll("&lt;Contact Name&gt;",contactName).replaceAll("&lt;Total&gt;",getBoat.get("Total")).replaceAll("&lt;Policy Number&gt;",getBoat.get("Policy_Number")).replaceAll("#UPOCARDNUMBER#",UPOCardNumber);
+// // 		modifiedSubject = getTemplateCRM.get("email_templates").get(0).get("subject");
+// // 		//info modifiedContent;
+// // 		//,"template":{"id":"4516886000014770109"}
+// // 		data = {{"from":{"email":zoho.adminuserid},"to":{{"email":"priyadharshini.rk@cloudlion.org"}},"subject":modifiedSubject,"content":modifiedContent,"mail_format":"html","attachments":att_List1}};
+// // 		json_data = Map();
+// // 		json_data.put("data",data);
+// // 		send_mail = invokeurl
+// // 		[
+// // 			url :"https://www.zohoapis.com/crm/v3/Deals/" + DealID + "/actions/send_mail"
+// // 			type :POST
+// // 			parameters:json_data.toString()
+// // 			connection:"crm"
+// // 		];
+// // 		info send_mail;
+// // 		creatorMap.put("Renewal_Stage","30th Day - Successful Payment");
+// // 		crmUpdateMap.put("Renewal_Stage","30th Day - Successful Payment");
+// // 	}
+// // 	else if(Payment == "Failure")
+// // 	{
+// // 		/****** Unsuccessfull*/
+// // 		getTemplateCRM = invokeurl
+// // 		[
+// // 			url :"https://www.zohoapis.com/crm/v6/settings/email_templates/5778486000008321037"
+// // 			type :GET
+// // 			connection:"crm"
+// // 		];
+// // 		//info getTemplateCRM.get("email_templates").get(0).get("content");
+// // 		Day18 = getBoat.get("Expiry_Date").subDay(18);
+// // 		Day19 = getBoat.get("Expiry_Date").subDay(19);
+// // 		RenewalDate = getBoat.get("Expiry_Date").addDay(1);
+// // 		modifiedContent = getTemplateCRM.get("email_templates").get(0).get("content").replaceAll("&lt;Boat Details&gt;",msg).replaceAll("&lt;Day 18&gt;",Day18).replaceAll("&lt;Day 19&gt;",Day19).replaceAll("&lt;Renewal Date&gt;",RenewalDate).replaceAll("&lt;Contact Name&gt;",contactName).replaceAll("&lt;Total&gt;",getBoat.get("Total")).replaceAll("&lt;Policy Number&gt;",getBoat.get("Policy_Number")).replaceAll("#UPOCARDNUMBER#",UPOCardNumber);
+// // 		modifiedSubject = getTemplateCRM.get("email_templates").get(0).get("subject");
+// // 		//info modifiedContent;
+// // 		//,"template":{"id":"4516886000014770109"}
+// // 		data = {{"from":{"email":zoho.adminuserid},"to":{{"email":"priyadharshini.rk@cloudlion.org"}},"subject":modifiedSubject,"content":modifiedContent,"mail_format":"html","attachments":att_List1}};
+// // 		json_data = Map();
+// // 		json_data.put("data",data);
+// // 		send_mail = invokeurl
+// // 		[
+// // 			url :"https://www.zohoapis.com/crm/v3/Deals/" + DealID + "/actions/send_mail"
+// // 			type :POST
+// // 			parameters:json_data.toString()
+// // 			connection:"crm"
+// // 		];
+// // 		info send_mail;
+// // 		creatorMap.put("Renewal_Stage","30th Day - Unsuccessful Payment");
+// // 		crmUpdateMap.put("Renewal_Stage","30th Day - Unsuccessful Payment");
+// // 	}
+// // 	creatorUpdate = zoho.creator.updateRecord("service_recprotect","quotation","Boats_Report",getBoat.get("Creator_ID").toLong(),creatorMap,Map(),"creator");
+// // 	updateCRM = zoho.crm.updateRecord("Deals",DealID,crmUpdateMap);
+// // }

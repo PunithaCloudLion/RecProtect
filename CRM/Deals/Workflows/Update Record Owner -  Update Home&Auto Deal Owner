@@ -1,0 +1,11 @@
+Get_Dealresponse = zoho.crm.getRecordById("deals",Deal_id);
+info Get_Dealresponse;
+Get_Dealowner = ifnull(Get_Dealresponse.getJson("Owner").get("id"),null);
+Get_userdetails = zoho.crm.getRecordById("users",Get_Dealowner);
+Role = ifnull(Get_userdetails.getjson("role").get("name"),"");
+if(Role == "Boat and Trailer Admin" || Role == "Boat and Trailer Service" || Role == "Boat and Trailer Sales")
+{
+	Updatemap = Map();
+	Updatemap.put("Owner",5778486000008345001);
+	Updateresposne = zoho.crm.updateRecord("deals",Deal_id,Updatemap);
+}

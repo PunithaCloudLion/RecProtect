@@ -1,0 +1,5 @@
+
+getdeal = zoho.crm.getRecordById("Deals",dealid);
+updatemap = Map();
+updatemap.put("Deal_Name",getdeal.get("Policy_Number"));
+updateresp = zoho.crm.updateRecord("Deals",dealid,updatemap);

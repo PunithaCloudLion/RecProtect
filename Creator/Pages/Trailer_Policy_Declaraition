@@ -1,0 +1,700 @@
+<%{
+	// 		input.trailerID = 4564627000000584266;
+	sign = Signature[ID != null];
+	getTrailers = TrailerQuote[ID == input.trailerID];
+	if(getTrailers.Customer_ID != null)
+	{
+		getCustomers = Customer[ID == getTrailers.Customer_ID];
+	}
+	%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<style>
+/*#zppagesLive {
+	padding:0;
+	padding-right: 0px; 
+    padding-top: 0px; 
+    padding-bottom: 0px; 
+    padding-left: 0px;
+}*/
+.zc-pb-singleElement
+{
+	padding-right: 4% !important; 
+    padding-top: 2% !important; 
+    padding-bottom: 2% !important; 
+    padding-left: 4% !important;
+}
+
+.mainDiv
+{
+	width:100%;
+	margin:auto;
+	font-size: 12px
+}
+
+img {
+  	display: block;
+  	padding: 20px;
+  	margin-bottom: auto;
+  	margin-left: 1%;
+  	align:left;
+}
+.div1
+{
+	border:1px solid black;
+	border-radius:7px;
+}
+
+hr.new2 {
+  border-top: 2px dashed #000000;
+}
+
+
+
+.itemAddTable td, .itemAddTable th {
+//   border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.itemTable1 th {
+//   border-right:1px solid #ddd;
+//   border-bottom:1px solid #ddd;
+  padding: 8px;
+}
+
+.itemTable1 td
+{
+// 	border-right:1px solid #ddd;
+    padding: 1px;
+// 	padding-bottom:1px;
+}
+
+.itemTable1 th {
+  padding-top: 8px;
+  padding-bottom: 4px;
+  text-align: left;
+
+}
+
+.grid-container1 {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  padding-top:10px;
+  width:47%;
+}
+.grid-item1 {
+  padding: 1px;
+  font-size: 15px;
+  text-align: left;
+  margin-left: 7px;
+
+}
+.grid-container2 {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  padding: 1%;
+  width:47%;
+  border:1px solid black;
+  border-radius:5px;
+  float:left;
+}
+.grid-item2 {
+  padding: 1px;
+  font-size: 15px;
+  text-align: left;
+  border-right:1px solid black;
+}
+
+</style>
+</head>
+<body>
+<div class = "mainDiv">
+
+<!-- logo div -->
+<div class="row" style="">
+<div class="col-md-6">
+<img align="left" style="width: 34%;padding: 0;" src="https://previewengine-accl.zoho.com/image/WD/rnhg746db378696bc41c7851cb4cefe42823c?version=1.0&width=2046&height=1536" alt="logo">
+</div>
+</div>
+<!-- logo div ends-->
+
+<!-- 1st Section -->
+<div style="margin-top:1%;margin-right:15%;max-width:100%;display:flex;justify-content:space-between;">
+<div style="max-width:70%;">
+<p><b>POLICY DECLARATION<br>
+NAME AND POSTAL ADDRESS OF INSURED</b></p>
+</div>
+<div style="max-width:30%;float:left;">
+<p><b>POLICY NO.: <%=getTrailers.Policy_Number%><br>
+BROKER: 500-005</b></p>
+</div>
+</div>
+<!-- 1st Section ends -->
+
+<!-- 2nd Section -->
+<div style="margin-right:2%;display:flex;justify-content:space-between;width:100%;">
+<div class = "div1" style="padding:1%;width:47%;height: max-content;">
+
+<p><b>
+<%=getCustomers.First_Name%> <%=getCustomers.Last_Name%><br>
+<%=getCustomers.Address_Line1%>
+<%=getCustomers.Address_Line2%>
+<%=getCustomers.City%>
+<%=getCustomers.Province%>
+<%=getCustomers.Country%>
+<%=getCustomers.Postal_Code%><br>
+PHONE <%=getCustomers.Phone_Number.toString().remove("+")%>
+
+</b></p>
+
+</div>
+ <div style="max-width:6%;"></div>
+<div class = "div1" style="padding: 1%;width:47%;height: max-content;">
+<p><b>COBURN INSURANCE BROKERS LTD.
+RECPROTECT PROGRAM
+114 MAIN STREET S., PO BOX 209
+MOUNT FOREST, ONTARIO N0G 2L0
+PHONE 1 888 887 0881</b></p>
+</div>
+</div>
+<!-- 2nd Section ends-->
+
+<!-- 3rd Section-->
+<div class="grid-container1" style="font-size:12px;">
+	<div class="grid-item1"><p style="font-size:12px;"><b>INSURANCE PERIOD</b></p></div>
+  	<div class="grid-item1"><p style="font-size:12px;"><b>FROM</b></p></div>
+  	<div class="grid-item1"><p style="font-size:12px;"><b>TO</b></p></div> 
+</div>
+
+<div style="width:100%;height: 50px;margin-bottom:1%;">
+
+<div class="grid-container2" >
+  <div class="grid-item2" style="font-size:8px;border-right:1px solid black;">12:01 A.M. STANDARD TIME AT THE POSTAL ADDRESS OF THE NAMED INSURED AS STATED HEREIN</div>
+  <div class="grid-item2">
+ <table style="font-size:10px;border: none;">
+<tr>
+	<td style="border-right: 1px solid rgb(221, 221, 221);">DAY</td>
+	<td style="border-right: 1px solid rgb(221, 221, 221);">MO.</td>
+	<td style="border-right: 1px solid rgb(221, 221, 221);">YEAR</td>
+</tr>
+<tr >
+	<td style="border-right: 1px solid rgb(221, 221, 221);"><%=if(getTrailers.Inception_Date != null,getTrailers.Inception_Date.getDay(),"-")%></td>
+	<td style="border-right: 1px solid rgb(221, 221, 221);"><%=if(getTrailers.Inception_Date != null,getTrailers.Inception_Date.getMonth(),"-")%></td>
+	<td><%=if(getTrailers.Inception_Date != null,getTrailers.Inception_Date.getYear(),"-")%></td>
+</tr>
+</table>
+</div>
+  <div class="grid-item2">
+  <table style="font-size:10px;">
+<tr>
+	<td style="border-right: 1px solid rgb(221, 221, 221);">DAY</td>
+	<td style="border-right: 1px solid rgb(221, 221, 221);">MO.</td>
+	<td>YEAR</td>
+</tr>
+<tr>
+	<td style="border-right: 1px solid rgb(221, 221, 221);"><%=if(getTrailers.Expiry_Date != null,getTrailers.Expiry_Date.getDay(),"-")%></td>
+	<td style="border-right: 1px solid rgb(221, 221, 221);"><%=if(getTrailers.Expiry_Date != null,getTrailers.Expiry_Date.getMonth(),"-")%></td>
+	<td><%=if(getTrailers.Expiry_Date != null,getTrailers.Expiry_Date.getYear(),"-")%></td>
+</tr>
+</table>
+</div>
+</div>
+<div style="width:47%;border:1px solid black;float:right;height: 50px;border-radius:5px;">
+<p style="padding:1%;"><b>PER-AUTHORIZED PAYMENT<br>PREMIUM PAYABLE: $<%=ifNull(getTrailers.Total_Premium_before_tax,0)%></b></p>
+</div>
+</div>
+<!-- 3rd Section Ends-->
+<br>
+<!--4th section-->
+<div class = "div1" style="margin-top:4%;margin-right:2%;width:100%;border:0px solid black;">
+<p><b>This Declarations Page is evidence of a contract of insurance between the Insured and the Company,
+subject in all respects to the Insuring agreement of the Mutual Residential Policy.</b></p>
+<hr class="new2">
+<p><b><u>IMPORTANT MESSAGE(S)</u></b></p>
+<p><b>Communicable Disease Exclusion Endorsement EO-1557-1020 has been attached to your policy to
+reinforce that there is no coverage response from this policy if you experience direct or indirect loss or
+damage due to the presence of a Communicable Disease.</b></p>
+<%
+	if(getTrailers.Trailer != null)
+	{
+		k = 0;
+		for each  trail in getTrailers.Trailer
+		{
+			if(trail.Is_the_trailer_permanently_or_seasonally_parked_at_an_accredited_campground == "Yes" && trail.Is_the_trailer_removed_from_the_park_in_the_off_season == "No" && trail.Select_a_Park1 != 4564627000000511007)
+			{
+				k = k + 1;
+			}
+			else if(trail.Is_the_trailer_permanently_or_seasonally_parked_at_an_accredited_campground == "No" && trail.Select_a_Park1 != 4564627000000511007)
+			{
+				k = k + 1;
+			}
+			else
+			{
+				k = 0;
+			}
+		}
+	}
+	if(k > 0)
+	{
+		%>
+<hr class="new2">
+<p><b>DISCOUNTS/SURCHARGES</b></p>
+<hr>
+<%
+	}
+	if(getTrailers.Trailer != null)
+	{
+		j = 0;
+		for each  trail in getTrailers.Trailer
+		{
+			j = j + 1;
+			if(trail.Is_the_trailer_permanently_or_seasonally_parked_at_an_accredited_campground == "Yes" && trail.Is_the_trailer_removed_from_the_park_in_the_off_season == "No" && trail.Select_a_Park1 != 4564627000000511007)
+			{
+				%>
+<p><b>Permanently Parked Discount @ Location #<%=j%></b></p>
+<%
+			}
+			else if(trail.Is_the_trailer_permanently_or_seasonally_parked_at_an_accredited_campground == "No" && trail.Select_a_Park1 != 4564627000000511007)
+			{
+				%>
+<p><b>Preferred Park Discount @ Location #<%=j%></b></p>
+<%
+			}
+		}
+	}
+	if(k > 0)
+	{
+		%>
+<hr class="new2">
+<%
+	}
+	if(getTrailers.Trailer != null)
+	{
+		lienHolderCount = 0;
+		for each  lienholder in getTrailers.Trailer
+		{
+			if(lienholder.Is_this_trailer_financed == "Yes")
+			{
+				lienHolderCount = lienHolderCount + 1;
+			}
+		}
+		if(lienHolderCount > 0)
+		{
+			%>
+<p style="margin-top:3%;"><b>ITEM ADDITIONAL INTERESTS</b></p>
+<hr>
+<%
+		}
+		if(lienHolderCount > 0)
+		{
+			%>
+<div class="text-left" style="max-width:100%;">
+<%
+			i = 100;
+			for each  lienholder in getTrailers.Trailer
+			{
+				i = i + 1;
+				if(lienholder.Is_this_trailer_financed == "Yes")
+				{
+					%>
+<p style="font-size: 11px;">ITEM(S) #<%=i%> - Lien Holder: <%=if(lienholder.Name_of_Financier != "",lienholder.Name_of_Financier + ", ","")%> - <%=if(lienholder.Address_line1 != "",lienholder.Address_line1 + ",","")%> <%=if(lienholder.Address_line2 != "",lienholder.Address_line2 + ",","")%>
+<%=lienholder.City1%> <%=lienholder.Province1%> <%=lienholder.Country%> <%=lienholder.Postal_Code%>
+</p>
+<%
+				}
+			}
+			%>
+</div>
+<%
+		}
+		%>
+<div style="page-break-inside: auto;">
+<p class="text-center" style="margin-top:2%;"><b>SCHEDULE</b></p>
+
+
+<table class="itemTable1" style="Width:100%;">
+      <tr>
+        <th rowspan="2" style="border-top:1px solid #ddd;border-bottom:1px solid #ddd;width: 8%;">ITEM #</th>
+        <th rowspan="2" style="border-top:1px solid #ddd;border-bottom:1px solid #ddd;width: 47%;">DESCRIPTION</th>
+        <th colspan="4" style="border-top:1px solid #ddd;"><b>INSURANCE APPLICABLE</b></th>
+      </tr>
+	  <tr>
+	  	<th  style="border-top:1px solid #ddd;border-bottom:1px solid #ddd;text-align:center;">DEDUCTIBLE</th>
+		<th  style="border-top:1px solid #ddd;border-bottom:1px solid #ddd;text-align:center;">SECTION</th>
+		<th  style="border-top:1px solid #ddd;border-bottom:1px solid #ddd;text-align:center;">COVERAGE</th>
+		<th  style="border-top:1px solid #ddd;border-bottom:1px solid #ddd;text-align:right;">LIMIT</th>
+	  </tr>
+	    <tbody>
+<%
+		i = 100;
+		for each  trailer in getTrailers.Trailer
+		{
+			i = i + 1;
+			%>
+<tr>
+<td><%=i%></td>
+<td>
+<%
+			if(!trailer.Site_Number.isEmpty())
+			{
+				%>
+<%=trailer.Site_Number%>
+<%
+			}
+			if(!trailer.Site_Number.isEmpty() && !trailer.Park_Name.isEmpty())
+			{
+				%>
+,
+<%
+			}
+			if(!trailer.Park_Name.isEmpty())
+			{
+				%>
+<%=trailer.Park_Name%>
+<%
+			}
+			if(!trailer.Park_Name.isEmpty() && !trailer.Address_Lines1.isEmpty())
+			{
+				%>
+,
+<%
+			}
+			if(!trailer.Address_Lines1.isEmpty())
+			{
+				%>
+<%=trailer.Address_Lines1%>
+<%
+			}
+			if(!trailer.Address_Lines1.isEmpty() && !trailer.City.isEmpty())
+			{
+				%>
+,
+<%
+			}
+			if(!trailer.City.isEmpty())
+			{
+				%>
+<%=trailer.City%>
+<%
+			}
+			if(!trailer.City.isEmpty() && !trailer.Province.isEmpty())
+			{
+				%>
+,
+<%
+			}
+			if(!trailer.Province.isEmpty())
+			{
+				%>
+<%=trailer.Province%>
+<%
+			}
+			if(!trailer.Province.isEmpty() && !trailer.PostalCode.isEmpty())
+			{
+				%>
+,
+<%
+			}
+			if(!trailer.PostalCode.isEmpty())
+			{
+				%>
+<%=trailer.PostalCode%>
+<%
+			}
+			%>
+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>
+<%
+			if(trailer.Select_Trailer_Type == "Travel Trailer/Fifth Wheel Trailer")
+			{
+				%>
+Recreational Trailer Coverage -
+<%
+			}
+			else if(trailer.Select_Trailer_Type == "Park Model/Destination Trailer")
+			{
+				%>
+Park Models or Destination Trailer -
+<%
+			}
+			%>
+<%=trailer.Coverage_Type%> - 
+</td>
+<td style="text-align:right;">$<%=if(trailer.Deductible != "",trailer.Deductible.toDecimal().round(2),0.00)%></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td><%=trailer.Select_coverage_for_policy%></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>TRAILER</td>
+<td></td>
+<td style="text-align:center;">1</td>
+<td style="text-align:center;">A</td>
+<td style="text-align:right;" >$ <%=if(!trailer.Trailer_Coverage.isEmpty(),trailer.Trailer_Coverage.toDecimal().round(2),0.00)%></td>
+</tr>
+<tr>
+<td></td>
+<td>DETACHED PRIVATE STRUCTURES</td>
+<td></td>
+<td style="text-align:center;">1</td>
+<td style="text-align:center;">B</td>
+<td style="text-align:right;">$ <%=if(!trailer.Detached_Private_Structure_Coverage_Sheds_etc.isEmpty(),trailer.Detached_Private_Structure_Coverage_Sheds_etc.toDecimal().round(2),0.00)%></td>
+</tr>
+<tr>
+<td></td>
+<td>PERSONAL PROPERTY</td>
+<td></td>
+<td style="text-align:center;">1</td>
+<td style="text-align:center;">C</td>
+<td style="text-align:right;">$ <%=if(trailer.Personal_Property_Coverage_T_V_Furniture_etc != "",trailer.Personal_Property_Coverage_T_V_Furniture_etc.toDecimal().round(2),0.00)%></td>
+</tr>
+<%
+			if(getTrailers.Province == "Alberta")
+			{
+				%>
+<tr>
+<td></td>
+<td>
+HAIL DEDUCTIBLE
+</td>
+<td>$5,000.00</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<%
+			}
+			%>
+<tr>
+<td></td>
+<td>LEGAL LIABILITY - DESIGNATED PREMISES</td>
+<td></td>
+<td style="text-align:center;">2</td>
+<td style="text-align:center;">E</td>
+<td style="text-align:right;">$2,000,000.00</td>
+</tr>
+<tr>
+<td></td>
+<td>MEDICAL PAYMENT</td>
+<td></td>
+<td style="text-align:center;">2</td>
+<td style="text-align:center;">F</td>
+<td style="text-align:right;">$5,000.00</td>
+</tr>
+<tr>
+<td></td>
+<td>VOLUNTARY PROPERTY DAMAGE</td>
+<td></td>
+<td style="text-align:center;">2</td>
+<td style="text-align:center;">G</td>
+<td style="text-align:right;">$2,000.00</td>
+</tr>
+<!-- adding golf cart -->
+<%
+			if(trailer.Would_you_like_to_insure_a_golf_cart == "Yes")
+			{
+				if(trailer.Number_of_Golf_Cart == "1")
+				{
+					%>
+<tr>
+<td></td>
+<td>VALUE OF GOLF CART #1</td>
+<td></td>
+<td style="text-align:center;">1</td>
+<td style="text-align:center;">H</td>
+<td style="text-align:right;">$<%=if(trailer.Value_of_Golf_Cart_1 != null,trailer.Value_of_Golf_Cart_1,0)%></td>
+</tr>
+<%
+				}
+				else if(trailer.Number_of_Golf_Cart == "2")
+				{
+					%>
+<tr>
+<td></td>
+<td>VALUE OF GOLF CART #1</td>
+<td></td>
+<td style="text-align:center;">1</td>
+<td style="text-align:center;">H</td>
+<td style="text-align:right;">$<%=if(trailer.Value_of_Golf_Cart_1 != null,trailer.Value_of_Golf_Cart_1,0)%></td>
+</tr>
+<tr>
+<td></td>
+<td>VALUE OF GOLF CART #2</td>
+<td></td>
+<td style="text-align:center;">1</td>
+<td style="text-align:center;">I</td>
+<td style="text-align:right;">$<%=if(trailer.Value_of_Golf_Cart_2 != null,trailer.Value_of_Golf_Cart_2,0)%></td>
+</tr>
+<%
+				}
+			}
+			%>
+<!-- adding golf cart -->
+
+<tr>
+<td></td>
+<td>
+<%
+			if(trailer.Trailer_Model_Year != null)
+			{
+				%>
+<%=trailer.Trailer_Model_Year%>,
+<%
+			}
+			if(trailer.Select_Trailer_Type != null)
+			{
+				%>
+<%=trailer.Select_Trailer_Type%>,
+<%
+			}
+			if(trailer.Trailer_Manufacturer != null)
+			{
+				%>
+<%=trailer.Trailer_Manufacturer%>,
+<%
+			}
+			if(trailer.Trailer_Model != null)
+			{
+				%>
+<%=trailer.Trailer_Model%>,
+<%
+			}
+			if(trailer.Trailer_Length != null)
+			{
+				%>
+<%=trailer.Trailer_Length%>,
+<%
+			}
+			if(trailer.Trailer_Width != null)
+			{
+				%>
+<%=trailer.Trailer_Width%>,
+<%
+			}
+			if(trailer.VIN != null)
+			{
+				%>
+<%=trailer.VIN%>,
+<%
+			}
+			if(trailer.Screened_in_room_or_Florida_room_Length != null)
+			{
+				%>
+<%=trailer.Screened_in_room_or_Florida_room_Length%>,
+<%
+			}
+			if(trailer.Screened_in_room_or_Florida_room_Width != null)
+			{
+				%>
+<%=trailer.Screened_in_room_or_Florida_room_Width%>,
+<%
+			}
+			if(trailer.Deck_Length != null)
+			{
+				%>
+<%=trailer.Deck_Length%>,
+<%
+			}
+			if(trailer.Deck_Width != null)
+			{
+				%>
+<%=trailer.Deck_Width%>
+<%
+			}
+			%>
+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<%
+		}
+		%>
+</tbody>
+</table>
+<%
+	}
+	%>
+</div>
+</div>
+
+<!-- 4th section-->
+<div class="row" style="margin-top:3%;padding:10px;margin-right:2%;">
+<p><b>IN WITNESS WHEREOF, the Company has caused this Policy to be signed by its President, but the same shall not be binding upon the Company untill countersigned by a duly authorized representative of the Company.</b></p>
+</div>
+
+<!-- 5th section-->
+<div class="row">
+<div style="margin-top:3%;max-width:100%;margin-right:2%;display:flex;justify-content:space-between;">
+<div style="width:20%;"></div>
+<div style="width:33.33%;">
+<img align="right" style="width: 60%;padding: 0;margin-top: 3%;padding:10px;margin-right:100px;" src="https://workdrive.zohoexternal.com/external/ef6af8e84d80c908b053bb40776260279d9810958abebce529387270e1219369/download?directDownload=true" alt="sign">
+</div>
+<div style="width:33.33%;">
+<img align="right" style="width: 60%;padding: 0;margin-top: 3%;padding:10px;margin-right:100px;" src="https://workdrive.zohoexternal.com/external/8d6702b8d213e1c8d553bfc6849beaca3a787d9cd1f3ad43c64c1b124cf94a07/download?directDownload=true" alt="sign">
+</div>
+</div>
+<hr>
+<div class="row"style="margin-top:1%;padding: 20px;margin-right:2%;display:flex;justify-content:space-between;max-width:100%;">
+<%
+	if(getTrailers.Payment_Date != null)
+	{
+		paymentDate = getTrailers.Payment_Date.toDate();
+	}
+	else
+	{
+		getPaymentDate = Trailer_Transaction_History[Quote == input.trailerID.toLong() && Payment_For == "NEW_BUSINESS"];
+		if(getPaymentDate.count() > 0)
+		{
+			paymentDate = getPaymentDate.Payment_Initiated_Date;
+		}
+		else
+		{
+			paymentDate = "";
+		}
+	}
+	%>
+<div style="width:33.33%;"><h4 style="font-size: 12px;">Date Printed<br><%=paymentDate%></h4></div>
+<div style="width:33.33%;"><h4 style="font-size: 12px;">President</h4></div>
+<div style="width:33.33%;"><h4 style="font-size: 12px;"></h4></div>
+</div>
+</div>
+
+<!-- 6th section-->
+<div class="row text-center" style="margin-top:3%;background-color:#d3d3d3;padding-top:1%;padding:10px;margin-right:2%;">
+<b><p style="font-size:12px;"> ABSOLUTELY NO COVERAGE IF THE TRAILER IS RENTED TO OTHERS</p></b>
+</div>
+
+<!-- 7th section-->
+<div class="row text-center" style="margin-top:3%;padding: 20px;margin-right:2%;">
+<p>Underwritten by Four Points Insurance Company Ltd. A Subsidiary of the Mutual Fire Insurance Company of British Columbia.</p>
+</div>
+<!-- container closing div-->
+</div>
+</body>
+</html>
+<%
+
+}%>

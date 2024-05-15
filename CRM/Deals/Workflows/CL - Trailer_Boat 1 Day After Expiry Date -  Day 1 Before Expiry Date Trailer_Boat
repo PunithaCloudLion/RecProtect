@@ -1,0 +1,26 @@
+/*CL - Trailer/Boat 1 Day After Expiry Date - CL : Day 1 Before Expiry Date Trailer/Boat*/
+
+
+getBoatandTrailer = zoho.crm.getRecordById("Deals",DealID);
+Layout = getBoatandTrailer.get("Layout").get("name");
+if(Layout == "Boat Policy")
+{
+	//Renewal Stage update on Creator
+	creatorMap = Map();
+	creatorMap.put("Renewal_Stage","1 Day");
+	creatorUpdate = zoho.creator.updateRecord("service_recprotect","quotation","Boats_Report",getBoatandTrailer.get("Creator_ID").toLong(),creatorMap,Map(),"creator");
+	info "Update Creator --->" + creatorUpdate;
+}
+else if(Layout == "Trailer Policy")
+{
+	//Renewal Stage Update on Creator
+	creatorMap = Map();
+	creatorMap.put("Renewal_Stage","1 Day");
+	creatorUpdate = zoho.creator.updateRecord("service_recprotect","quotation","All_Trailer_Quotations",getBoatandTrailer.get("Creator_ID").toLong(),creatorMap,Map(),"creator");
+	info "Update Creator --->" + creatorUpdate;
+}
+//Renewal Stage update in CRM
+updateCRM_Map = Map();
+updateCRM_Map.put("Renewal_Stage","1 Day");
+updateCRM = zoho.crm.updateRecord("Deals",DealID,updateCRM_Map);
+info updateCRM;

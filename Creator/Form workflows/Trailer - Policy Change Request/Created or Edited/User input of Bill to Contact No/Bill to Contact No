@@ -1,0 +1,21 @@
+/******************
+Description: Populate Bill to Contact detail
+Created AT : 10/08/2022
+Created By : Hari Prema
+*****************/
+if(input.Bill_to_Contact_No != null)
+{
+	input.Contact_No1 = ifnull(input.Bill_to_Contact_No,null);
+	input.Bill_to_Contact_Name = ifnull(input.Bill_to_Contact_No.Name,"");
+	input.Bill_to_Phone_No = ifnull(input.Bill_to_Contact_No.Phone_No1,"");
+	input.Bill_to_Fax_No = ifnull(input.Bill_to_Contact_No.Fax,"");
+	input.Bill_to_Email = ifnull(input.Bill_to_Contact_No.Email,"");
+}
+else
+{
+	input.Contact_No1 = null;
+	input.Bill_to_Contact_Name = "";
+	input.Bill_to_Phone_No = "";
+	input.Bill_to_Fax_No = "";
+	input.Bill_to_Email = "";
+}

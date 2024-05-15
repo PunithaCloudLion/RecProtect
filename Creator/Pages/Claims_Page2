@@ -1,0 +1,25 @@
+<%{
+	getClaims = Claims[ID == input.recID.tolong()];
+	if(getClaims.Approved == "No")
+	{
+		%>
+<panel elementName="Panel">
+  <pr width='fill' height='fill'>
+    <pc padding='20px' bgColor='#FFFFFF' width='100%' vAlign='middle'>
+      <pr width='auto' height='auto'>
+        <pc vAlign='middle'>
+          <button marginLeft='0px' marginRight='0px' marginBottom='0px' marginTop='0px' action='ExecuteFunction' executeWorkflow='afterConfirmation' confirmationMsg='Are you sure you want Approve?' parameters='${recID}' functionName='Claims.claimApproved' color='#FFFFFF' size='16px' text='Approve' type='flat' bgColor='#0072F4' cornerRadius='3px' successMsg='Approved !' /> </pc>
+      </pr>
+    </pc>
+  </pr>
+</panel>
+<%
+	}
+	else
+	{
+		%>
+<panel></panel>
+<%
+	}
+
+}%>

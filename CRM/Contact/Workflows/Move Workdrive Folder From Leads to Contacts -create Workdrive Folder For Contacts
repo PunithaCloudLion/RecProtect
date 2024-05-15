@@ -1,0 +1,54 @@
+try 
+{
+	owner_name = "service_recprotect";
+	app_name = "quotation";
+	getContacts = zoho.crm.getRecordById("Contacts",contactsID);
+	if(getContacts.size() > 0)
+	{
+		//----------------------------Create Workdrive Folder --------------------------
+		FolderName = getContacts.get("First_Name") + " " + getContacts.get("Last_Name") + " - " + contactsID;
+		createFolder = zoho.workdrive.createFolder(FolderName,"3d6ab560ff0f6d7c44985beb6a04dbe25f3fb","workdrive");
+		//----------------------------Store the Workdrive Details-------------------------
+		FolderID = createFolder.get("data").get("id");
+		WorkdriveURL = createFolder.get("data").get("attributes").get("permalink");
+		updateMap = Map();
+		updateMap.put("Workdrive_Folder_ID",FolderID);
+		updateMap.put("Workdrive_URL",WorkdriveURL);
+		updateRes = zoho.crm.updateRecord("Contacts",contactsID,updateMap);
+		//-------------------------- Add folder as an attachments ---------------------
+		dataList = List();
+		data = Map();
+		data.put("$link_url",WorkdriveURL);
+		data.put("File_Name",FolderName);
+		data.put("$type","");
+		dataList.add(data);
+		payload = "attachments=" + zoho.encryption.urlEncode({"data":dataList});
+		resp = invokeurl
+		[
+			url :"https://www.zohoapis.com/crm/v2/Contacts/" + contactsID + "/Attachments"
+			type :POST
+			parameters:payload
+			connection:"crm"
+			content-type:"application/x-www-form-urlencoded"
+		];
+		//-----------Update Workdrive Details in Creator Customer--------
+		if(getContacts.get("Zoho_Creator_ID") != null && getContacts.get("Zoho_Creator_ID") != "")
+		{
+			datamap = Map();
+			datamap.put("Workdrive_Folder_ID",FolderID);
+			datamap.put("Workdrive_URL",WorkdriveURL);
+			update_creator_rec = zoho.creator.updateRecord(owner_name,app_name,"All_Customers",getContacts.get("Zoho_Creator_ID").toLong(),datamap,Map(),"creator");
+		}
+	}
+}
+catch (e)
+{
+	developerlog = Map();
+	developerlog.put("Product","CRM");
+	developerlog.put("Module","Contacts");
+	developerlog.put("Action_Flow","On Creator Workflow --https://crm.zoho.com/crm/org810798353/settings/workflow-rules/5778486000008069079");
+	developerlog.put("Description","Create Workdrive Folder For Contacts");
+	developerlog.put("Request",contactsID.toString());
+	developerlog.put("Response",e);
+	dev_log_resp = zoho.creator.createRecord(owner_name,app_name,"Developer_Logs",developerlog,Map(),"creator");
+}

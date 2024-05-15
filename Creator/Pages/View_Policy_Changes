@@ -1,0 +1,299 @@
+<%{
+	%>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+	</head>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.th_clssIn {
+  border: 1px solid #dddddd;
+  text-align: center;
+  padding: 9px;
+  font-weight: 800;
+  background:#f0e6e6;
+}
+.td_clssIn {
+  border: 1px solid #dddddd;
+  text-align: center;
+  padding: 10px;
+}
+.tr_clssIn {
+  border: 1px solid #dddddd;
+  text-align: center;
+  padding: 8px;
+}
+.mainOuterSection
+{
+	width : 90%;
+	padding: 40px;
+    display: flex;
+    justify-content: center;
+	
+}
+</style>
+
+<div class="mainOuterSection">
+
+<div style="width : 70%;border : 1px solid #dddddd;padding:30px;">
+<div>
+    <img class="logo_image" style="margin-left: 0%; width: 14%;" src="https://workdrive.zohoexternal.com/external/776d8a580b3efa96e76c0bf0066d7f6b7b9bef04303a4757c8a1d4a5a506d139/download?directDownload=true">
+	</div>
+<%
+	if(input.ViewOptionFor == "BoatPolicyChange")
+	{
+		getBoatChangeInfo = Boat_Policy_change_Request[ID == input.recID];
+		refBy = null;
+		if(getBoatChangeInfo.Where_Did_You_Find_Us == "Friend or Family")
+		{
+			refBy = getBoatChangeInfo.Name;
+		}
+		if(getBoatChangeInfo.Where_Did_You_Find_Us == "Dealership")
+		{
+			refBy = getBoatChangeInfo.Name_of_Dealership;
+		}
+		if(getBoatChangeInfo.Where_Did_You_Find_Us == "Campground")
+		{
+			refBy = getBoatChangeInfo.Name_of_Campground;
+		}
+		if(getBoatChangeInfo.Where_Did_You_Find_Us == "Marina")
+		{
+			refBy = getBoatChangeInfo.Name_of_Marina;
+		}
+		if(getBoatChangeInfo.Where_Did_You_Find_Us == "Other")
+		{
+			refBy = getBoatChangeInfo.Where_Did_You_Find_Us;
+		}
+		%>
+<! ---- Main Form Data ------!>
+		
+		<div class="" style="margin-top:3%;">
+		<table class="table">
+			 <th style = "background-color:#8ADAB2;text-align:left;padding: 10px 20px;font-size:18px;"colspan="4"><h4>Boat Information - <%=getBoatChangeInfo.Quote_ID%> -  <%=getBoatChangeInfo.Select_Type%></h4></th>
+			 <tr><td><b style ="text-decoration:underline; font-size:16px"> Basic Information</b></td></tr>
+			 <tr><td><b>Quote ID</b></td><td><%=getBoatChangeInfo.Quote_ID%></td></tr>	
+			 <tr><td><b>Quote Status</b></td><td><%=getBoatChangeInfo.Quote_Status%></td></tr>
+			 <tr><td><b>Policy Number</b></td><td><%=getBoatChangeInfo.Policy_Number%></td></tr>
+			 <tr><td><b>Deal Type</b></td><td><%=getBoatChangeInfo.Deal_Type%></td></tr>
+			 <tr><td><b>Referral Reason</b></td><td><%=getBoatChangeInfo.Referral_Reason%></td></tr>
+			 
+			 <tr><td><b style ="text-decoration:underline; font-size:16px">Customer Information</b></td></tr>
+			 <tr><td><b>Customer Name</b></td><td><%=getBoatChangeInfo.Customer_ID.First_Name%> <%=getBoatChangeInfo.Customer_ID.Last_Name%></td></tr>
+			 <tr><td><b>Email</b></td><td><%=getBoatChangeInfo.Email%></td></tr>
+			 <tr><td><b>Insured First Name</b></td><td><%=getBoatChangeInfo.Insured_First_Name%></td></tr>
+			 <tr><td><b>Insured Last Name</b></td><td><%=getBoatChangeInfo.Insured_Last_Name%></td></tr>
+			 <tr><td><b>Phone</b></td><td><%=getBoatChangeInfo.Phone_Number%></td></tr>
+			 <tr><td><b>Date of Birth</b></td><td><%=getBoatChangeInfo.Date_of_Birth%></td></tr>
+			 <tr><td><b>Where Did You Find Us?</b></td><td><%=getBoatChangeInfo.Where_Did_You_Find_Us%></td></tr>
+			 <tr><td><b>Referred By</b></td><td><%=refBy%></td></tr>
+			 <tr><td><b>Tell us more</b></td><td><%=getBoatChangeInfo.Tell_us_more%></td></tr>
+			 
+			 <tr><td><b style ="text-decoration:underline; font-size:16px">Quote Information</b></td></tr>
+			 <tr><td><b>Boat approve for being over 15 years old?</b></td><td><%=getBoatChangeInfo.Boat_approve_for_being_over_15_years_old%></td></tr>
+			 <tr><td><b>Please select the province your boat is used in</b></td><td><%=getBoatChangeInfo.Please_select_the_province_your_boat_is_used_in%></td></tr>
+			 <tr><td><b>How many boats would you like to insure?</b></td><td><%=getBoatChangeInfo.How_many_boats_would_you_like_to_insure%></td></tr>
+			 <tr><td><b>Are there any additional names on the boat ownership ownership?</b></td><td><%=getBoatChangeInfo.Are_there_any_additional_names_on_the_boat_ownership%></td></tr>
+			 
+			 <tr><td><b style ="text-decoration:underline; font-size:16px"> Policy Details</b></td></tr>
+			<tr><td><b>Inception Date</b></td><td><%=getBoatChangeInfo.Inception_Date%></td></tr>
+			 <tr><td><b>Expiry Date</b></td><td><%=getBoatChangeInfo.Expiry_Date%></td></tr>
+			 
+			 <tr><td><b style ="text-decoration:underline; font-size:16px">Payment</b></td></tr>
+			 <tr><td><b>Enter Payment Info</b></td><td><%=getBoatChangeInfo.Enter_payment_info%></td></tr>
+			<tr><td><b>Payment Date</b></td><td><%=getBoatChangeInfo.Payment_Date%></td></tr>
+			 <tr><td><b>Total Premium (before tax)</b></td><td><%=getBoatChangeInfo.Total_Premium_before_tax%></td></tr>
+			 <tr><td><b>Fee</b></td><td><%=getBoatChangeInfo.Fee%></td></tr>
+			 <tr><td><b>Tax Province</b></td><td><%=getBoatChangeInfo.Tax_Province%></td></tr>
+			 <tr><td><b>Tax Precent</b></td><td><%=getBoatChangeInfo.Tax_Precent%></td></tr>
+			 <tr><td><b>Total Tax</b></td><td><%=getBoatChangeInfo.Total_Tax%></td></tr>
+			 <tr><td><b>Total Payable Premium(after tax)</b></td><td><%=getBoatChangeInfo.Total_Payable_Premium_after_tax%></td></tr>
+			 
+			 <tr><td><b style ="text-decoration:underline; font-size:16px">Mailing Address</b></td></tr>
+			 <tr><td><b>Country</b></td><td><%=getBoatChangeInfo.Country%></td></tr>
+			 <tr><td><b>Address</b></td><td><%=getBoatChangeInfo.Address%></td></tr>
+			 <tr><td><b>Suite/Apt#</b></td><td><%=getBoatChangeInfo.Suite_Apt%></td></tr>
+			 <tr><td><b>City</b></td><td><%=getBoatChangeInfo.City%></td></tr>
+			 <tr><td><b>Province</b></td><td><%=getBoatChangeInfo.Province%></td></tr>
+			 <tr><td><b>Postal Code/ZIP Code</b></td><td><%=getBoatChangeInfo.Postal_code_ZIP_Code%></td></tr>
+			  
+			 <tr><td><b style ="text-decoration:underline; font-size:16px">Adjusted Premium</b></td></tr>
+			 <tr><td><b>Outstanding</b></td><td><%=getBoatChangeInfo.Outstanding%></td></tr>
+			 <tr><td><b>Prorated</b></td><td><%=getBoatChangeInfo.Prorated%></td></tr>
+			 <tr><td><b>Tax</b></td><td><%=getBoatChangeInfo.Tax%></td></tr>
+			 <tr><td><b>Total</b></td><td><%=getBoatChangeInfo.Total%></td></tr>
+			 <tr><td><b>Prorate From</b></td><td><%=getBoatChangeInfo.Prorate_From%></td></tr>
+			 <tr><td><b>Waive Fee?</b></td><td><%=getBoatChangeInfo.Waive_Free%></td></tr>
+			 <tr><td><b>Reason For Rejection</b></td><td><%=getBoatChangeInfo.Reason_For_Rejection1%></td></tr>
+			  
+			 <tr><td><b style ="text-decoration:underline; font-size:16px">Other Information</b></td></tr>
+			 <tr><td><b>Is Watercraft Ineligible For Coverage</b></td><td><%=getBoatChangeInfo.Is_Watercraft_Ineligible_For_Coverage%></td></tr>
+			 <tr><td><b>Does Watercraft Meet Safety And Usage Requirements</b></td><td><%=getBoatChangeInfo.Does_Watercraft_Meet_Safety_And_Usage_Requirements%></td></tr>
+			 <tr><td><b> Is Applicant Ineligible For Coverage</b></td><td><%=getBoatChangeInfo.Is_Applicant_Ineligible_For_Coverage%></td></tr>
+			 <tr><td><b> Is Operator Ineligible For Coverage</b></td><td><%=getBoatChangeInfo.Is_Operator_Ineligible_For_Coverage%></td></tr>
+		</table>
+		<div>
+		<! ---- Main Form Data - End ------!>
+		
+		<div style="margin-top: 2%;font-size: 18px;font-weight: 700;background-color: #8ADAB2;padding: 10px 20px;">Boats</div>
+		<table style="margin-top:2%">
+			<tr class="tr_clssIn">
+   			<th class="th_clssIn"></th>
+    		<th class="th_clssIn">Type</th>
+	 		<th class="th_clssIn">Manufacturer</th>
+	  		<th class="th_clssIn">Model</th>
+	   		<th class="th_clssIn"></th>
+            </tr>
+<%
+		count = 0;
+		for each  boatRec in getBoatChangeInfo.Boat
+		{
+			count = count + 1;
+			%>
+<tr class="tr_clssIn">
+    				<td class="td_clssIn"><%=count%></td>
+	 				<td class="td_clssIn"><%=boatRec.Select_the_type_of_watercraft%></td>
+	  				<td class="td_clssIn"><%=boatRec.Boat_Manufacturer%></td>
+	  				<td class="td_clssIn"><%=boatRec.Boat_Model_Year%></td>
+    				<td class="td_clssIn"><u><a href="https://creator.zoho.com/service_recprotect/quotation/view-perma/View_Policy_Change_Subform?ViewOptionFor=Boat&recID=<%=boatRec.ID%>"target="_blank">View Boat</a></u></td>
+  				</tr>
+<%
+			//<td class="td_clssIn"><u><a href="https://creator.zoho.com/service_recprotect/quotation#Page:View_Policy_Change_Subform?ViewOptionFor=Boat&recID=<%=boatRec.ID%>">View Boat</a></u></td>
+			//<td class="td_clssIn"><u><a href="#Page:View_Policy_Change_Subform?ViewOptionFor=Boat&recID=<%=boatRec.ID%>&zc_LoadIn=dialog">View Boat</a></u></td>
+		}
+		%>
+</table>
+<%
+	}
+	if(input.ViewOptionFor == "TrailerPolicyChange")
+	{
+		getTrailerChangeInfo = Trailer_Policy_Change_Request[ID == input.recID];
+		refBy = null;
+		if(getTrailerChangeInfo.Where_Did_You_Find_Us == "Friend or Family")
+		{
+			refBy = getTrailerChangeInfo.Name;
+		}
+		if(getTrailerChangeInfo.Where_Did_You_Find_Us == "Dealership")
+		{
+			refBy = getTrailerChangeInfo.Name_of_Dealership;
+		}
+		if(getTrailerChangeInfo.Where_Did_You_Find_Us == "Campground")
+		{
+			refBy = getTrailerChangeInfo.Name_of_Campground;
+		}
+		if(getTrailerChangeInfo.Where_Did_You_Find_Us == "Marina")
+		{
+			refBy = getTrailerChangeInfo.Name_of_Marina;
+		}
+		if(getTrailerChangeInfo.Where_Did_You_Find_Us == "Other")
+		{
+			refBy = getTrailerChangeInfo.Where_Did_You_Find_Us;
+		}
+		%>
+<! ---- Main Form Data ------!>
+		
+		<div class="" style="margin-top:3%;">
+		<table class="table">
+			 <th style = "background-color:#8ADAB2;text-align:left;padding: 10px 20px;font-size:18px;"colspan="4"><h4>Trailer Information - <%=getTrailerChangeInfo.Quote_ID%> -  <%=getTrailerChangeInfo.Select_Type%></h4></th>
+			 <tr><td><b style ="text-decoration:underline; font-size:16px">Basic Information</b></td></tr>
+			 <tr><td><b>Quote ID</b></td><td><%=getTrailerChangeInfo.Quote_ID%></td></tr>	
+			 <tr><td><b>Quote Status</b></td><td><%=getTrailerChangeInfo.Quote_Status%></td></tr>
+			 <tr><td><b>Policy Number</b></td><td><%=getTrailerChangeInfo.Policy_Number%></td></tr>
+			 <tr><td><b>Deal Type</b></td><td><%=getTrailerChangeInfo.Deal_Type%></td></tr>
+			 <tr><td><b>Referral Reason</b></td><td><%=getTrailerChangeInfo.Referral_Reason%></td></tr>
+			 
+			 <tr><td><b style ="text-decoration:underline; font-size:16px">Customer Information</b></td></tr>
+			 <tr><td><b>Customer Name</b></td><td><%=getTrailerChangeInfo.Customer_ID.First_Name%> <%=getTrailerChangeInfo.Customer_ID.Last_Name%></td></tr>
+			 <tr><td><b>Email</b></td><td><%=getTrailerChangeInfo.Email%></td></tr>
+			 <tr><td><b>Insured First Name</b></td><td><%=getTrailerChangeInfo.Insured_First_Name%></td></tr>
+			 <tr><td><b>Insured Last Name</b></td><td><%=getTrailerChangeInfo.Insured_Last_Name%></td></tr>
+			 <tr><td><b>Phone</b></td><td><%=getTrailerChangeInfo.Phone_Number%></td></tr>
+			 <tr><td><b>Date of Birth</b></td><td><%=getTrailerChangeInfo.Date_of_Birth%></td></tr>
+			 <tr><td><b>Where Did You Find Us?</b></td><td><%=getTrailerChangeInfo.Where_Did_You_Find_Us%></td></tr>
+			 <tr><td><b>Referred By</b></td><td><%=refBy%></td></tr>
+			 <tr><td><b>Tell us more</b></td><td><%=getTrailerChangeInfo.Tell_us_more%></td></tr>
+			 <tr><td><b>Are there any additional names on the trailer ownership?</b></td><td><%=getTrailerChangeInfo.Are_there_any_additional_names_on_the_trailer_ownership%></td></tr>
+			 
+			  <tr><td><b style ="text-decoration:underline; font-size:16px">General Information</b></td></tr>
+			 <tr><td><b>Please select the province your trailer is located in</b></td><td><%=getTrailerChangeInfo.Please_select_the_province_your_trailer_is_located_in%></td></tr>	
+			 <tr><td><b>How many trailers would you like to insure?</b></td><td><%=getTrailerChangeInfo.How_many_trailers_would_you_like_to_insure%></td></tr>
+			 
+			 <tr><td><b style ="text-decoration:underline; font-size:16px">Policy Details</b></td></tr>
+			 <tr><td><b>Inception Date</b></td><td><%=getTrailerChangeInfo.Inception_Date%></td></tr>
+			 <tr><td><b>Expiry Date</b></td><td><%=getTrailerChangeInfo.Expiry_Date%></td></tr>
+			 <tr><td><b>Payment Date</b></td><td><%=getTrailerChangeInfo.Payment_Date%></td></tr>
+			 
+			 <tr><td><b style ="text-decoration:underline; font-size:16px">Mailing Address</b></td></tr>
+			 <tr><td><b>Country</b></td><td><%=getTrailerChangeInfo.Country%></td></tr>
+			 <tr><td><b>Address</b></td><td><%=getTrailerChangeInfo.Address%></td></tr>
+			 <tr><td><b>Suite/Apt#</b></td><td><%=getTrailerChangeInfo.Suite_Apt%></td></tr>
+			 <tr><td><b>City</b></td><td><%=getTrailerChangeInfo.City%></td></tr>
+			 <tr><td><b>Province</b></td><td><%=getTrailerChangeInfo.Province%></td></tr>
+			 <tr><td><b>Postal Code/ZIP Code</b></td><td><%=getTrailerChangeInfo.Postal_code_ZIP_Code%></td></tr>
+			  
+			 <tr><td><b style ="text-decoration:underline; font-size:16px">Payment</b></td></tr>
+			 <tr><td><b>Enter Payment Info</b></td><td><%=getTrailerChangeInfo.Enter_payment_info%></td></tr>
+			 <tr><td><b>Payment Date</b></td><td><%=getTrailerChangeInfo.Payment_Date%></td></tr>
+			 <tr><td><b>Total Premium (before tax)</b></td><td><%=getTrailerChangeInfo.Total_Premium_before_tax%></td></tr>
+			 <tr><td><b>Fee</b></td><td><%=getTrailerChangeInfo.Fee%></td></tr>
+			 <tr><td><b>Tax Province</b></td><td><%=getTrailerChangeInfo.Tax_Province%></td></tr>
+			 <tr><td><b>Tax Precent</b></td><td><%=getTrailerChangeInfo.Tax_Precent%></td></tr>
+			 <tr><td><b>Total Tax</b></td><td><%=getTrailerChangeInfo.Total_Tax%></td></tr>
+			 <tr><td><b>Total Payable Premium(after tax)</b></td><td><%=getTrailerChangeInfo.Total_Payable_Premium_after_tax%></td></tr>
+			 
+			 <tr><td><b style ="text-decoration:underline; font-size:16px">Adjusted Premium</b></td></tr>
+			 <tr><td><b>Outstanding</b></td><td><%=getTrailerChangeInfo.Outstanding%></td></tr>
+			 <tr><td><b>Prorated</b></td><td><%=getTrailerChangeInfo.Prorated%></td></tr>
+			 <tr><td><b>Tax</b></td><td><%=getTrailerChangeInfo.Tax%></td></tr>
+			 <tr><td><b>Total</b></td><td><%=getTrailerChangeInfo.Total%></td></tr>
+			 <tr><td><b>Prorate From</b></td><td><%=getTrailerChangeInfo.Prorate_From%></td></tr>
+			 <tr><td><b>Waive Fee?</b></td><td><%=getTrailerChangeInfo.Waive_Fee%></td></tr>
+			 <tr><td><b>Reason For Rejection</b></td><td><%=getTrailerChangeInfo.Reason_For_Rejection1%></td></tr>
+			 
+			 <tr><td><b style ="text-decoration:underline; font-size:16px">Other Information</b></td></tr>
+			 <tr><td><b>Reason For Rejection</b></td><td><%=getTrailerChangeInfo.Reason_For_Rejection1%></td></tr>
+			 <tr><td><b>Do you have a screened in room or a Florida room?</b></td><td><%=getTrailerChangeInfo.Do_you_have_a_screened_in_room_or_a_Florida_room%></td></tr>
+		</table>
+		<div>
+		<! ---- Main Form Data - End ------!>
+		
+		<div style="margin-top: 2%;font-size: 18px;font-weight: 700;background-color: #8ADAB2;padding: 10px 20px;">Trailers</div>
+		<table style="margin-top:2%">
+			<tr class="tr_clssIn">
+    			<th class="th_clssIn"></th>
+    			<th class="th_clssIn">Type</th>
+	 			<th class="th_clssIn">Manufacturer</th>
+	  			<th class="th_clssIn">Model</th>
+	   			<th class="th_clssIn"></th>
+ 			</tr>
+<%
+		count = 0;
+		for each  trailerRec in getTrailerChangeInfo.Trailer
+		{
+			count = count + 1;
+			%>
+<tr class="tr_clssIn">
+    				<td class="td_clssIn"><%=count%></td>
+	 				<td class="td_clssIn"><%=trailerRec.Select_Trailer_Type%></td>
+	  				<td class="td_clssIn"><%=trailerRec.Trailer_Manufacturer%></td>
+	  				<td class="td_clssIn"><%=trailerRec.Trailer_Model_Year%></td>
+    				<td class="td_clssIn"><u><a href="https://creator.zoho.com/service_recprotect/quotation/view-perma/View_Policy_Change_Subform?ViewOptionFor=Trailer&recID=<%=trailerRec.ID%>" target="_blank">View Trailer</a></u></td>
+  				</tr>
+<%
+		}
+		%>
+</table>
+<%
+	}
+	%>
+</div>
+</div>
+<%
+
+}%>

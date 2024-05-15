@@ -1,0 +1,980 @@
+<%{
+	// 		input.CancellationID = 4564627000000903015;
+	TrailerCancellation = TrailerQuote[ID == input.CancellationID.toLong()];
+	if(TrailerCancellation.count() > 0)
+	{
+		get_TrailCancel = Cancellation[Policy_Number == TrailerCancellation.Policy_Number];
+		EfftDate = "";
+		EfftMonth = "";
+		EfftYear = "";
+		EndDate = "";
+		EndMonth = "";
+		EndYear = "";
+		if(get_TrailCancel.count() > 0)
+		{
+			if(get_TrailCancel.Cancellation_Date != null)
+			{
+				EfftDate = ifNull(get_TrailCancel.Cancellation_Date.getDay(),"");
+				EfftMonth = ifNull(get_TrailCancel.Cancellation_Date.getMonth(),"");
+				EfftYear = ifNull(get_TrailCancel.Cancellation_Date.getYear(),"");
+			}
+			if(get_TrailCancel.Expiry_Date != null)
+			{
+				EndDate = ifNull(get_TrailCancel.Expiry_Date.getDay(),"");
+				EndMonth = ifNull(get_TrailCancel.Expiry_Date.getMonth(),"");
+				EndYear = ifNull(get_TrailCancel.Expiry_Date.getYear(),"");
+			}
+		}
+		LineHolderTemp = false;
+		for each  iteT in TrailerCancellation.Trailer
+		{
+			if(iteT.Lein_holder != null)
+			{
+				LineHolderTemp = true;
+			}
+		}
+		sign = Signature[ID != null];
+		%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+img {
+  display: block;
+  padding: 1%;
+  margin-bottom: auto;
+  margin-left: 10px;
+  padding-left: 35px;
+   align:left;
+}
+.container-fluid{
+        padding-left: 3%;
+    padding-right: 3%;
+	}
+.div1
+{
+	border:1px solid black;
+	border-radius:7px;
+	padding: 1%;
+	font-size: 14px;
+	margin-bottom: 1%;
+}
+.div2
+{
+	border:1px solid white;
+	border-radius:7px;
+	padding: 1%;
+	font-size: 14px;
+}
+hr.new2 {
+  border-top: 2px dashed #000000;
+}
+    table,
+    th,
+    td {
+      border-collapse: collapse
+    }
+	h4{
+	margin-bottom:15px;
+	margin-top:15px;
+	font-weight: bold;
+	text-align: left;
+	margin-left: 10px;
+	 font-size: 13px;
+	 text-transform: uppercase;
+	}
+	h6{
+	margin-bottom:15px;
+	margin-top:15px;
+	font-weight: bold;
+	margin-left: 10px;
+	font-size: 12px;
+	}  
+	
+	* {
+      box-sizing: border-box
+    }
+    
+    .column {
+      float: left;
+    }
+    
+    .column3 {
+      float: left;
+      width: 33.33%;
+      font-size: 10px;
+	  line-height: 0.5;
+    }
+    
+    .left {
+      width: 35%;
+    }
+    
+    .right {
+      width: 35%;
+    }
+    
+    .end {
+      width: 30%;
+    }
+    
+    .header1,
+    header2 {
+      width: 100%
+    }
+    
+    .HeaderTopic {
+      background-color: rgb(187, 187, 187);
+      padding: 1px
+    }
+    
+    .paragraph {
+    }
+    
+    .row:after {
+      content: "";
+      display: table;
+      clear: both
+    }
+    
+    @media screen and (max-width: 600px) {
+      .column {
+        width: 100%
+      }
+    }
+    
+    .left1 {
+      width: 40%;
+    }
+    
+    .right1 {
+      width: 45%;
+	  border:1px solid black;
+	  border-radius:7px;
+	  padding: 5px;
+    }
+    
+    .right2 {
+      width: 50%;
+	  padding-left: 5px;
+    }
+    
+    .leftfull {
+      width: 100%;
+    }
+	.leftfull1 {
+      width: 100%;
+	   border:1px solid black;
+	  border-radius:7px;
+	  padding: 5px;
+    }
+    
+    table,
+    th,
+    td {
+      border-collapse: collapse;
+	 font-size: 12px; 
+    }
+	.table tbody tr td, .table tfoot tr td, 
+	.table tbody tr td 
+	{
+    padding: 0px 0px;
+	}
+	@media print {
+  div.column {
+//   line-height: 1.6;
+}
+	}
+
+</head>
+</style>
+
+<body>
+<div class="container-fluid" style = "margin-bottom:0%;">
+			 <table class="table" style="width:100%;">
+			 <tr style= "height: 10px;" colspan="4">
+			 <td colspan="4">
+			  <div class="column left">
+        <img src="https://previewengine-accl.zoho.com/image/WD/rnhg746db378696bc41c7851cb4cefe42823c?version=1.0&amp;width=1646&amp;height=1436"
+          alt="img" width="180" height="150">
+      </div>
+	  </td>
+			 </tr>
+			<tr colspan="4">
+			 <td colspan="4">
+      <div class="column right1" style="margin-right: 2%;line-height: 0.6;font-weight:bold; border:0px solid black;">
+<p> POLICY CANCELLED </p>
+<p> NAME AND POSTAL ADDRESS OF INSURED </p>
+      </div>
+      <div class="column right1" style="margin-left: 4%;line-height: 0.6;font-weight:bold; border:0px solid black;">
+<p> POLICY NO.&nbsp;: &nbsp; <%=ifNull(TrailerCancellation.Policy_Number,"")%>  </p>
+<p> BROKER&nbsp;:&nbsp; 500-005 </p>
+      </div>
+			 </td>
+			 </tr>
+	 </tr>
+			<tr colspan="4">
+			 <td colspan="4">
+      <div class="column right1"  style="margin-right: 2%;font-weight:bold;text-transform: uppercase;height: 80px;    padding: 5px;">
+<div> <%=ifNull(TrailerCancellation.Insured_First_Name,"")%> &nbsp;<%=ifNull(TrailerCancellation.Insured_Last_Name,"")%> </div> 
+<div> <%=ifNull(TrailerCancellation.Address,"")%>,<%=ifNull(TrailerCancellation.City,"")%>  </div> 
+<div> <%=ifNull(TrailerCancellation.Province,"")%>,<%=ifNull(TrailerCancellation.Country,"")%>,  </div> 
+<div> <%=ifNull(TrailerCancellation.Postal_code_ZIP_Code,"")%></div>
+      </div>
+      <div class="column right1"  style="margin-left: 4%;font-weight:bold;height: 80px;    padding: 5px;">
+<div>RECPROTECT</div>
+<div>BY COBURN INSURANCE BROKERS LTD. PO BOX 209</div>
+<div>MOUNT FOREST, ON N0G 2L0</div>
+<div>Phone (888) 887-0881</div>
+      </div>
+			 </td>
+			 </tr>
+			 
+			  </tr>
+			<tr colspan="4">
+			 <td colspan="4">
+      <div class="column right1"  style="margin-right: 2%; border:0px solid black;">
+<table class="" style="">
+      <tr>
+       	 <td  style="width:24%; padding: 5px;font-weight:bold;">INSURANCE PERIOD </td>
+		 <td  style="width:6%;  padding: 5px;font-weight:bold;" colspan = "3">FROM</td>
+		 <td  style="width:4%;  padding: 5px;font-weight:bold;" colspan = "3">TO</td>
+      </tr>
+	  </table>
+      </div>	   
+      <div class="column right1"  style="margin-left: 4%;border:0px solid black;"></div>
+			 </tr>
+			 <tr>
+			 <td colspan="4">
+      <div class="column right1"  style="margin-right: 2%; height: 80px;">
+	  
+<table class="" style="">
+      <tr>
+       	 <td  style="width:68%; padding: 5px; font-size: 8px;  ">12:01 A.M. STANDARD TIME AT  </td>
+		 <td  style="width:5%;   font-size: 8px;padding: 5px; border-left: 1px solid rgb(221, 221, 221);border-bottom: 1px solid rgb(221, 221, 221);font-weight:bold;">DAY</td>
+		 <td  style="width:5%;   font-size: 8px;padding: 5px; border-left: 1px solid rgb(221, 221, 221);border-bottom: 1px solid rgb(221, 221, 221);font-weight:bold;">MO.</td>
+		 <td  style="width:6%;   font-size: 8px;padding: 5px; border-left: 1px solid rgb(221, 221, 221);border-bottom: 1px solid rgb(221, 221, 221);font-weight:bold;">YEAR</td>
+		 <td style="width:5%;"></td>
+		 <td  style="width:5%;   font-size: 8px;padding: 5px; border-left: 1px solid rgb(221, 221, 221);border-bottom: 1px solid rgb(221, 221, 221);font-weight:bold;">DAY</td>
+		 <td  style="width:5%;   font-size: 8px;padding: 5px; border-left: 1px solid rgb(221, 221, 221);border-bottom: 1px solid rgb(221, 221, 221);font-weight:bold;">MO.</td>
+		 <td  style="width:6%;   font-size: 8px;padding: 5px; border-left: 1px solid rgb(221, 221, 221);border-bottom: 1px solid rgb(221, 221, 221);font-weight:bold;">YEAR</td>
+      </tr>
+	  <tr>
+       	 <td  style="width:68%; padding: 5px;font-size: 8px; ">THE POSTAL ADDRESS OF THE  </td>
+		 <td  style="width:5%;  font-size: 8px;padding: 5px; border-left: 1px solid rgb(221, 221, 221);font-weight:bold;"><%=ifNull(EfftDate,"")%></td>
+		 <td  style="width:5%;  font-size: 8px;padding: 5px;  border-left: 1px solid rgb(221, 221, 221);font-weight:bold;"><%=ifNull(EfftMonth,"")%></td>
+		 <td  style="width:6%;  font-size: 8px;padding: 5px;  border-left: 1px solid rgb(221, 221, 221);font-weight:bold;"><%=ifNull(EfftYear,"")%></td>
+		 <td style="width:5%;"></td>
+		 <td  style="width:5%;  font-size: 8px;padding: 5px;  border-left: 1px solid rgb(221, 221, 221);font-weight:bold;"><%=ifNull(EndDate,"")%></td>
+		 <td  style="width:5%;  font-size: 8px;padding: 5px;  border-left: 1px solid rgb(221, 221, 221);font-weight:bold;"><%=ifNull(EndMonth,"")%></td>
+		 <td  style="width:6%;  font-size: 8px;padding: 5px; border-left: 1px solid rgb(221, 221, 221);font-weight:bold;"><%=ifNull(EndYear,"")%></td>
+      </tr>
+	   <tr>
+       	 <td  style="width:68%; padding: 5px;font-size: 8px;">NAMED INSURED AS STATED HEREIN </td>
+
+      </tr>
+  </table>
+      </div>
+			    <div class="column right1"  style="margin-left: 4%;font-weight:bold;height: 80px; padding: 5px;">
+				<div> Pre-Authorized Payment</div>
+				<div>  Premium Payable : &nbsp; $ &nbsp;<%=ifNull(get_TrailCancel.Premium_Payable,"0")%> </div>
+				 </div>
+			  </td>
+			 </tr>
+	</table>
+
+<!--3rd section-->
+<div class = "row" style = "margin-top:2%;margin-bottom:0%;margin-left: 0%;">
+<div class = "" style="width: 94%;">
+<div class= "div1" style="font-size: 14px;font-weight:bold;">
+<div> This Declarations Page is evidence of a contract of insurance between the Insured and the Company, subject in all respects to the Insuring agreement of the Mutual Residential Policy.</div>
+<hr class="new2">
+<div style="text-align:center;"><br>It is understood and agreed this Policy is hereby cancelled effective as of <%=ifNull(get_TrailCancel.Cancellation_Date.toString("MMMM dd, yyyy"),"")%></div>
+<hr class="new2">
+<%
+		if(LineHolderTemp == true)
+		{
+			%>
+<table style="margin-bottom=1%;margin-left:2%;">
+          <th style="margin-bottom=2%;width:20%; padding: 5px;">Name of the Financier</th>
+          <th  style="width:14%; padding: 5px;">Address Line 1</th>
+     	  <th  style="width:18%; padding: 5px;">Address Line 2</th>
+      	  <th  style="width:14%; padding: 5px;">City</th>
+     	  <th  style="width:14%; padding: 5px;">Province</th>
+     	  <th  style="width:14%; padding: 5px;">Postal Code</th>
+    	  <th  style="width:14%; padding: 5px;">Country</th>
+<%
+			for each  iteT in TrailerCancellation.Trailer
+			{
+				if(iteT.Lein_holder != null)
+				{
+					if(iteT.Lein_holder.Name_of_Financier == "Other")
+					{
+						NameofFinancierT = ifNull(iteT.Name_of_Financier,"");
+					}
+					else
+					{
+						NameofFinancierT = ifNull(iteT.Lein_holder.Name_of_Financier,"");
+					}
+					%>
+<tr style="font-weight:normal;">
+ <td  style="width:14%; padding: 5px;text-align:center;"><%=ifNull(NameofFinancierT,"")%></td>
+ <td  style="width:14%; padding: 5px;text-align:center;"><%=ifNull(iteT.Address_line1,"")%></td>
+ <td  style="width:18%; padding: 5px;text-align:center;"><%=ifNull(iteT.Address_line2,"")%></td>
+ <td  style="width:14%; padding: 5px;text-align:center;"><%=ifNull(iteT.City,"")%></td>
+ <td  style="width:14%; padding: 5px;text-align:center;"><%=ifNull(iteT.Province,"")%></td>
+ <td  style="width:14%; padding: 5px;text-align:center;"><%=ifNull(iteT.Postal_Code,"")%></td>
+ <td  style="width:14%; padding: 5px;text-align:center;"><%=ifNull(iteT.Country,"")%></td>
+</tr>
+<%
+				}
+			}
+			%>
+</table>
+<%
+		}
+		%>
+<!------LineHolder Subform table End--->
+<hr class="new2">
+<div style="height:10px;"></div>
+<hr class="new2">
+<div><u>Cancellation Reason</u></div>
+<div><div><%=get_TrailCancel.Reason_for_Cancellation%></div></div>
+<hr class="new2">
+<div style="height:40px;"></div>
+</div>
+</div>
+
+<!-- 4th section-->
+<div class="row text-center" style="font-size: 14px;margin-left: 0%;font-weight:bold;    margin-right: 4%;">
+<p >IN WITNESS WHEREOF, the Company has caused this Policy to be signed by its President, but the same shall not be binding upon the Company untill countersigned by a duly authorized representative of the Company.</p>
+</div> 
+
+</div>
+<div class="Page2" style = "margin-right: 4%;">
+<!-- 5th section-->
+<div class="row"     style="margin-left: 0%;">
+<div style="max-width:95%;margin-left:2%;    margin-right: 5%;display:flex;justify-content:space-between;">
+<div style="width:20%;"></div>
+
+<div style="width:33.33%;">
+<img align="right" style="width: 60%;margin-top:2%;" src="https://workdrive.zohoexternal.com/external/ef6af8e84d80c908b053bb40776260279d9810958abebce529387270e1219369/download?directDownload=true" alt="sign">
+</div>
+<div style="width:33.33%;">
+<img align="right" style="width: 60%;padding: 0;" src="https://workdrive.zohoexternal.com/external/8d6702b8d213e1c8d553bfc6849beaca3a787d9cd1f3ad43c64c1b124cf94a07/download?directDownload=true" alt="sign">
+</div>
+</div>
+<hr>
+<div class="row" style="margin-left:2%;display:flex;justify-content:space-between;max-width:100%;">
+<div style="width:33.33%;"><h4 style="font-size: 12px;text-align: left;">Date Printed<br><%=zoho.currentdate.toString("MM/dd/yyyy")%></h4></div>
+<div style="width:33.33%;"><h4 style="font-size: 12px;text-align: center;">President</h4></div>
+<div style="width:33.33%;"><h4 style="font-size: 12px; text-align: center;"></h4></div>
+</div>
+</div>
+
+<!-- 6th section-->
+<div class="row text-center" style="margin-top:3%;background-color:#d3d3d3;padding-top:1%;margin-left: 0%;">
+<b><p style="font-size:12px; margin-left:1%;"> ABSOLUTELY NO COVERAGE IF THE TRAILER IS RENTED TO OTHERS</p></b>
+</div>
+
+<!-- 7th section-->
+<div class="row text-center" style="margin-left: 0%;">
+<p >Underwritten by Four Points Insurance Company Ltd. A Subsidiary of the Mutual Fire Insurance Company of British Columbia.</p>
+</div>
+</div>
+<!-- container closing div-->
+</div>
+
+
+</div>
+</body>
+</html>
+<%
+	}
+	else
+	{
+		BoatCancellation = BoatQuote[ID == input.CancellationID.toLong()];
+		if(BoatCancellation.count() > 0)
+		{
+			get_BoatCancel = Cancellation[Policy_Number == BoatCancellation.Policy_Number];
+			BoatEfftDate = "";
+			BoatEfftMonth = "";
+			BoatEfftYear = "";
+			BoatEndDate = "";
+			BoatEndMonth = "";
+			BoatEndYear = "";
+			if(get_BoatCancel.count() > 0)
+			{
+				if(get_BoatCancel.Cancellation_Date != null)
+				{
+					BoatEfftDate = ifNull(get_BoatCancel.Cancellation_Date.getDay(),"");
+					BoatEfftMonth = ifNull(get_BoatCancel.Cancellation_Date.getMonth(),"");
+					BoatEfftYear = ifNull(get_BoatCancel.Cancellation_Date.getYear(),"");
+				}
+				if(get_BoatCancel.Expiry_Date != null)
+				{
+					BoatEndDate = ifNull(get_BoatCancel.Expiry_Date.getDay(),"");
+					BoatEndMonth = ifNull(get_BoatCancel.Expiry_Date.getMonth(),"");
+					BoatEndYear = ifNull(get_BoatCancel.Expiry_Date.getYear(),"");
+				}
+			}
+			BoatLineHolderTemp = false;
+			for each  ite in BoatCancellation.Boat
+			{
+				if(ite.Lein_holder != null)
+				{
+					BoatLineHolderTemp = true;
+				}
+			}
+			Boatsign = Signature[ID != null];
+			%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+img {
+  display: block;
+  padding: 1%;
+  margin-bottom: auto;
+  margin-left: 10px;
+  padding-left: 35px;
+   align:left;
+}
+.container-fluid{
+        padding-left: 3%;
+    padding-right: 3%;
+	}
+.div1
+{
+	border:1px solid black;
+	border-radius:7px;
+	padding: 1%;
+	font-size: 14px;
+	margin-bottom: 1%;
+}
+.div2
+{
+	border:1px solid white;
+	border-radius:7px;
+	padding: 1%;
+	font-size: 14px;
+}
+hr.new2 {
+  border-top: 2px dashed #000000;
+}
+    table,
+    th,
+    td {
+      border-collapse: collapse
+    }
+	h4{
+	margin-bottom:15px;
+	margin-top:15px;
+	font-weight: bold;
+	text-align: left;
+	margin-left: 10px;
+	 font-size: 13px;
+	 text-transform: uppercase;
+	}
+	h6{
+	margin-bottom:15px;
+	margin-top:15px;
+	font-weight: bold;
+	margin-left: 10px;
+	font-size: 12px;
+	}  
+	
+	* {
+      box-sizing: border-box
+    }
+    
+    .column {
+      float: left;
+    }
+    
+    .column3 {
+      float: left;
+      width: 33.33%;
+      font-size: 10px;
+	  line-height: 0.5;
+    }
+    
+    .left {
+      width: 35%;
+    }
+    
+    .right {
+      width: 35%;
+    }
+    
+    .end {
+      width: 30%;
+    }
+    
+    .header1,
+    header2 {
+      width: 100%
+    }
+    
+    .HeaderTopic {
+      background-color: rgb(187, 187, 187);
+      padding: 1px
+    }
+    
+    .paragraph {
+    }
+    
+    .row:after {
+      content: "";
+      display: table;
+      clear: both
+    }
+    
+    @media screen and (max-width: 600px) {
+      .column {
+        width: 100%
+      }
+    }
+    
+    .left1 {
+      width: 40%;
+    }
+    
+    .right1 {
+      width: 45%;
+	  border:1px solid black;
+	  border-radius:7px;
+	  padding: 5px;
+    }
+    
+    .right2 {
+      width: 50%;
+	  padding-left: 5px;
+    }
+    
+    .leftfull {
+      width: 100%;
+    }
+	.leftfull1 {
+      width: 100%;
+	   border:1px solid black;
+	  border-radius:7px;
+	  padding: 5px;
+    }
+    
+    table,
+    th,
+    td {
+      border-collapse: collapse;
+	 font-size: 12px; 
+    }
+	.table tbody tr td, .table tfoot tr td, 
+	.table tbody tr td 
+	{
+    padding: 0px 0px;
+	}
+	@media print {
+  div.column {
+//   line-height: 1.6;
+}
+	}
+
+</head>
+</style>
+
+<body>
+<div class="container-fluid" style = "margin-bottom:0%;">
+			 <table class="table" style="width:100%;">
+			 <tr style= "height: 10px;" colspan="4">
+			 <td colspan="4">
+			  <div class="column left">
+        <img src="https://previewengine-accl.zoho.com/image/WD/rnhg746db378696bc41c7851cb4cefe42823c?version=1.0&amp;width=1646&amp;height=1436"
+          alt="img" width="180" height="150">
+      </div>
+	  </td>
+			 </tr>
+			<tr colspan="4">
+			 <td colspan="4">
+      <div class="column right1" style="margin-right: 2%;line-height: 0.6;font-weight:bold; border:0px solid black;">
+<p> POLICY CANCELLED </p>
+<p> NAME AND POSTAL ADDRESS OF INSURED </p>
+      </div>
+      <div class="column right1" style="margin-left: 4%;line-height: 0.6;font-weight:bold; border:0px solid black;">
+<p> POLICY NO.&nbsp;: &nbsp; <%=ifNull(BoatCancellation.Policy_Number,"")%>  </p>
+<p> BROKER&nbsp;:&nbsp; 500-008 </p>
+      </div>
+			 </td>
+			 </tr>
+	 </tr>
+			<tr colspan="4">
+			 <td colspan="4">
+      <div class="column right1"  style="margin-right: 2%;font-weight:bold;text-transform: uppercase;height: 80px;    padding: 5px;">
+<div> <%=ifNull(BoatCancellation.Insured_First_Name,"")%> &nbsp;<%=ifNull(BoatCancellation.Insured_Last_Name,"")%> </div> 
+<div> <%=ifNull(BoatCancellation.Address,"")%>,<%=ifNull(BoatCancellation.City,"")%>  </div> 
+<div> <%=ifNull(BoatCancellation.Province,"")%>,<%=ifNull(BoatCancellation.Country,"")%>,  </div> 
+<div> <%=ifNull(BoatCancellation.Postal_code_ZIP_Code,"")%></div>
+      </div>
+      <div class="column right1"  style="margin-left: 4%;font-weight:bold;height: 80px;    padding: 5px;">
+<div>RECPROTECT</div>
+<div>BY COBURN INSURANCE BROKERS LTD. PO BOX 209</div>
+<div>MOUNT FOREST, ON N0G 2L0</div>
+<div>Phone (888) 887-0881</div>
+      </div>
+			 </td>
+			 </tr>
+			 
+			  </tr>
+			<tr colspan="4">
+			 <td colspan="4">
+      <div class="column right1"  style="margin-right: 2%; border:0px solid black;">
+<table class="" style="">
+      <tr>
+       	 <td  style="width:24%; padding: 5px;font-weight:bold;">INSURANCE PERIOD </td>
+		 <td  style="width:6%;  padding: 5px;font-weight:bold;" colspan = "3">FROM</td>
+		 <td  style="width:4%;  padding: 5px;font-weight:bold;" colspan = "3">TO</td>
+      </tr>
+	  </table>
+      </div>	   
+      <div class="column right1"  style="margin-left: 4%;border:0px solid black;"></div>
+			 </tr>
+			 <tr>
+			 <td colspan="4">
+      <div class="column right1"  style="margin-right: 2%; height: 80px;">
+	  
+<table class="" style="">
+      <tr>
+       	 <td  style="width:68%; padding: 5px; font-size: 8px;  ">12:01 A.M. STANDARD TIME AT  </td>
+		 <td  style="width:5%;   font-size: 8px;padding: 5px; border-left: 1px solid rgb(221, 221, 221);border-bottom: 1px solid rgb(221, 221, 221);font-weight:bold;">DAY</td>
+		 <td  style="width:5%;   font-size: 8px;padding: 5px; border-left: 1px solid rgb(221, 221, 221);border-bottom: 1px solid rgb(221, 221, 221);font-weight:bold;">MO.</td>
+		 <td  style="width:6%;   font-size: 8px;padding: 5px; border-left: 1px solid rgb(221, 221, 221);border-bottom: 1px solid rgb(221, 221, 221);font-weight:bold;">YEAR</td>
+		 <td style="width:6%;"></td>
+		 		 <td  style="width:5%;   font-size: 8px;padding: 5px; border-left: 1px solid rgb(221, 221, 221);border-bottom: 1px solid rgb(221, 221, 221);font-weight:bold;">DAY</td>
+		 <td  style="width:5%;   font-size: 8px;padding: 5px; border-left: 1px solid rgb(221, 221, 221);border-bottom: 1px solid rgb(221, 221, 221);font-weight:bold;">MO.</td>
+		 <td  style="width:6%;   font-size: 8px;padding: 5px; border-left: 1px solid rgb(221, 221, 221);border-bottom: 1px solid rgb(221, 221, 221);font-weight:bold;">YEAR</td>
+
+      </tr>
+	  <tr>
+       	 <td  style="width:68%; padding: 5px;font-size: 8px; ">THE POSTAL ADDRESS OF THE  </td>
+		 <td  style="width:5%;  font-size: 8px;padding: 5px; border-left: 1px solid rgb(221, 221, 221);font-weight:bold;"><%=ifNull(BoatEfftDate,"")%></td>
+		 <td  style="width:5%;  font-size: 8px;padding: 5px;  border-left: 1px solid rgb(221, 221, 221);font-weight:bold;"><%=ifNull(BoatEfftMonth,"")%></td>
+		 <td  style="width:6%;  font-size: 8px;padding: 5px;  border-left: 1px solid rgb(221, 221, 221);font-weight:bold;"><%=ifNull(BoatEfftYear,"")%></td>
+		 <td style="width:6%;"></td>
+		 <td  style="width:5%;  font-size: 8px;padding: 5px;  border-left: 1px solid rgb(221, 221, 221);font-weight:bold;"><%=ifNull(BoatEndDate,"")%></td>
+		 <td  style="width:5%;  font-size: 8px;padding: 5px;  border-left: 1px solid rgb(221, 221, 221);font-weight:bold;"><%=ifNull(BoatEndMonth,"")%></td>
+		 <td  style="width:6%;  font-size: 8px;padding: 5px; border-left: 1px solid rgb(221, 221, 221);font-weight:bold;"><%=ifNull(BoatEndYear,"")%></td>
+      </tr>
+	   <tr>
+       	 <td  style="width:68%; padding: 5px;font-size: 8px;">NAMED INSURED AS STATED HEREIN </td>
+      </tr>
+  </table>
+      </div>
+			    <div class="column right1"  style="margin-left: 4%;font-weight:bold;height: 80px; padding: 5px;">
+				<div> Pre-Authorized Payment</div>
+<div>  Premium Payable : &nbsp; $ &nbsp;<%=ifNull(get_BoatCancel.Premium_Payable,"0")%> </div>
+				 </div>
+			  </td>
+			 </tr>
+	</table>
+
+<!--3rd section-->
+<div class = "row" style = "margin-top:2%;margin-bottom:0%;margin-left: 0%;">
+<div class = "" style="width: 94%;">
+<div class= "div1" style="font-size: 14px;font-weight:bold;">
+<div> This Declarations Page is evidence of a contract of insurance between the Insured and the Company, subject in all respects to the Insuring agreement of the Mutual Residential Policy.</div>
+<hr class="new2">
+<div style="text-align:center;"><br>It is understood and agreed this Policy is hereby cancelled effective as of <%=ifNull(get_BoatCancel.Cancellation_Date.toString("MMMM dd, yyyy"),"")%></div>
+<hr class="new2">
+<%
+			if(BoatLineHolderTemp == true)
+			{
+				%>
+<table style="margin-bottom=1%;margin-left:2%;">
+          <th style="margin-bottom=2%;width:20%; padding: 5px;">Name of the Financier</th>
+          <th  style="width:14%; padding: 5px;">Address Line 1</th>
+     	  <th  style="width:18%; padding: 5px;">Address Line 2</th>
+      	  <th  style="width:14%; padding: 5px;">City</th>
+     	  <th  style="width:14%; padding: 5px;">Province</th>
+     	  <th  style="width:14%; padding: 5px;">Postal Code</th>
+    	  <th  style="width:14%; padding: 5px;">Country</th>
+<%
+				for each  iteB in BoatCancellation.Boat
+				{
+					if(iteB.Lein_holder != null)
+					{
+						if(iteB.Lein_holder.Name_of_Financier == "Other")
+						{
+							NameofFinancierB = ifNull(iteB.Name_of_Financier,"");
+						}
+						else
+						{
+							NameofFinancierB = ifNull(iteB.Lein_holder.Name_of_Financier,"");
+						}
+						%>
+<tr style="font-weight:normal;">
+ <td  style="width:14%; padding: 5px;text-align:center;"><%=ifNull(NameofFinancierB,"")%></td>
+ <td  style="width:14%; padding: 5px;text-align:center;"><%=ifNull(iteB.Address_line1,"")%></td>
+ <td  style="width:18%; padding: 5px;text-align:center;"><%=ifNull(iteB.Address_line2,"")%></td>
+ <td  style="width:14%; padding: 5px;text-align:center;"><%=ifNull(iteB.City,"")%></td>
+ <td  style="width:14%; padding: 5px;text-align:center;"><%=ifNull(iteB.Province,"")%></td>
+ <td  style="width:14%; padding: 5px;text-align:center;"><%=ifNull(iteB.Postal_Code,"")%></td>
+ <td  style="width:14%; padding: 5px;text-align:center;"><%=ifNull(iteB.Country,"")%></td>
+</tr>
+<%
+					}
+				}
+				%>
+</table>
+<hr>
+<%
+			}
+			%>
+<!------LineHolder Subform table End--->
+
+<div style = "line-height: 0.6;">
+<%
+			btNo = 0;
+			for each  assetDet in BoatCancellation.Boat
+			{
+				btNo = btNo + 1;
+				%>
+<h5>Boat <%=btNo%></h5>
+	  <p Style="font-size:14px;font-weight: bold;"><%=ifNull(assetDet.Boat_Model_Year,"")%>
+<%
+				if(assetDet.Boat_Manufacturer != null)
+				{
+					%>
+<span>,</span>
+<%
+				}
+				%>
+<%=ifNull(assetDet.Boat_Manufacturer,"")%>
+<%
+				if(assetDet.Boat_Model != null)
+				{
+					%>
+<span>,</span>
+<%
+				}
+				%>
+<%=ifNull(assetDet.Boat_Model,"")%>
+<%
+				if(assetDet.Select_the_type_of_watercraft != null)
+				{
+					%>
+<span>,</span>
+<%
+				}
+				%>
+<%=ifNull(assetDet.Select_the_type_of_watercraft,"")%>
+<%
+				if(assetDet.Estimated_max_speed != null)
+				{
+					%>
+<span>,</span>
+<%
+				}
+				%>
+<%=ifNull(assetDet.Estimated_max_speed,"")%>
+<%
+				if(assetDet.Lengths != null)
+				{
+					%>
+<span>,</span>
+<%
+				}
+				%>
+<%=ifNull(assetDet.Lengths,"")%>
+<%
+				if(assetDet.Hull_Type != null)
+				{
+					%>
+<span>,</span>
+<%
+				}
+				%>
+<%=ifNull(assetDet.Hull_Type,"")%>
+	  </p>
+	  
+	  <p Style="font-size:14px;font-weight: bold;"><%=ifNull(assetDet.Types,"")%>
+<%
+				if(assetDet.Fuel_Type != null)
+				{
+					%>
+<span>,</span>
+<%
+				}
+				%>
+<%=ifNull(assetDet.Fuel_Type,"")%>
+<%
+				if(assetDet.Model_Year != null)
+				{
+					%>
+<span>,</span>
+<%
+				}
+				%>
+<%=ifNull(assetDet.Model_Year,"")%>
+<%
+				if(assetDet.Manufacturer != null)
+				{
+					%>
+<span>,</span>
+<%
+				}
+				%>
+<%=ifNull(assetDet.Manufacturer,"")%>
+<%
+				if(assetDet.Horsepower != null)
+				{
+					%>
+<span>,</span>
+<%
+				}
+				%>
+<%=ifNull(assetDet.Horsepower,"")%></p>
+<%
+				if(assetDet.Add_a_trailer == "Yes")
+				{
+					%>
+<p Style="font-size:14px;font-weight: bold;"><%=ifNull(assetDet.Trailer_Model_Year,"")%>
+<%
+					if(assetDet.Trailer_Manufacturer != null)
+					{
+						%>
+<span>,</span>
+<%
+					}
+					%>
+<%=ifNull(assetDet.Trailer_Manufacturer,"")%>
+<%
+					if(assetDet.Trailer_Length != null)
+					{
+						%>
+<span>,</span>
+<%
+					}
+					%>
+<%=ifNull(assetDet.Trailer_Length,"")%>FT</p>
+<p Style="font-size:14px;font-weight: bold;">
+<%
+					if(assetDet.Hull_ID_Serial != null)
+					{
+						%>
+BOAT SERIAL: <%=ifNull(assetDet.Hull_ID_Serial,"")%>,
+<%
+					}
+					if(assetDet.Hull_ID_Serial != null)
+					{
+						%>
+MOTOR SERIAL: <%=ifNull(assetDet.Serial,"")%>,
+<%
+					}
+					if(assetDet.Hull_ID_Serial != null)
+					{
+						%>
+TRAILER SERIAL: <%=ifNull(assetDet.Trailer_VIN,"")%>
+<%
+					}
+					%>
+</p>
+<%
+				}
+				else
+				{
+					%>
+<p Style="font-size:14px;font-weight: bold;">
+<%
+					if(assetDet.Hull_ID_Serial != null)
+					{
+						%>
+BOAT SERIAL: <%=ifNull(assetDet.Hull_ID_Serial,"")%>
+<%
+					}
+					if(assetDet.Serial != null)
+					{
+						%>
+<span>,</span>
+<%
+					}
+					if(assetDet.Serial != null)
+					{
+						%>
+MOTOR SERIAL: <%=ifNull(assetDet.Serial,"")%>
+<%
+					}
+					%>
+</p>
+<%
+				}
+			}
+			%>
+</div>
+<hr class="new2">
+<div style="height:15px;"></div>
+<hr class="new2">
+<div><u>Cancellation Reason</u></div>
+<div><div><%=get_BoatCancel.Reason_for_Cancellation%></div></div>
+<hr class="new2">
+<div style="height:40px;"></div>
+</div>
+</div>
+
+<!-- 4th section-->
+<div class="row text-center" style="font-size: 14px;margin-left: 0%;font-weight:bold;    margin-right: 4%;">
+<p >IN WITNESS WHEREOF, the Company has caused this Policy to be signed by its President, but the same shall not be binding upon the Company untill countersigned by a duly authorized representative of the Company.</p>
+</div> 
+
+</div>
+<div class="Page2" style = "margin-right: 4%;">
+<!-- 5th section-->
+<div class="row"     style="margin-left: 0%;">
+<div style="max-width:95%;margin-left:2%;    margin-right: 5%;display:flex;justify-content:space-between;">
+<div style="width:20%;"></div>
+//
+<div style="width:33.33%;">
+<img align="right" style="width: 60%;margin-top:2%;" src="https://workdrive.zohoexternal.com/external/ef6af8e84d80c908b053bb40776260279d9810958abebce529387270e1219369/download?directDownload=true" alt="sign">
+</div>
+<div style="width:33.33%;">
+<img align="right" style="width: 60%;padding: 0;" src="https://workdrive.zohoexternal.com/external/8d6702b8d213e1c8d553bfc6849beaca3a787d9cd1f3ad43c64c1b124cf94a07/download?directDownload=true" alt="sign">
+</div>
+</div>
+<hr>
+<div class="row" style="margin-left:2%;display:flex;justify-content:space-between;max-width:100%;">
+<div style="width:33.33%;"><h4 style="font-size: 12px;text-align: left;">Date Printed<br><%=zoho.currentdate.toString("MM/dd/yyyy")%></h4></div>
+<div style="width:33.33%;"><h4 style="font-size: 12px;text-align: center;">President</h4></div>
+<div style="width:33.33%;"><h4 style="font-size: 12px; text-align: center;"></h4></div>
+</div>
+</div>
+
+<!-- 6th section-->
+<div class="row text-center" style="margin-top:3%;background-color:#d3d3d3;padding-top:1%;margin-left: 0%;">
+<b><p style="font-size:12px; margin-left:1%;"> ABSOLUTELY NO COVERAGE IF THE TRAILER IS RENTED TO OTHERS</p></b>
+</div>
+
+<!-- 7th section-->
+<div class="row text-center" style="margin-left: 0%;">
+<p >Underwritten by Four Points Insurance Company Ltd. A Subsidiary of the Mutual Fire Insurance Company of British Columbia.</p>
+</div>
+</div>
+<!-- container closing div-->
+</div>
+
+
+</div>
+</body>
+</html>
+<%
+		}
+		else
+		{
+			%>
+<div><p  style="text-align:center;color:red;">page not found (404)</p> </div>
+<%
+		}
+	}
+
+}%>

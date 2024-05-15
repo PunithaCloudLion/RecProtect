@@ -1,0 +1,60 @@
+try 
+{
+	owner_name = "service_recprotect";
+	app_name = "quotation";
+	get_Contact = zoho.crm.getRecordById("Contacts",contact_id);
+	if(get_Contact.size() > 0)
+	{
+		resource_id = get_Contact.get("Workdrive_Folder_ID");
+		//----------------------------------Move the Folder to Contact Folder-----------------------
+		header = Map();
+		header.put("Accept","application/vnd.api+json");
+		data = Map();
+		data_param1 = Map();
+		att_param1 = Map();
+		att_param1.put("parent_id","3d6ab560ff0f6d7c44985beb6a04dbe25f3fb");
+		data_param1.put("attributes",att_param1);
+		data_param1.put("type","files");
+		data.put("data",data_param1);
+		info data;
+		response = invokeurl
+		[
+			url :"https://www.zohoapis.com/workdrive/api/v1/files/" + resource_id
+			type :PATCH
+			parameters:data.toString()
+			headers:header
+			connection:"workdrive"
+		];
+		//--------------------------Contact folder name updates -----------------------------------------			
+		header = Map();
+		header.put("Accept","application/vnd.api+json");
+		data = Map();
+		data_param1 = Map();
+		att_param1 = Map();
+		att_param1.put("name",get_Contact.get("Full_Name"));
+		data_param1.put("attributes",att_param1);
+		data_param1.put("type","files");
+		data.put("data",data_param1);
+		info data;
+		response = invokeurl
+		[
+			url :"https://www.zohoapis.com/workdrive/api/v1/files/" + resource_id
+			type :PATCH
+			parameters:data.toString()
+			headers:header
+			connection:"workdrive"
+		];
+		info response;
+	}
+}
+catch (e)
+{
+	developerlog = Map();
+	developerlog.put("Product","CRM");
+	developerlog.put("Module","Contacts");
+	developerlog.put("Action_Flow","On Creator Workflow --https://crm.zoho.com/crm/org810798353/settings/workflow-rules/5778486000008069079");
+	developerlog.put("Description","Move Workdrive Folder from Leads to Contacts");
+	developerlog.put("Request",contact_id.toString());
+	developerlog.put("Response",e);
+	dev_log_resp = zoho.creator.createRecord(owner_name,app_name,"Developer_Logs",developerlog,Map(),"creator");
+}

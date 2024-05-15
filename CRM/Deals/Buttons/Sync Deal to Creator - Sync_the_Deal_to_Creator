@@ -1,0 +1,478 @@
+try 
+{
+	alertMessage = "";
+	update_dealmap = Map();
+	get_deal = zoho.crm.getRecordById("Deals",deal_ID);
+	if(get_deal.size() > 0)
+	{
+		//----------------------Map and List-------------------
+		datamap = Map();
+		insuredlist = List();
+		insuredmap = Map();
+		//----------------------Map and List End -------------------
+		datamap.put("Zoho_Crm_ID",deal_ID);
+		datamap.put("Source","CREATOR");
+		if(get_deal.get("Contact_Name") != null)
+		{
+			get_contact = zoho.crm.getRecordById("Contacts",get_deal.get("Contact_Name").get("id"));
+			if(get_contact.size() > 0)
+			{
+				//---------------------------Lookup Sunc Check in Creator Start-------------------
+				//-------------------Check Contact----------------
+				if(get_contact.get("Zoho_Creator_ID") == null || get_contact.get("Zoho_Creator_ID") == "")
+				{
+					alertMessage = "Contact not Synced with Creator";
+				}
+				else
+				{
+					//----------------------------------------Check Additional Insued 1 ------------------------------
+					if(get_deal.get("Additional_Insured") != null)
+					{
+						get_insured1 = zoho.crm.getRecordById("Contacts",get_deal.get("Additional_Insured").get("id"));
+						if(get_insured1.get("Zoho_Creator_ID") == null || get_insured1.get("Zoho_Creator_ID") == "")
+						{
+							alertMessage = "Additional Insured 1 not Synced with Creator";
+						}
+					}
+					//----------------------------------------Check Additional Insued 2 ------------------------------
+					if(get_deal.get("Additional_Insured_Name") != null)
+					{
+						get_insured2 = zoho.crm.getRecordById("Contacts",get_deal.get("Additional_Insured_Name").get("id"));
+						if(get_insured2.get("Zoho_Creator_ID") == null || get_insured2.get("Zoho_Creator_ID") == "")
+						{
+							alertMessage = "Additional Insured 2 not Synced with Creator";
+						}
+					}
+					//---------------------------Lookup Sunc Check in Creator End-------------------
+					datamap.put("Additional_Names",insuredlist);
+				}
+			}
+			if(alertMessage == "")
+			{
+				//---------------------------------Boat Policy-----------------
+				if(get_deal.get("Layout").get("name") == "Boat Policy")
+				{
+					//---------------------Customer Map--------------------
+					datamap.put("Customer_ID",get_contact.get("Zoho_Creator_ID"));
+					datamap.put("Insured_First_Name",get_contact.get("First_Name"));
+					datamap.put("Insured_Last_Name",get_contact.get("Last_Name"));
+					datamap.put("Date_of_Birth",get_contact.get("Date_of_Birth").toDate());
+					datamap.put("Phone_Number",get_contact.get("Phone"));
+					datamap.put("Email",get_contact.get("Email"));
+					datamap.put("Where_Did_You_Find_Us",get_contact.get("Referral_Type"));
+					if(get_contact.get("Referral_Type") == "Friend or Family")
+					{
+						datamap.put("Name",get_contact.get("Referral_Friend"));
+					}
+					if(get_contact.get("Referral_Type") == "Dealership")
+					{
+						datamap.put("Name_of_Dealership",get_contact.get("Referral_Friend"));
+					}
+					if(get_contact.get("Referral_Type") == "Campground")
+					{
+						datamap.put("Name_of_Campground",get_contact.get("Referral_Friend"));
+					}
+					if(get_contact.get("Referral_Type") == "Marina")
+					{
+						datamap.put("Name_of_Marina",get_contact.get("Referral_Friend"));
+					}
+					if(get_contact.get("Referral_Type") == "Other")
+					{
+						datamap.put("Tell_us_more",get_contact.get("Referral_Friend"));
+					}
+					//-----------------Deal Information---------------
+					datamap.put("Deal_Type",get_deal.get("Deal_Status"));
+					datamap.put("Postal_code_ZIP_Code",get_deal.get("Postal_code_ZIP_Code_of_Mailing_address"));
+					datamap.put("Policy_AutoRenewal_Status",get_deal.get("Policy_AutoRenewal_Status"));
+					datamap.put("Policy_Status",get_deal.get("Policy_Status"));
+					datamap.put("Referral_Reason",get_deal.get("Referral_Reason"));
+					datamap.put("How_many_boats_would_you_like_to_insure",get_deal.get("How_many_boats_would_you_like_to_insure"));
+					datamap.put("Agree_to_terms_and_conditions",get_deal.get("Agree_to_terms_and_conditions"));
+					datamap.put("Carrier",get_deal.get("Carrier"));
+					if(get_deal.get("Province") == "AB")
+					{
+						datamap.put("Please_select_the_province_your_boat_is_used_in","Alberta");
+					}
+					if(get_deal.get("Province") == "BC")
+					{
+						datamap.put("Please_select_the_province_your_boat_is_used_in","British Columbia");
+					}
+					if(get_deal.get("Province") == "ON")
+					{
+						datamap.put("Please_select_the_province_your_boat_is_used_in","Ontario");
+					}
+					if(get_deal.get("Province") == "SK")
+					{
+						datamap.put("Please_select_the_province_your_boat_is_used_in","Saskatchewan");
+					}
+					//---------------------------Additional Insured--------------------\
+					if(get_deal.get("Additional_Insured") != null)
+					{
+						datamap.put("Are_there_any_additional_names_on_the_boat_ownership","Yes");
+						insuredmap.put("Customer_ID",get_insured1.get("Zoho_Creator_ID"));
+						insuredmap.put("Additional_Insured_First_Name",get_insured1.get("First_Name"));
+						insuredmap.put("Additional_Insured_Last_Name",get_insured1.get("Last_Name"));
+						insuredmap.put("DOB",get_insured1.get("Date_of_Birth").toDate());
+						insuredmap.put("Phone_Number",get_insured1.get("Phone"));
+						insuredmap.put("Email",get_insured1.get("Email"));
+						insuredlist.add(insuredmap);
+					}
+					if(get_deal.get("Additional_Insured_Name") != null)
+					{
+						datamap.put("Are_there_any_additional_names_on_the_boat_ownership","Yes");
+						insuredmap.put("Customer_ID",get_insured2.get("Zoho_Creator_ID"));
+						insuredmap.put("Additional_Insured_First_Name",get_insured2.get("First_Name"));
+						insuredmap.put("Additional_Insured_Last_Name",get_insured2.get("Last_Name"));
+						insuredmap.put("DOB",get_insured2.get("Date_of_Birth").toDate());
+						insuredmap.put("Phone_Number",get_insured2.get("Phone"));
+						insuredmap.put("Email",get_insured2.get("Email"));
+						insuredlist.add(insuredmap);
+					}
+					datamap.put("Additional_Names",insuredlist);
+					//-----------------Deal Dates---------------
+					if(get_deal.get("Inception_Date") != null && get_deal.get("Inception_Date") != "")
+					{
+						datamap.put("Inception_Date",get_deal.get("Inception_Date").toDate());
+					}
+					else
+					{
+						datamap.put("Inception_Date",get_deal.get("Inception_Date"));
+					}
+					if(get_deal.get("Expiry_Date") != null && get_deal.get("Expiry_Date") != "")
+					{
+						datamap.put("Expiry_Date",get_deal.get("Expiry_Date").toDate());
+					}
+					else
+					{
+						datamap.put("Expiry_Date",get_deal.get("Expiry_Date"));
+					}
+					if(get_deal.get("Payment_Date") != null && get_deal.get("Payment_Date") != "")
+					{
+						datamap.put("Payment_Date",get_deal.get("Payment_Date").toDate());
+					}
+					else
+					{
+						datamap.put("Payment_Date",get_deal.get("Payment_Date"));
+					}
+					if(get_deal.get("Effective_Date") != null && get_deal.get("Effective_Date") != "")
+					{
+						datamap.put("Effective_Date",get_deal.get("Effective_Date").toDate());
+					}
+					else
+					{
+						datamap.put("Effective_Date",get_deal.get("Effective_Date"));
+					}
+					if(get_deal.get("Sales_Date_1") != null && get_deal.get("Sales_Date_1") != "")
+					{
+						datamap.put("Sales_Date",get_deal.get("Sales_Date_1").toDate());
+					}
+					else
+					{
+						datamap.put("Sales_Date",get_deal.get("Sales_Date_1"));
+					}
+					if(get_deal.get("Bind_Date") != null && get_deal.get("Bind_Date") != "")
+					{
+						datamap.put("Bind_Date",get_deal.get("Bind_Date").toDate());
+					}
+					else
+					{
+						datamap.put("Bind_Date",get_deal.get("Bind_Date"));
+					}
+					if(get_deal.get("End_Date") != null && get_deal.get("End_Date") != "")
+					{
+						datamap.put("End_Date",get_deal.get("End_Date").toDate());
+					}
+					else
+					{
+						datamap.put("End_Date",get_deal.get("End_Date"));
+					}
+					//--------------------Premium----------------------
+					datamap.put("Total_Premium_before_tax",get_deal.get("Premium"));
+					datamap.put("Total_Tax",get_deal.get("Tax"));
+					datamap.put("Fee",get_deal.get("Fee"));
+					datamap.put("Total_Payable_Premium_after_tax",get_deal.get("Total"));
+					//---------------------Adjusted Premium-------------------
+					datamap.put("Outstanding",get_deal.get("Outstanding"));
+					datamap.put("Prorated",get_deal.get("Prorated"));
+					if(get_deal.get("Prorate_From") != null && get_deal.get("Prorate_From") != "")
+					{
+						datamap.put("Prorate_From",get_deal.get("Prorate_From").toDate());
+					}
+					else
+					{
+						datamap.put("Prorate_From",get_deal.get("Prorate_From"));
+					}
+					datamap.put("Waive_Free",get_deal.get("Waive_Fee"));
+					//-------------------Deal Reference-------------------
+					datamap.put("Policy_Number",get_deal.get("Policy_Number"));
+					datamap.put("Quote_ID",get_deal.get("Quote_ID"));
+					datamap.put("Reason_For_Rejection1",get_deal.get("Reason_For_Rejection"));
+					//------------------Developer Section-------------------
+					datamap.put("Contact_Policy_Folder_Workdrive_Folder_ID",get_deal.get("Workdrive_Folder_ID"));
+					datamap.put("Contact_Policy_Folder_Workdrive_Link",get_deal.get("Workdrive_URL"));
+					datamap.put("Policy_UPO_Data",get_deal.get("UPO_Card_Number"));
+					//-----------------------Search in Creator---------------------
+					search_boat = zoho.creator.getRecords("service_recprotect","quotation","Boats_Report","Quote_ID == \"" + get_deal.get("Quote_ID") + "\"",1,200,"creator");
+					if(search_boat.get("code") == 3000)
+					{
+						if(get_deal.get("Policy_Number") != null)
+						{
+							if(search_boat.get("data").get(0).get("Policy_Number") == get_deal.get("Policy_Number"))
+							{
+								response = zoho.creator.updateRecord("service_recprotect","quotation","Boats_Report",search_boat.get("data").get(0).get("ID"),datamap,Map(),"creator");
+							}
+							else
+							{
+								alertMessage = "Required Data not Matced -- Policy Number";
+							}
+						}
+						else
+						{
+							alertMessage = "Required Data not Matced -- Policy Number";
+						}
+					}
+					else
+					{
+						//--------------------------Create-----------------
+						response = zoho.creator.createRecord("service_recprotect","quotation","BoatQuote",datamap,Map(),"creator");
+					}
+					//-------------------------Update in CRM----------
+					if(response.get("code") == 3000)
+					{
+						alertMessage = "Data Synced Successfully";
+						update_dealmap.put("Creator_ID",response.get("data").get("ID").toString());
+					}
+					else
+					{
+						alertMessage = "Error on Sync";
+						info response;
+					}
+				}
+				//--------------------------Trailer Policy----------------
+				else if(get_deal.get("Layout").get("name") == "Trailer Policy")
+				{
+					//-------------------------------Customer Map------------
+					datamap.put("Customer_ID",get_contact.get("Zoho_Creator_ID"));
+					datamap.put("Insured_First_Name",get_contact.get("First_Name"));
+					datamap.put("Insured_Last_Name",get_contact.get("Last_Name"));
+					datamap.put("Date_of_Birth",get_contact.get("Date_of_Birth").toDate());
+					datamap.put("Phone_Number",get_contact.get("Phone"));
+					datamap.put("Email",get_contact.get("Email"));
+					datamap.put("Where_Did_You_Find_Us",get_contact.get("Referral_Type"));
+					if(get_contact.get("Referral_Type") == "Friend or Family")
+					{
+						datamap.put("Name",get_contact.get("Referral_Friend"));
+					}
+					if(get_contact.get("Referral_Type") == "Dealership")
+					{
+						datamap.put("Name_of_Dealership",get_contact.get("Referral_Friend"));
+					}
+					if(get_contact.get("Referral_Type") == "Campground")
+					{
+						datamap.put("Name_of_Campground",get_contact.get("Referral_Friend"));
+					}
+					if(get_contact.get("Referral_Type") == "Marina")
+					{
+						datamap.put("Name_of_Marina",get_contact.get("Referral_Friend"));
+					}
+					if(get_contact.get("Referral_Type") == "Other")
+					{
+						datamap.put("Tell_us_more",get_contact.get("Referral_Friend"));
+					}
+					//-------------------Deal Infor------------------
+					datamap.put("Deal_Type",get_deal.get("Deal_Status"));
+					datamap.put("Postal_code_ZIP_Code",get_deal.get("Postal_code_ZIP_Code_of_Mailing_address"));
+					datamap.put("Policy_Status",get_deal.get("Policy_Status"));
+					datamap.put("Policy_AutoRenewal_Status",get_deal.get("Policy_AutoRenewal_Status"));
+					datamap.put("Referral_Reason",get_deal.get("Referral_Reason"));
+					datamap.put("How_many_trailers_would_you_like_to_insure",get_deal.get("How_many_trailers_would_you_like_to_insure"));
+					datamap.put("Agree_to_terms_and_conditions",get_deal.get("Agree_to_terms_and_conditions"));
+					datamap.put("Carrier",get_deal.get("Carrier"));
+					if(get_deal.get("Province") == "AB")
+					{
+						datamap.put("Please_select_the_province_your_trailer_is_located_in","Alberta");
+					}
+					if(get_deal.get("Province") == "BC")
+					{
+						datamap.put("Please_select_the_province_your_trailer_is_located_in","British Columbia");
+					}
+					if(get_deal.get("Province") == "ON")
+					{
+						datamap.put("Please_select_the_province_your_trailer_is_located_in","Ontario");
+					}
+					if(get_deal.get("Province") == "SK")
+					{
+						datamap.put("Please_select_the_province_your_trailer_is_located_in","Saskatchewan");
+					}
+					//---------------------------Additional Insured--------------------\
+					if(get_deal.get("Additional_Insured") != null)
+					{
+						datamap.put("Are_there_any_additional_names_on_the_trailer_ownership","Yes");
+						insuredmap.put("Customer_ID",get_insured1.get("Zoho_Creator_ID"));
+						insuredmap.put("Additional_Insured_First_Name",get_insured1.get("First_Name"));
+						insuredmap.put("Additional_Insured_Last_Name",get_insured1.get("Last_Name"));
+						insuredmap.put("DOB",get_insured1.get("Date_of_Birth").toDate());
+						insuredmap.put("Phone_Number",get_insured1.get("Phone"));
+						insuredmap.put("Email",get_insured1.get("Email"));
+						insuredlist.add(insuredmap);
+					}
+					if(get_deal.get("Additional_Insured_Name") != null)
+					{
+						datamap.put("Are_there_any_additional_names_on_the_trailer_ownership","Yes");
+						insuredmap.put("Customer_ID",get_insured2.get("Zoho_Creator_ID"));
+						insuredmap.put("Additional_Insured_First_Name",get_insured2.get("First_Name"));
+						insuredmap.put("Additional_Insured_Last_Name",get_insured2.get("Last_Name"));
+						insuredmap.put("DOB",get_insured2.get("Date_of_Birth").toDate());
+						insuredmap.put("Phone_Number",get_insured2.get("Phone"));
+						insuredmap.put("Email",get_insured2.get("Email"));
+						insuredlist.add(insuredmap);
+					}
+					datamap.put("Additional_Names",insuredlist);
+					//-----------------Deal Dates---------------
+					if(get_deal.get("Inception_Date") != null && get_deal.get("Inception_Date") != "")
+					{
+						datamap.put("Inception_Date",get_deal.get("Inception_Date").toDate());
+					}
+					else
+					{
+						datamap.put("Inception_Date",get_deal.get("Inception_Date"));
+					}
+					if(get_deal.get("Expiry_Date") != null && get_deal.get("Expiry_Date") != "")
+					{
+						datamap.put("Expiry_Date",get_deal.get("Expiry_Date").toDate());
+					}
+					else
+					{
+						datamap.put("Expiry_Date",get_deal.get("Expiry_Date"));
+					}
+					if(get_deal.get("Payment_Date") != null && get_deal.get("Payment_Date") != "")
+					{
+						datamap.put("Payment_Date",get_deal.get("Payment_Date").toDate());
+					}
+					else
+					{
+						datamap.put("Payment_Date",get_deal.get("Payment_Date"));
+					}
+					if(get_deal.get("Effective_Date") != null && get_deal.get("Effective_Date") != "")
+					{
+						datamap.put("Effective_Date",get_deal.get("Effective_Date").toDate());
+					}
+					else
+					{
+						datamap.put("Effective_Date",get_deal.get("Effective_Date"));
+					}
+					if(get_deal.get("Sales_Date_1") != null && get_deal.get("Sales_Date_1") != "")
+					{
+						datamap.put("Sales_Date",get_deal.get("Sales_Date_1").toDate());
+					}
+					else
+					{
+						datamap.put("Sales_Date",get_deal.get("Sales_Date_1"));
+					}
+					if(get_deal.get("Bind_Date") != null && get_deal.get("Bind_Date") != "")
+					{
+						datamap.put("Bind_Date",get_deal.get("Bind_Date").toDate());
+					}
+					else
+					{
+						datamap.put("Bind_Date",get_deal.get("Bind_Date"));
+					}
+					if(get_deal.get("End_Date") != null && get_deal.get("End_Date") != "")
+					{
+						datamap.put("End_Date",get_deal.get("End_Date").toDate());
+					}
+					else
+					{
+						datamap.put("End_Date",get_deal.get("End_Date"));
+					}
+					//--------------------Premium----------------------
+					datamap.put("Total_Premium_before_tax",get_deal.get("Premium"));
+					datamap.put("Total_Tax",get_deal.get("Tax"));
+					datamap.put("Fee",get_deal.get("Fee"));
+					datamap.put("Total_Payable_Premium_after_tax",get_deal.get("Total"));
+					//---------------------Adjusted Premium-------------------
+					datamap.put("Outstanding",get_deal.get("Outstanding"));
+					datamap.put("Prorated",get_deal.get("Prorated"));
+					if(get_deal.get("Prorate_From") != null && get_deal.get("Prorate_From") != "")
+					{
+						datamap.put("Prorate_From",get_deal.get("Prorate_From").toDate());
+					}
+					else
+					{
+						datamap.put("Prorate_From",get_deal.get("Prorate_From"));
+					}
+					datamap.put("Waive_Fee",get_deal.get("Waive_Fee"));
+					//-------------------Deal Reference-------------------
+					datamap.put("Policy_Number",get_deal.get("Policy_Number"));
+					datamap.put("Quote_ID",get_deal.get("Quote_ID"));
+					datamap.put("Reason_For_Rejection1",get_deal.get("Reason_For_Rejection"));
+					//------------------Developer Section-------------------
+					datamap.put("Contact_Policy_Folder_Workdrive_Folder_ID",get_deal.get("Workdrive_Folder_ID"));
+					datamap.put("Contact_Policy_Folder_Workdrive_Link",get_deal.get("Workdrive_URL"));
+					datamap.put("UPO_Data",get_deal.get("UPO_Card_Number"));
+					//-----------------------Search in Creator---------------------	
+					search_trailer = zoho.creator.getRecords("service_recprotect","quotation","All_Trailer_Quotations","Quote_ID == \"" + get_deal.get("Quote_ID") + "\"",1,200,"creator");
+					if(search_trailer.get("code") == 3000)
+					{
+						if(get_deal.get("Policy_Number") != null)
+						{
+							if(search_trailer.get("data").get(0).get("Policy_Number") == get_deal.get("Policy_Number"))
+							{
+								response = zoho.creator.updateRecord("service_recprotect","quotation","All_Trailer_Quotations",search_trailer.get("data").get(0).get("ID"),datamap,Map(),"creator");
+							}
+							else
+							{
+								alertMessage = "Required Data not Matced --Policy Number";
+							}
+						}
+						else
+						{
+							alertMessage = "Required Data not Matced  --Policy Number";
+						}
+					}
+					else
+					{
+						response = zoho.creator.createRecord("service_recprotect","quotation","TrailerQuote",datamap,Map(),"creator");
+					}
+					//------------------Update in CRM-------------
+					if(response.get("code") == 3000)
+					{
+						alertMessage = "Data Synced Successfully";
+						update_dealmap.put("Creator_ID",response.get("data").get("ID").toString());
+					}
+					else
+					{
+						alertMessage = "Error on Sync";
+						info response;
+					}
+				}
+				//--------------------------Not Trailer and Boat Policy----------------
+				else
+				{
+					alertMessage = "Only Trailer Policy and Boat Policy Deals can be Sync";
+				}
+				info "//-----------------------DataMap---------------";
+				info datamap;
+				info "//-----------------------Response---------------";
+				info response;
+				update_deal = zoho.crm.updateRecord("Deals",deal_ID,update_dealmap);
+			}
+		}
+		else
+		{
+			alertMessage = "Contact Name Should not be Empty";
+		}
+	}
+}
+catch (e)
+{
+	developerlog = Map();
+	developerlog.put("Product","CRM");
+	developerlog.put("Module","Deals");
+	developerlog.put("Action_Flow","Button function --https://crm.zoho.com/crm/org810798353/settings/modules/Potentials/links-and-buttons/5778486000015287236?component=buttons");
+	developerlog.put("Description","Create/Update Boat and Trailer Policy in Creator ID --" + deal_ID.toString());
+	developerlog.put("Request","DataMap --" + datamap.toString() + "--Response--" + response.toString());
+	developerlog.put("Response",e);
+	dev_log_resp = zoho.creator.createRecord("service_recprotect","quotation","Developer_Logs",developerlog,Map(),"creator");
+}
+return alertMessage;

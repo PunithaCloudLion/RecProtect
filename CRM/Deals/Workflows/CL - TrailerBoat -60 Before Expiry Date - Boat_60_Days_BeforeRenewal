@@ -1,0 +1,87 @@
+/*  CL - Trailer/Boat - 60 Before Expiry Date - CL : Boat 60 Days Before Renewal*/ 
+
+getBoat = zoho.crm.getRecordById("Deals",BoatID);
+if(getBoat.get("Creator_ID") != "")
+{
+	if(getBoat.get("Contact_Name") != null)
+	{
+		contactName = getBoat.get("Contact_Name").get("name");
+		get_ContactInfo = zoho.crm.getRecordById("Contacts",getBoat.get("Contact_Name").get("id").toLong());
+		Email = get_ContactInfo.get("Email");
+	}
+	else
+	{
+		contactName = "";
+	}
+	//CL - Day 60, Day 45 Boat
+	getTemplateCRM = invokeurl
+	[
+		url :"https://www.zohoapis.com/crm/v6/settings/email_templates/5778486000008321001"
+		type :GET
+		connection:"crm"
+	];
+	//info getTemplateCRM.get("email_templates").get(0).get("content");
+	creatorID = getBoat.get("Creator_ID").toLong();
+	EligibleCount = 0;
+	NeedCount = 0;
+	BoatCount = 0;
+	BoatContent = "";
+	msg = "";
+	getAllBoats = zoho.creator.getRecords("service_recprotect","quotation","All_Boat_Lines","BoatQuote == " + creatorID,1,200,"creator");
+	for each  boat in getAllBoats.get("data")
+	{
+		getBoatFromCreator = zoho.creator.getRecordById("service_recprotect","quotation","All_Boat_Lines",boat.get("ID"),"creator");
+		// 		info "getBoatFromCreator " + getBoatFromCreator;
+		if(getBoatFromCreator.get("data").get("Boat_Status") != "Over Age")
+		{
+			BoatCount = BoatCount + 1;
+			if(getBoatFromCreator.get("data").get("Boat_Status") == "Eligible")
+			{
+				EligibleCount = EligibleCount + 1;
+				BoatContent = BoatContent + "<br>Asset" + BoatCount + " " + getBoatFromCreator.get("data").get("Boat_Model_Year") + "," + getBoatFromCreator.get("data").get("Boat_Manufacturer") + "," + getBoatFromCreator.get("data").get("Boat_Model") + "," + getBoatFromCreator.get("data").get("Select_the_type_of_watercraft") + " - No Requirements";
+			}
+			else
+			{
+				BoatContent = BoatContent + "<br>Asset" + BoatCount + " " + getBoatFromCreator.get("data").get("Boat_Model_Year") + "," + getBoatFromCreator.get("data").get("Boat_Manufacturer") + "," + getBoatFromCreator.get("data").get("Boat_Model") + "," + getBoatFromCreator.get("data").get("Select_the_type_of_watercraft") + " - " + getBoatFromCreator.get("data").get("Boat_Status");
+			}
+		}
+	}
+	if(EligibleCount > 1)
+	{
+		getTemplate = zoho.creator.getRecords("service_recprotect","quotation","All_Email_Templates","Title == \"Day 60, Day 45 Boat - Atleast One Eligible\"",1,200,"creator");
+	}
+	else
+	{
+		getTemplate = zoho.creator.getRecords("service_recprotect","quotation","All_Email_Templates","Title == \"Day 60, Day 45 Boat - Requirements Need\"",1,200,"creator");
+	}
+	msg = getTemplate.get("data").get(0).get("Mail_Content").replaceAll("<(.|\n)*?>","").replaceAll("&nbsp;"," ");
+	if(BoatCount > 0)
+	{
+		//msg = "a registered letter will be sent in the mail cancelling the policy for non-compliance of Underwriting Guidelines.";
+		Day30 = getBoat.get("Expiry_Date").subDay(30);
+		Day35 = getBoat.get("Expiry_Date").subDay(35);
+		RenewalDate = getBoat.get("Expiry_Date").addDay(1);
+		modifiedContent = getTemplateCRM.get("email_templates").get(0).get("content").replaceAll("Dynamic Content",msg).replaceAll("Boat Details",BoatContent).replaceAll("&lt;Day 30&gt;",Day30).replaceAll("&lt;Day 35&gt;",Day35).replaceAll("&lt;Renewal Date&gt;",RenewalDate).replaceAll("&lt;Contact Name&gt;",contactName).replaceAll("&lt;Total&gt;",getBoat.get("Total")).replaceAll("&lt;Policy Number&gt;",getBoat.get("Policy_Number")).replaceAll("#UPOCARDNUMBER#",UPOCardNumber);
+		modifiedSubject = getTemplateCRM.get("email_templates").get(0).get("subject").replaceAll("deal name",getBoat.get("Deal_Name"));
+		info modifiedContent;
+		//,"template":{"id":"4516886000014770109"}
+		data = {{"from":{"email":zoho.adminuserid},"to":{{"email":Email}},"subject":modifiedSubject,"content":modifiedContent,"mail_format":"html"}};
+		json_data = Map();
+		json_data.put("data",data);
+		send_mail = invokeurl
+		[
+			url :"https://www.zohoapis.com/crm/v3/Deals/" + BoatID + "/actions/send_mail"
+			type :POST
+			parameters:json_data.toString()
+			connection:"crm"
+		];
+		info send_mail;
+	}
+	//Renewal Stage update
+	creatorMap = Map();
+	creatorMap.put("Renewal_Stage","60th Day");
+	creatorUpdate = zoho.creator.updateRecord("service_recprotect","quotation","Boats_Report",getBoat.get("Creator_ID").toLong(),creatorMap,Map(),"creator");
+	crmUpdateMap = Map();
+	crmUpdateMap.put("Renewal_Stage","60th Day");
+	updateCRM = zoho.crm.updateRecord("Deals",BoatID,crmUpdateMap);
+}

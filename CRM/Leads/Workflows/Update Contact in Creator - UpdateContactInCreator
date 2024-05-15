@@ -1,0 +1,60 @@
+getLead = zoho.crm.getRecordById("Leads",crmID);
+if(getLead.contains("id"))
+{
+	customerMap = Map();
+	customerMap.put("First_Name",ifnull(getLead.get("First_Name"),""));
+	customerMap.put("Last_Name",ifnull(getLead.get("Last_Name"),""));
+	customerMap.put("Email",ifnull(getLead.get("Email"),""));
+	customerMap.put("Phone_Number",ifnull("+1" + getLead.get("Phone"),""));
+	// 	.toDate("yyyy-MM-dd").toString("yyyy-MM-dd")
+	// 	customerMap.put("DOB",if(getContact.get("Date_of_Birth") != null,getContact.get("Date_of_Birth").toDate(),null));
+	// 	info getContact.get("Referral_Type")+"-------0------";
+	// 	customerMap.put("Where_Did_You_Find_Us", if(getContact.get("Referral_Type") != null,getContact.get("Referral_Type"),""));
+	// 	customerMap.put("Name", getContact.get("Referral_Friend"));
+	// 	if(getContact.get("Referral_Type") != "Boat" && getContact.get("Referral_Type") != "Trailer" && getContact.get("Referral_Type") != "" && getContact.get("Referral_Type") != null)
+	// 	{
+	// 		if(getContact.get("Referral_Type") == "Friend or Family")
+	// 		{
+	// 			customerMap.put("Where_Did_You_Find_Us","Friend or Family");
+	// 			customerMap.put("Name",ifnull(getContact.get("Referral_Friend"),""));
+	// 		}
+	// 		else if(getContact.get("Referral_Type") == "Dealership")
+	// 		{
+	// 			customerMap.put("Where_Did_You_Find_Us","Dealership");
+	// 			customerMap.put("Name_of_Dealership",ifnull(getContact.get("Referral_Friend"),""));
+	// 		}
+	// 		else if(getContact.get("Referral_Type") == "Campground")
+	// 		{
+	// 			customerMap.put("Where_Did_You_Find_Us","Campground");
+	// 			customerMap.put("Name_of_Campground",ifnull(getContact.get("Referral_Friend"),""));
+	// 		}
+	// 		else if(getContact.get("Referral_Type") == "Marina")
+	// 		{
+	// 			customerMap.put("Where_Did_You_Find_Us","Marina");
+	// 			customerMap.put("Name_of_Marina",ifnull(getContact.get("Referral_Friend"),""));
+	// 		}
+	// 		else if(getContact.get("Referral_Type") == "Other")
+	// 		{
+	// 			customerMap.put("Where_Did_You_Find_Us","Other");
+	// 			customerMap.put("Tell_us_more",ifnull(getContact.get("Referral_Friend"),""));
+	// 		}
+	// 		else
+	// 		{
+	// 			customerMap.put("Where_Did_You_Find_Us",ifnull(getContact.get("Referral_Friend"),""));
+	// 		}
+	// 	}
+	// 	customerMap.put("Customer_Type","Contact");
+	// 	customerMap.put("Address_Line1",ifnull(getContact.get("Mailing_Address"),""));
+	// 	customerMap.put("Address_Line2",ifnull(getContact.get("Mailing_Street"),""));
+	// 	customerMap.put("City",ifnull(getContact.get("Mailing_City"),""));
+	customerMap.put("Province",ifnull(getLead.get("Province"),""));
+	// 	customerMap.put("Country",ifnull(getContact.get("Mailing_Country"),""));
+	// 	customerMap.put("Postal_Code",ifnull(getContact.get("Mailing_Zip"),""));
+	customerMap.put("Zoho_Crm_ID",ifnull(getLead.get("id"),""));
+	customerMap.put("Workdrive_Folder_ID",ifnull(getLead.get("Workdrive_Folder_ID"),""));
+	customerMap.put("Workdrive_URL",ifnull(getLead.get("Workdrive_URL"),""));
+	info getLead.get("Creator_ID");
+	// 	updateContact=zoho.creator.updateRecords("service_recprotect", "quotation", "All_Customers", getContact.get("Zoho_Creator_ID"),customerMap, map(), "creator");
+	updateContact = zoho.creator.updateRecord("service_recprotect","quotation","All_Customers",getLead.get("Creator_ID"),customerMap,Map(),"creator");
+	info "updateContact----->" + updateContact;
+}

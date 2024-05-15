@@ -1,0 +1,53 @@
+try 
+{
+	get_Leads = zoho.crm.getRecordById("Leads",lead_id);
+	owner_name = "service_recprotect";
+	app_name = "quotation";
+	if(get_Leads.size() > 0)
+	{
+		//----------------------------Create Workdrive Folder --------------------------
+		Name = get_Leads.get("Full_Name");
+		create_Workdrive = zoho.workdrive.createFolder(Name,"3d6ab63c31e905f8245bd919af75a5837c43e","workdrive");
+		//----------------------------Store the Workdrive Details--------------------------
+		Url_Link = create_Workdrive.get("data").get("attributes").get("permalink");
+		update_Link = Map();
+		update_Link.put("Workdrive_Folder_ID",create_Workdrive.get("data").get("id"));
+		update_Link.put("Workdrive_URL",Url_Link);
+		update_crm = zoho.crm.updateRecord("Leads",lead_id,update_Link);
+		//-------------------------- Add folder as an attachments ---------------------
+		dataList = List();
+		data = Map();
+		data.put("$link_url",Url_Link);
+		data.put("File_Name",Name);
+		data.put("$type","");
+		dataList.add(data);
+		payload = "attachments=" + zoho.encryption.urlEncode({"data":dataList});
+		resp = invokeurl
+		[
+			url :"https://www.zohoapis.com/crm/v2/Leads/" + lead_id + "/Attachments"
+			type :POST
+			parameters:payload
+			connection:"crm"
+			content-type:"application/x-www-form-urlencoded"
+		];
+		//-----------Update Workdrive Details in Creator Customer--------
+		if(get_Leads.get("Creator_ID") != null && get_Leads.get("Creator_ID") != "")
+		{
+			datamap = Map();
+			datamap.put("Workdrive_Folder_ID",create_Workdrive.get("data").get("id"));
+			datamap.put("Workdrive_URL",Url_Link);
+			update_creator_rec = zoho.creator.updateRecord(owner_name,app_name,"All_Customers",get_Leads.get("Creator_ID").toLong(),datamap,Map(),"creator");
+		}
+	}
+}
+catch (e)
+{
+	developerlog = Map();
+	developerlog.put("Product","CRM");
+	developerlog.put("Module","Leads");
+	developerlog.put("Action_Flow","On Creator Workflow --https://crm.zoho.com/crm/org810798353/settings/workflow-rules/5778486000008187065");
+	developerlog.put("Description","Create Workdrive Folder for Leads");
+	developerlog.put("Request",lead_id.toString());
+	developerlog.put("Response",e);
+	dev_log_resp = zoho.creator.createRecord(owner_name,app_name,"Developer_Logs",developerlog,Map(),"creator");
+}

@@ -1,0 +1,13 @@
+disable Policy_Number;
+disable CRM_ID;
+hide Developer_Section;
+hide Transaction_Details.Product_Name11;
+disable Transaction_Details.Tax_Amount;
+disable Transaction_Details.Amount_With_Tax;
+disable Total_Amount_Without_Tax;
+disable Tax_Amount;
+disable Total_Amount_With_Tax;
+disable Deal_Name;
+disable Customer_Name;
+disable Date_field;
+disable Policy_Type;

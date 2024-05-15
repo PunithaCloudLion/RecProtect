@@ -1,0 +1,303 @@
+getBoat = zoho.crm.getRecordById("Deals",BoatID);
+// info getBoat;
+status = "";
+NonEligibleCount = 0;
+TotalBoat = 0;
+CRM_Status = List();
+if(getBoat.get("Creator_ID") != "")
+{
+	if(getBoat.get("Contact_Name") != null)
+	{
+		contactName = getBoat.get("Contact_Name").get("name");
+		get_ContactInfo = zoho.crm.getRecordById("Contacts",getBoat.get("Contact_Name").get("id").toLong());
+		Email = get_ContactInfo.get("Email");
+		// 		 		Email = "rajapiran@cloudlion.org";
+	}
+	else
+	{
+		contactName = "";
+	}
+	getTemplateCRM = invokeurl
+	[
+		url :"https://www.zohoapis.com/crm/v6/settings/email_templates/5778486000010113001"
+		type :GET
+		connection:"crm"
+	];
+	//info getTemplateCRM.get("email_templates").get(0).get("content");
+	creatorID = getBoat.get("Creator_ID").toLong();
+	// creatorID = 4564627000000217023;
+	// 	info "Creator ID " + creatorID;
+	msg = "";
+	Risk = "";
+	getAllBoats = zoho.creator.getRecords("service_recprotect","quotation","All_Boat_Lines","BoatQuote == " + creatorID,1,200,"creator");
+	info "getAllBoats " + getAllBoats;
+	CRM_StatusList = List();
+	for each  boat in getAllBoats.get("data")
+	{
+		TotalBoat = TotalBoat + 1;
+		updateMap = Map();
+		newApproved_Year = "";
+		getTemplate = "";
+		// 		info boat.get("ID");
+		getBoatFromCreator = zoho.creator.getRecordById("service_recprotect","quotation","All_Boat_Lines",boat.get("ID"),"creator");
+		info "getBoatFromCreator " + getBoatFromCreator;
+		//Approved Year Calculations
+		fileobj = invokeurl
+		[
+			url :"https://www.zohoapis.com/crm/v2/functions/newapprovedyear/actions/execute?auth_type=apikey&zapikey=1003.e22f3273bb04b81989500e60afe3e5d6.99dc1d6bafbf8dd22c72d8420f043dc3"
+			type :GET
+			parameters:{"BoatModelYear":getBoatFromCreator.get("data").get("Boat_Model_Year").tolong()}
+			connection:"crm"
+		];
+		if(fileobj.get("code") == "success")
+		{
+			newApproved_Year = fileobj.get("details").get("output");
+		}
+		//Age Calculations
+		if(getBoatFromCreator.get("data").get("Boat_Age") > 30)
+		{
+			//Boat can't be renewed, Need Template   CL - Reg Canc - UW Guidelines AGE V1 122023
+			status = "Not Eligible";
+			updateMap.put("Boat_Status","Over Age");
+			updateMap.put("Eligible_for_Auto_Renewal",false);
+			updateMap.put("Approved_Year",null);
+			//CRM_Status = "Over Age";
+		}
+		else
+		{
+			if(getBoatFromCreator.get("data").get("Boat_Age") > 15)
+			{
+				if(getBoatFromCreator.get("data").get("Boat_Age") < 20 && getBoatFromCreator.get("data").get("Is_auto_approved_for_next_5_years") == true && getBoatFromCreator.get("data").get("Approved_Year") > zoho.currentdate.getYear())
+				{
+					updateMap.put("Eligible_for_Auto_Renewal",true);
+					status = "Eligible";
+					updateMap.put("Boat_Status","Eligible");
+				}
+				else
+				{
+					//Need to send boat photos required email
+					//Underwritting Approved
+					if(getBoatFromCreator.get("data").get("Boat_Age") >= 20 && getBoatFromCreator.get("data").get("Is_auto_approved_for_next_5_years") == false && getBoatFromCreator.get("data").get("Approved_Year") == "")
+					{
+						if(getBoatFromCreator.get("data").get("Select_the_type_of_watercraft") == "Cabin Cruiser")
+						{
+							//request the customer for the Marine survey     CL - Marine Survey Required
+							status = "Need Marine Survey";
+							updateMap.put("Boat_Status","Need Marine Survey");
+							getTemplate = zoho.creator.getRecords("service_recprotect","quotation","All_Email_Templates","Title == \"Need Marine Survey\"",1,200,"creator");
+						}
+						else
+						{
+							if(getBoatFromCreator.get("data").get("Boat_Age") < 25)
+							{
+								//Have to request the customer for photos and send for underwriting.   CL - Boat Photos Required
+								status = "Need Photos";
+								updateMap.put("Boat_Status","Need Photos");
+								getTemplate = zoho.creator.getRecords("service_recprotect","quotation","All_Email_Templates","Title == \"Need Photos\"",1,200,"creator");
+							}
+							else
+							{
+								//request the customer for the Marine survey		CL - Marine Survey Required
+								status = "Need Marine Survey";
+								updateMap.put("Boat_Status","Need Marine Survey");
+								getTemplate = zoho.creator.getRecords("service_recprotect","quotation","All_Email_Templates","Title == \"Need Marine Survey\"",1,200,"creator");
+							}
+						}
+					}
+					else
+					{
+						//Send boat photos required  email		CL - Boat Photos Required
+						status = "Need Photos";
+						updateMap.put("Boat_Status","Need Photos");
+						getTemplate = zoho.creator.getRecords("service_recprotect","quotation","All_Email_Templates","Title == \"Need Photos\"",1,200,"creator");
+					}
+				}
+			}
+			else
+			{
+				updateMap.put("Eligible_for_Auto_Renewal",true);
+				//Need Confirmation Approved Year 
+				updateMap.put("Boat_Status","Eligible");
+				updateMap.put("Approved_Year",newApproved_Year);
+				status = "Eligible";
+			}
+		}
+		// 		info updateBoat;
+		//For CRM Status update 
+		if(getBoatFromCreator.get("data").get("Boat_Age") > 30)
+		{
+			CRM_StatusList.add("Partial Boats - Over Age");
+			NonEligibleCount = NonEligibleCount + 1;
+			getTemplate = zoho.creator.getRecords("service_recprotect","quotation","All_Email_Templates","Title == \"Non-Eligible Boat\"",1,200,"creator");
+		}
+		else if(getBoatFromCreator.get("data").get("Select_the_type_of_watercraft") == "Cabin Cruiser")
+		{
+			info "Cabin";
+			if(getBoatFromCreator.get("data").get("Boat_Age") > 15 && getBoatFromCreator.get("data").get("Boat_Age") < 20)
+			{
+				info "Boat Age " + getBoatFromCreator.get("data").get("Boat_Age");
+				CRM_StatusList.add("Partial Boats - Need Photos");
+				getTemplate = zoho.creator.getRecords("service_recprotect","quotation","All_Email_Templates","Title == \"Need Photos\"",1,200,"creator");
+			}
+			else if(getBoatFromCreator.get("data").get("Boat_Age") > 20 && getBoatFromCreator.get("data").get("Boat_Age") < 30)
+			{
+				CRM_StatusList.add("Partial Boats - Need Marine Survey");
+				getTemplate = zoho.creator.getRecords("service_recprotect","quotation","All_Email_Templates","Title == \"Need Marine Survey\"",1,200,"creator");
+			}
+			else if(status == "")
+			{
+				updateMap.put("Boat_Status","Eligible");
+				updateMap.put("Approved_Year",newApproved_Year);
+			}
+		}
+		else
+		{
+			if(getBoatFromCreator.get("data").get("Boat_Age") > 15 && getBoatFromCreator.get("data").get("Boat_Age") < 25)
+			{
+				info "neeed " + getBoatFromCreator.get("data").get("Boat_Age") + "---" + getBoatFromCreator.get("data").get("Select_the_type_of_watercraft");
+				CRM_StatusList.add("Partial Boats - Need Photos");
+				getTemplate = zoho.creator.getRecords("service_recprotect","quotation","All_Email_Templates","Title == \"Need Photos\"",1,200,"creator");
+			}
+			else if(getBoatFromCreator.get("data").get("Boat_Age") > 25 && getBoatFromCreator.get("data").get("Boat_Age") < 30)
+			{
+				CRM_StatusList.add("Partial Boats - Need Marine Survey");
+				getTemplate = zoho.creator.getRecords("service_recprotect","quotation","All_Email_Templates","Title == \"Need Marine Survey\"",1,200,"creator");
+			}
+			else if(status == "")
+			{
+				updateMap.put("Boat_Status","Eligible");
+				updateMap.put("Approved_Year",newApproved_Year);
+			}
+		}
+		updateBoat = zoho.creator.updateRecord("service_recprotect","quotation","All_Boat_Lines",boat.get("ID"),updateMap,Map(),"creator");
+		info "updateBoat ==>" + updateBoat;
+		if(getTemplate != "")
+		{
+			msg = msg + "<br>" + getBoatFromCreator.get("data").get("Boat_Model_Year") + "," + getBoatFromCreator.get("data").get("Boat_Manufacturer") + "," + getBoatFromCreator.get("data").get("Boat_Model") + "," + getBoatFromCreator.get("data").get("Select_the_type_of_watercraft") + "<br><br>";
+			Risk = msg + "<br>" + getBoatFromCreator.get("data").get("Boat_Model_Year") + "," + getBoatFromCreator.get("data").get("Boat_Manufacturer") + "," + getBoatFromCreator.get("data").get("Boat_Model") + "," + getBoatFromCreator.get("data").get("Select_the_type_of_watercraft") + "<br><br>";
+			msg = msg + getTemplate.get("data").get(0).get("Mail_Content").replaceAll("asset year",getBoatFromCreator.get("data").get("Boat_Model_Year")).replaceAll("make",getBoatFromCreator.get("data").get("Boat_Manufacturer")).replaceAll("model",getBoatFromCreator.get("data").get("Boat_Model")).replaceAll("serial #",getBoatFromCreator.get("data").get("Serial")).replaceAll("VIN",getBoatFromCreator.get("data").get("Trailer_VIN")).replaceAll("watercraft/trailer",getBoatFromCreator.get("data").get("Select_the_type_of_watercraft")).replaceAll("expiry date of policy",getBoat.get("Expiry_Date"));
+		}
+	}
+	//info "Testt " + getTemplateCRM.get("email_templates").get(0).get("subject");
+	if(CRM_StatusList.size() > 0)
+	{
+		Day30 = getBoat.get("Expiry_Date").subDay(30);
+		Day35 = getBoat.get("Expiry_Date").subDay(35);
+		modifiedContent = getTemplateCRM.get("email_templates").get(0).get("content").replaceAll("Dynamic Content",msg).replaceAll("&lt;Day 35&gt;",Day35).replaceAll("&lt;Day 30&gt;",Day30).replaceAll("&lt;Contact Name&gt;",contactName);
+		modifiedSubject = getTemplateCRM.get("email_templates").get(0).get("subject").replaceAll("deal name",getBoat.get("Deal_Name"));
+		//info modifiedContent;
+		//,"template":{"id":"4516886000014770109"}
+		data = {{"from":{"email":zoho.adminuserid},"to":{{"email":Email}},"subject":modifiedSubject,"content":modifiedContent,"mail_format":"html"}};
+		json_data = Map();
+		json_data.put("data",data);
+		send_mail = invokeurl
+		[
+			url :"https://www.zohoapis.com/crm/v3/Deals/" + BoatID + "/actions/send_mail"
+			type :POST
+			parameters:json_data.toString()
+			connection:"crm"
+		];
+		info "send mail --->" + send_mail;
+		//-----------------------------writer merge document-----------------------------------------------------------------
+		dataMap = Map();
+		dataMap.put("Date",zoho.currentdate);
+		dataMap.put("Name",contactName);
+		dataMap.put("Address",get_ContactInfo.get("Mailing_Address"));
+		dataMap.put("City",get_ContactInfo.get("Mailing_City"));
+		dataMap.put("Province",get_ContactInfo.get("Mailing_State"));
+		dataMap.put("Country",get_ContactInfo.get("Mailing_Country"));
+		dataMap.put("Postal_Code",get_ContactInfo.get("Mailing_Zip"));
+		dataMap.put("Email",get_ContactInfo.get("Email"));
+		dataMap.put("Policy_Number",getBoat.get("Policy_Number"));
+		dataMap.put("Customer_First_Name",get_ContactInfo.get("First_Name"));
+		dataMap.put("Risk",Risk);
+		dataMap.put("Expiry_Date",getBoat.get("Expiry_Date"));
+		dataMap.put("Service_Rep_Name",zoho.loginuser);
+		dataMap.put("Carrier",getBoat.get("Carrier"));
+		getTemplateCRM = invokeurl
+		[
+			url :"https://www.zohoapis.com/crm/v6/settings/email_templates/5778486000018395118"
+			type :GET
+			connection:"crm"
+		];
+		modifiedContent1 = getTemplateCRM.get("email_templates").get(0).get("content").replaceAll("#SERVICEREP#",contactName).replaceAll("#POLICYNUMBER#",getBoat.get("Policy_Number"));
+		modifiedSubject1 = "Send the attached Register Letter to the " + contactName;
+		param = Map();
+		param.put("merge_data",{"data":dataMap});
+		param.put("output_format","pdf");
+		param.put("response_type","link");
+		param.put("filename","Send the attached Register Letter to the" + contactName);
+		response = invokeurl
+		[
+			url :"https://www.zohoapis.com/writer/api/v1/documents/s3en7f554d79030ed493fa165a9bda422319f/merge"
+			type :POST
+			parameters:param
+			connection:"cl_writter"
+		];
+		if(response != null)
+		{
+			msg = response.get("URL").toString();
+			getNOS_Doc = invokeurl
+			[
+				url :msg
+				type :GET
+				connection:"cl_writter"
+			];
+			getNOS_Doc.setParamName("file");
+			upload_Res = invokeurl
+			[
+				url :"https://www.zohoapis.com/crm/v2/files"
+				type :POST
+				files:getNOS_Doc
+				connection:"crm"
+			];
+			//info upload_Res;
+			if(upload_Res.get("data") != null)
+			{
+				attachment_ID = upload_Res.get("data").getJSON("details").get("id");
+				//info attachment_ID;
+			}
+			data = {{"from":{"email":zoho.adminuserid},"to":{{"email":Email}},"subject":modifiedSubject1,"content":modifiedContent1,"mail_format":"html","attachments":{{"id":attachment_ID}}}};
+			json_data = Map();
+			json_data.put("data",data);
+			send_mail = invokeurl
+			[
+				url :"https://www.zohoapis.com/crm/v3/Deals/" + BoatID + "/actions/send_mail"
+				type :POST
+				parameters:json_data.toString()
+				connection:"crm"
+			];
+			info send_mail;
+		}
+	}
+	// 	info "CRMLIst " + CRM_StatusList;
+	if(NonEligibleCount == TotalBoat)
+	{
+		CRM_Status.add("No Boats");
+	}
+	else if(CRM_StatusList.size() > 0)
+	{
+		for each  rec in CRM_StatusList.distinct()
+		{
+			// 			info "Test " + rec;
+			CRM_Status.add(rec);
+		}
+	}
+	else
+	{
+		CRM_Status.add("All Boats");
+	}
+	// 	info CRM_Status;
+	updateCRM_Map = Map();
+	updateCRM_Map.put("Renewal_Eligibility",CRM_Status);
+	updateCRM_Map.put("Renewal_Stage","120th Day");
+	updateCRM = zoho.crm.updateRecord("Deals",BoatID,updateCRM_Map);
+	info "updateCRM ==>" + updateCRM;
+	// Creator Status update
+	info CRM_Status;
+	creatorMap = Map();
+	creatorMap.put("Renewal_Eligibility",CRM_Status.toList());
+	creatorMap.put("Renewal_Stage","120th Day");
+	creatorUpdate = zoho.creator.updateRecord("service_recprotect","quotation","Boats_Report",getBoat.get("Creator_ID").toLong(),creatorMap,Map(),"creator");
+	info "Update Creator --->" + creatorUpdate;
+}

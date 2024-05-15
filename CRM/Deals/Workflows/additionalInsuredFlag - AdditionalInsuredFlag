@@ -1,0 +1,44 @@
+dealInfo = zoho.crm.getRecordById("Deals",dealID);
+dataMap = Map();
+if(dealInfo.size() > 0)
+{
+	if(dealInfo.get("Layout").get("name") == "Trailer Policy")
+	{
+		getTrailerAdditionalName = zoho.creator.getRecords("service_recprotect","quotation","Additional_Names_Trailer_Report","First_Name == \"" + dealInfo.get("Additional_Insured_1") + "\"",1,200,"creator");
+		if(getTrailerAdditionalName.get("code") == 3000)
+		{
+			for each  trailerInfo in getTrailerAdditionalName.get("data")
+			{
+				if(trailerInfo.get("Trailer_Quotation") != null)
+				{
+					if(trailerInfo.get("Email") == "" || trailerInfo.get("Email") == null)
+					{
+						dataMap.put("Add_status_Additional_Insured_Flag","Yes");
+					}
+				}
+			}
+		}
+	}
+	else
+	{
+		info "Boat";
+		creatorID = dealInfo.get("Creator_ID").toLong();
+		getBoatAdditionalName = zoho.creator.getRecords("service_recprotect","quotation","All_Additional_Names","Boats == \"" + creatorID + "\"",1,200,"creator");
+		info getBoatAdditionalName;
+		// 		if(getBoatAdditionalName.get("code") == 3000)
+		// 		{
+		// 			for each boatInfo in getTrailerAdditionalName.get("data")
+		// 			{
+		// 	if(trailerInfo.get("Boats") != null)
+		// 	{
+		// 			if(boatInfo.get("Email") == "" || boatInfo.get("Email") == null)
+		// 			{
+		// 				dataMap.put("Add_status_Additional_Insured_Flag","Yes");
+		// 			}
+		// 	}
+		// 		}
+		// 		}
+	}
+	// 	updateResp = zoho.crm.updateRecord("Deals",dealID,dataMap);
+	// 	info updateResp;
+}

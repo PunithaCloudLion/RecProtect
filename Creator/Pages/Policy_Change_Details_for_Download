@@ -1,0 +1,1803 @@
+<%{
+	%>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+	</head>
+	<body>
+	<style>
+	margin-bottom:3px;
+	margin-top:3px;
+	font-weight: bold;
+	}
+	</style>
+<%
+	if(input.process == "BOAT")
+	{
+		fetch_Boat = Boat_Policy_change_Request[ID == input.recID];
+		f_tax = Tax_Lists[ID == fetch_Boat.Override_Tax];
+		if(fetch_Boat.count() > 0)
+		{
+			%>
+<div class="container" style="margin-top:3%;">
+		<table class="table">
+		 <th style = "background-color:#8ADAB2"class="mt-4" colspan="4"><h4>Boat - Policy Changes Request Information - <%=fetch_Boat.Quote_ID%> - Boat - <%=fetch_Boat.Deal_Type%> - Type- <%=fetch_Boat.Select_Type%></h4></th>
+		 <br>
+		 <tr>	
+	        <td style=colspan="4"><u><h6>Basic Info</h6></u></td>       	    
+			</tr>
+			 <tr>
+				<td><b>Quote ID</b></td>
+				<td><%=fetch_Boat.Quote_ID%></td>
+			 </tr>
+			  <tr>
+				<td><b>Policy Status</b></td>
+				<td><%=fetch_Boat.Policy_Status%></td>
+			 </tr>
+			  <tr>
+				<td><b>Policy AutoRenewal Status</b></td>
+				<td><%=fetch_Boat.Policy_AutoRenewal_Status%></td>
+			 </tr>
+			  <tr>
+				<td><b>Policy Number</b></td>
+				<td><%=fetch_Boat.Policy_Number%></td>
+			 </tr>
+			  <tr>
+				<td><b>Quote Status</b></td>
+				<td><%=fetch_Boat.Quote_Status%></td>
+			 </tr>
+			 <tr>
+				<td><b>Deal Type</b></td>
+				<td><%=fetch_Boat.Deal_Type%></td>
+			 </tr>	
+			 <tr>
+				<td><b>Referral Reason</b></td>
+				<td><%=fetch_Boat.Referral_Reason%></td>
+			 </tr>
+			  <tr>
+				<td><b>Policy Reason Code</b></td>
+				<td><%=fetch_Boat.Policy_Reason_Code%></td>
+			 </tr>
+			  <tr>	
+	        <td style=colspan="4"><u><h6>Customer Information</h6></u></td>       	    
+			</tr>
+			 <tr>
+				<td><b>Customer Name</b></td>
+				<td><%=fetch_Boat.Insured_First_Name%> <%=fetch_Boat.Insured_Last_Name%></td>
+			 </tr>	
+			 <tr>
+				<td><b>Email</b></td>
+				<td><%=fetch_Boat.Email%></td>
+			 </tr>
+			  <tr>
+				<td><b>Insured First Name</b></td>
+				<td><%=fetch_Boat.Insured_First_Name%></td>
+			 </tr>
+			 <tr>
+				<td><b>Insured Middle Name </b></td>
+				<td><%=fetch_Boat.Insured_Middle_Name%></td>
+			 </tr>
+			   <tr>
+				<td><b>Insured Last Name</b></td>
+				<td><%=fetch_Boat.Insured_Last_Name%></td>
+			 </tr>
+			  <tr>
+				<td><b>Phone</b></td>
+				<td><%=fetch_Boat.Phone_Number%></td>
+			 </tr>
+			 <tr>
+				<td><b>Date of Birth</b></td>
+				<td><%=fetch_Boat.Date_of_Birth%></td>
+			 </tr>
+			 <tr>
+				<td><b>Where Did You Find Us?</b></td>
+				<td><%=fetch_Boat.Where_Did_You_Find_Us%></td>
+			 </tr>
+<%
+			if(fetch_Boat.Where_Did_You_Find_Us == "Friend or Family")
+			{
+				%>
+<tr>
+			    <td><b>Referred By</b></td>	
+               <td><%=fetch_Boat.Name%></td>
+			</tr>
+<%
+			}
+			if(fetch_Boat.Where_Did_You_Find_Us == "Dealership")
+			{
+				%>
+<tr>
+			    <td><b>Referred By</b></td>	
+               <td><%=fetch_Boat.Name_of_Dealership%></td>
+			</tr>
+<%
+			}
+			if(fetch_Boat.Where_Did_You_Find_Us == "Campground")
+			{
+				%>
+<tr>
+			    <td><b>Referred By</b></td>	
+                <td><%=fetch_Boat.Name_of_Campground%></td>
+				 </tr>
+<%
+			}
+			if(fetch_Boat.Where_Did_You_Find_Us == "Marina")
+			{
+				%>
+<tr>
+			    <td><b>Referred By</b></td>	
+             <td><%=fetch_Boat.Name_of_Marina%></td>
+             </tr>
+<%
+			}
+			if(fetch_Boat.Where_Did_You_Find_Us == "Other")
+			{
+				%>
+<tr>
+			    <td><b>Referred By</b></td>	
+              	<td><%=fetch_Boat.Tell_us_more%></td>
+			 </tr>
+<%
+			}
+			%>
+<tr>
+			
+			 <td><b>Are there any additional names on the boat ownership ownership?</b></td>
+<%
+			if(fetch_Boat.Are_there_any_additional_names_on_the_boat_ownership == "Yes")
+			{
+				%>
+<td>Yes</td>
+<%
+			}
+			else
+			{
+				%>
+<td>No</td>
+<%
+			}
+			%>
+</tr>
+<tr>	
+	        <td style=colspan="4"><u><h6>Quote Information</h6></u></td>       	    
+			</tr>		 
+
+			 <tr>
+				<td><b>Boat approve for being over 15 years old?</b></td>
+				<td><%=fetch_Boat.Boat_approve_for_being_over_15_years_old%></td>
+			 </tr>
+			 <tr>
+				<td><b>Please select the province your boat is used in</b></td>
+				<td><%=fetch_Boat.Please_select_the_province_your_boat_is_used_in%></td>
+			 </tr>
+			 <tr>
+				<td><b>How many boats would you like to insure?</b></td>
+				<td><%=fetch_Boat.How_many_boats_would_you_like_to_insure%></td>
+			 </tr>
+<tr>	
+	        <td style=colspan="4"><u><h6>Policy Details</h6></u></td>       	    
+			</tr>
+			<tr>
+				<td><b>Inception Date</b></td>
+				<td><%=fetch_Boat.Inception_Date%></td>
+			 </tr>
+			 <tr>
+				<td><b>Expiry Date</b></td>
+				<td><%=fetch_Boat.Expiry_Date%></td>
+			 </tr>
+			<tr>
+				<td><b>Sales Date</b></td>
+				<td><%=fetch_Boat.Sales_Date%></td>
+			 </tr>
+			 <tr>	
+	        <td style=colspan="4"><u><h6>Payment</h6></u></td>       	    
+			</tr>
+ <tr>
+				<td><b>Enter payment info</b></td>
+				<td><%=fetch_Boat.Enter_payment_info%></td>
+			 </tr>
+			   <tr>
+				<td><b>Payment Date</b></td>
+				<td><%=fetch_Boat.Payment_Date%></td>
+			 </tr>
+	        <tr>
+				<td><b>Total Premium (before tax)</b></td>
+				<td><%=fetch_Boat.Total_Premium_before_tax%></td>
+			 </tr>
+			 <tr>
+				<td><b>Fee</b></td>
+				<td><%=fetch_Boat.Fee%></td>
+			 </tr>
+			  <tr>
+				<td><b>Tax Province</b></td>
+				<td><%=fetch_Boat.Tax_Province%></td>
+			 </tr>
+			 <tr>
+				<td><b>Tax Precent</b></td>
+				<td><%=fetch_Boat.Tax_Precent%></td>
+			 </tr>
+			 <tr>
+				<td><b>Total Tax</b></td>
+				<td><%=fetch_Boat.Total_Tax%></td>
+			 </tr>
+			  <tr>
+				<td><b>Total Payable Premium(after tax)</b></td>
+				<td><%=fetch_Boat.Total_Payable_Premium_after_tax%></td>
+			 </tr>
+ <tr>	
+	        <td style=colspan="4"><u><h6>Mailing Address</h6></u></td>       	    
+			</tr>
+			 <tr>
+				<td><b>Country</b></td>
+				<td><%=fetch_Boat.Country%></td>
+			 </tr>
+			  <tr>
+				<td><b>Address</b></td>
+				<td><%=fetch_Boat.Address%></td>
+			 </tr>
+			 <tr>
+				<td><b>Suite/Apt#</b></td>
+				<td><%=fetch_Boat.Suite_Apt%></td>
+			 </tr>
+			  <tr>
+				<td><b>City</b></td>
+				<td><%=fetch_Boat.City%></td>
+			 </tr>
+			 <tr>
+				<td><b>Province</b></td>
+				<td><%=fetch_Boat.Province%></td>
+			 </tr>
+			 <tr>
+				<td><b>Postal code/ZIP Code</b></td>
+				<td><%=fetch_Boat.Postal_code_ZIP_Code%></td>
+			 </tr>
+			 			 <tr>	
+	        <td style=colspan="4"><u><h6>Adjusted Premium</h6></u></td>       	    
+			</tr>
+			  <tr>
+				<td><b>Outstanding</b></td>
+				<td><%=fetch_Boat.Outstanding%></td>
+			 </tr>
+			 <tr>
+				<td><b>Prorated</b></td>
+				<td><%=fetch_Boat.Prorated%></td>
+			 </tr>
+			 <tr>
+				<td><b>Tax</b></td>
+				<td><%=fetch_Boat.Tax%></td>
+			 </tr>
+			 <tr>
+				<td><b>Total</b></td>
+				<td><%=fetch_Boat.Total%></td>
+			 </tr>
+			 <tr>
+				<td><b>Prorate From</b></td>
+				<td><%=fetch_Boat.Prorate_From%></td>
+			 </tr>
+			 <tr>
+				<td><b>Waive Fee?</b></td>
+<%
+			if(fetch_Boat.Waive_Free == true)
+			{
+				%>
+<td>Yes</td>
+<%
+			}
+			else
+			{
+				%>
+<td>No</td>
+<%
+			}
+			%>
+</tr>	
+
+ <tr>	
+	        <td style=colspan="4"><u><h6>Additional Information</h6></u></td>       	    
+			</tr>
+
+			<tr>
+				<td><b>Effective Date</b></td>
+				<td><%=fetch_Boat.Inception_Date%></td>
+			 </tr>
+			 
+			 <tr>
+				<td><b>Spoke With</b></td>
+				<td><%=fetch_Boat.Spoke_With%></td>
+			 </tr>
+			 
+			 <tr>
+				<td><b>Confirmed Client</b></td>
+<%
+			if(fetch_Boat.Confirmed_Client == true)
+			{
+				%>
+<td>Yes</td>
+<%
+			}
+			else
+			{
+				%>
+<td>No</td>
+<%
+			}
+			%>
+</tr>
+			 
+ <tr>
+				<td><b>Update Email</b></td>
+				<td><%=fetch_Boat.Update_Email%></td>
+			 </tr>
+ <tr>
+				<td><b>Update Phone</b></td>
+				<td><%=fetch_Boat.Update_Phone%></td>
+			 </tr>
+ <tr>
+				<td><b>Confirmed Email/Phone</b></td>
+<%
+			if(fetch_Boat.Confirmed_Email_Phone == true)
+			{
+				%>
+<td>Yes</td>
+<%
+			}
+			else
+			{
+				%>
+<td>No</td>
+<%
+			}
+			%>
+</tr>
+
+<tr>
+				<td><b>X-Sell</b></td>
+<%
+			if(fetch_Boat.X_Sell == true)
+			{
+				%>
+<td>Yes</td>
+<%
+			}
+			else
+			{
+				%>
+<td>No</td>
+<%
+			}
+			%>
+</tr>
+
+ <tr>
+				<td><b>Highlights and Comments</b></td>
+				<td><%=fetch_Boat.Highlights_and_Comments%></td>
+			 </tr>
+<tr>	
+	        <td style=colspan="4"><u><h6>Admin Changes</h6></u></td>       	    
+			</tr>
+ <tr>
+				<td><b>Select Rate</b></td>
+				<td><%=fetch_Boat.Select_Rate%></td>
+			 </tr>
+ <tr>
+				<td><b>Override Tax by Admin</b></td>
+				<td><%=fetch_Boat.Override_Tax_by_Admin%></td>
+			 </tr>
+<tr>
+				<td><b>Overriden Tax%</b></td>
+				<td><%=f_tax.Tax%></td>
+			 </tr>
+<tr>	
+	        <td style=colspan="4"><u><h6>New Premium</h6></u></td>       	    
+			</tr>
+<tr>
+				<td><b>New Total Premium (before tax) </b></td>
+				<td><%=fetch_Boat.New_Total_Premium_before_tax%></td>
+			 </tr>
+<tr>
+				<td><b>New Total Payable Premium(after tax)</b></td>
+				<td><%=fetch_Boat.New_Total_Payable_Premium_after_tax%></td>
+			 </tr>
+<tr>
+				<td><b>New Tax Province</b></td>
+				<td><%=fetch_Boat.New_Tax_Province%></td>
+			 </tr>
+	
+			 <tr>
+				<td><b>New Tax Percent</b></td>
+				<td><%=fetch_Boat.New_Tax_Percent%></td>
+			 </tr>
+			 
+			 <tr>
+				<td><b>New Total Tax</b></td>
+				<td><%=fetch_Boat.New_Total_Tax%></td>
+			 </tr>
+			 
+			 <tr>
+				<td><b>New Admin Fee </b></td>
+				<td><%=fetch_Boat.New_Admin_Fee%></td>
+			 </tr>
+			 
+		</table>
+		</div>
+<%
+			count = 0;
+			for each  rec in fetch_Boat.Boat
+			{
+				count = count + 1;
+				%>
+<div class="container" style="margin-top:3%;">
+			 <table class="table">
+		  <tr>
+	<th style = "background-color:#5C8374"class="mt-4" colspan="4"><h4 ><%=count%>. Boat Details - <%=rec.Boat_Manufacturer%></h4></th>
+</tr>
+<tr>
+	<td><b>Select the type of watercraft </b></td>
+	<td><%=rec.Select_the_type_of_watercraft%></td>
+	<td><b>Boat Model Year</b></td>
+	<td><%=rec.Boat_Model_Year%></td>
+	</tr><tr>
+	<td><b>Boat Manufacturer</b></td>
+	<td><%=rec.Boat_Manufacturer%></td>
+	<td><b>Boat Model</b></td>
+	<td><%=rec.Boat_Model%></td>
+	</tr><tr>
+	<td><b>Replacement Cost</b></td>
+	<td><%=rec.Replacement_Cost%></td>
+	<td><b>Actual Cash Value</b></td>
+	<td><%=rec.Actual_Cash_Value%></td>
+	</tr>
+<%
+				if(rec.Is_the_Principal_Operator_the_same_as_the_Applicant_Owner == "Yes")
+				{
+					%>
+<tr><td><input type="checkbox" checked disabled> <b> Is the Principal Operator the same as the Applicant/Owner?</b></td>
+	<td></td><td><b>First Name</b></td>
+	<td><%=rec.First_Name%></td>
+	</tr>
+	<tr>
+	<td></td><td></td><td><b>Last Name</b></td><td><%=rec.Last_Name%></td>
+	</tr>
+	<tr>
+	<td></td><td></td><td><b>Date of Birth</b></td><td><%=rec.Date_of_Birth.toString("dd-MM-yy")%></td>
+	</tr>
+<%
+				}
+				else
+				{
+					%>
+<tr><td><input type="checkbox" disabled> <b> Is the Principal Operator the same as the Applicant/Owner? </b></td>
+</tr>
+<%
+				}
+				%>
+</tr>	
+<tr>
+<td><b>Principal operators years of boating experience with vessels of a similar size and type.</b></td>
+	<td><%=rec.Principal_operator_s_years_of_boating_experience_with_vessels_of_a_similar_size_and_type%></td>
+</tr>
+<tr>
+<%
+				if(rec.Does_the_operator_hold_a_Pleasure_Craft_Operator_s_Card_PCOC == "Yes")
+				{
+					%>
+<td><input type="checkbox" checked disabled> <b> Does the operator hold a Pleasure Craft Operators Card (PCOC)?</b></td>
+<%
+				}
+				else
+				{
+					%>
+<td><input type="checkbox" disabled> <b> Does the operator hold a Pleasure Craft Operators Card (PCOC)?</b></td>
+<%
+				}
+				%>
+</tr>
+<tr>
+	<th style = "background-color:#8ADAB2" class="mt-4" colspan="4"><h4 >Quote & Coverages</h4></th>
+</tr>
+<tr>
+	<td><b>Select coverage for policy </b></td>
+	<td><%=rec.Select_coverage_for_policy%></td>
+	<td><b>Liability coverage</b></td>
+	<td><%=rec.Liability_coverage%></td>
+	</tr>
+	
+	<tr>
+	<td><b>Premium Per Year </b></td>
+	<td><%=rec.Premium_Per_Year%></td>
+	<td><b>Boat Coverage</b></td>
+	<td><%=rec.Boat_Coverage%></td>
+	</tr>
+	<tr>
+	<td><b>Deductible</b></td>
+	<td><%=rec.Deductible%></td>
+	<td><b>Salvage</b></td>
+	<td><%=rec.Salvage%></td>
+	</tr>
+	<tr>
+	<td><b>Personal Effects Coverage</b></td>
+	<td><%=rec.Personal_Effects_Coverage%></td>
+	<td><b>Pollution</b></td>
+	<td><%=rec.Pollution%></td>
+	</tr>
+	<tr>
+	<td><b>Navigational Equipment Coverage</b></td>
+	<td><%=rec.Navigational_Equipment_Coverage%></td>
+	<td><b>Removal of Wreckage</b></td>
+	<td><%=rec.Removal_of_Wreckage%></td>
+	</tr>
+	<tr>
+	<td><b>Emergency Towing Limit</b></td>
+	<td><%=rec.Emergency_Towing_Limit%></td>
+	<td><b>Uninsured/ Underinsured Boater Endorsement</b></td>
+	<td><%=rec.Uninsured_Underinsured_Boater_Endorsement%></td>
+	</tr>
+	<tr>
+	<td><b>Loss of Use Limit</b></td>
+	<td><%=rec.Loss_of_Use_Limit%></td>
+	</tr>
+<tr>
+	<th style = "background-color:#8ADAB2" class="mt-4" colspan="8"><h4 >Eligibility</h4></th>
+</tr>
+<tr>
+	<td colspan="8">Please review the following:</td>
+</tr>
+<tr>
+	<td colspan="8">The watercraft will be used in Atlantic/Pacific Coastal waters such and the Atlantic, Pacific or Artic Ocean including Hudsons Bay.</td>
+</tr>
+<tr>
+<%
+				if(rec.Do_any_of_the_above_statements_apply_to_the_watercraft_Atlantic_Pacific == "Yes")
+				{
+					%>
+<td colspan="8"><input type="checkbox" checked disabled> <b> Do any of the above statements apply to the watercraft - Atlantic/Pacific?</b></td>
+<%
+				}
+				else
+				{
+					%>
+<td colspan="8"><input type="checkbox" disabled> <b> Do any of the above statements apply to the watercraft - Atlantic/Pacific?</b></td>
+<%
+				}
+				%>
+</tr>
+<tr>
+	<td colspan="8">Please review the following:</td>
+</tr>
+<tr>
+	<td colspan="8">The watercraft is chartered or rented to others (bareboat charters).<br>
+	The watercraft is used to carry passengers or cargo for compensation, for any other commercial business purpose, or anything other than private pleasure use.<br>
+	The watercraft has existing/unrepaired damage.<br>
+	The watercraft has been modified from the original design or specs.<br>
+	The watercraft is operated south of the 40th parallel at any time or is primarily moored in the USA.<br>
+	The watercraft or engine is modified, homemade or its horsepower exceeds the manufacturers specifications.<br>
+	The watercraft is used for Parasailing / Paraskiing or Racing.<br>
+	The watercraft has propane or compressed natural gas (CNG) refrigerators.
+	</td>
+</tr>
+<tr>
+<%
+				if(rec.Do_any_of_the_above_statements_apply_to_the_watercraft_engine_Parasailing_propane == "Yes")
+				{
+					%>
+<td colspan="8"><input type="checkbox" checked disabled> <b> Do any of the above statements apply to the watercraft - engine&Parasailing&propane?</b></td>
+<%
+				}
+				else
+				{
+					%>
+<td colspan="8"><input type="checkbox" disabled> <b>Do any of the above statements apply to the watercraft - engine&Parasailing&propane?</b></td>
+<%
+				}
+				%>
+</tr>
+
+<tr>
+	<td colspan="8">Please review the following:</td>
+</tr>
+<tr>
+	<td colspan="8">Is the vessel layed up out of the water from November 30 - April 1 every year?<br>
+	Have all boat safety requirements been met as required by law (i.e. life jackets, etc.)?
+	</td>
+</tr>
+<tr>
+<%
+				if(rec.Do_any_of_the_above_apply_to_the_watercraft_safety_requirements == "Yes")
+				{
+					%>
+<td colspan="8"><input type="checkbox" checked disabled> <b> Do any of the above apply to the watercraft - safety requirements?</b></td>
+<%
+				}
+				else
+				{
+					%>
+<td colspan="8"><input type="checkbox" disabled> <b>Do any of the above apply to the watercraft - safety requirements?</b></td>
+<%
+				}
+				%>
+</tr>
+
+<tr>
+	<td colspan="8">Please review the following:</td>
+</tr>
+<tr>
+	<td colspan="8">The applicant/owner employs paid crew.<br>
+	The applicant/owner lives aboard the watercraft, or the watercraft is a primary residence.
+	</td>
+</tr>
+<tr>
+<%
+				if(rec.Do_any_of_the_above_apply_to_the_applicant_Owner_primary_residence == "Yes")
+				{
+					%>
+<td colspan="8"><input type="checkbox" checked disabled> <b> Do any of the above apply to the applicant Owner - primary residence?</b></td>
+<%
+				}
+				else
+				{
+					%>
+<td colspan="8"><input type="checkbox" disabled> <b>Do any of the above apply to the applicant Owner - primary residence?</b></td>
+<%
+				}
+				%>
+</tr>
+
+<tr>
+	<td colspan="8">Please review the following:</td>
+</tr>
+<%
+				if(rec.Has_the_principal_operator_had_any_motor_vehicle_claims_in_the_last_5_years == "Yes")
+				{
+					%>
+<tr><td colspan="8"><input type="checkbox" checked disabled> <b> Has the principal operator had any motor vehicle claims in the last 5 years?</b></td>
+</tr> <tr><td><b>How many</b></td>
+	<td><%=rec.How_many_motor_vehicle_claims%></td>
+ </tr>
+<%
+				}
+				else
+				{
+					%>
+<tr><td colspan="8"><input type="checkbox" disabled> <b>Has the principal operator had any motor vehicle claims in the last 5 years?</b></td></tr>
+<%
+				}
+				if(rec.Has_the_principal_operator_had_any_motor_vehicle_convictions_in_the_last_3_years == "Yes")
+				{
+					%>
+<tr><td colspan="8"><input type="checkbox" checked disabled> <b> Has the principal operator had any motor vehicle convictions in the last 3 years?</b></td>
+</tr> <tr><td><b>How many</b></td>
+	<td><%=rec.How_many_motor_vehicle_convictions%></td>
+ </tr>
+<%
+				}
+				else
+				{
+					%>
+<tr><td colspan="8"><input type="checkbox" disabled> <b>Has the principal operator had any motor vehicle convictions in the last 3 years?</b></td></tr>
+<%
+				}
+				if(rec.Has_the_principal_operator_had_their_driver_s_license_suspended == "Yes")
+				{
+					%>
+<tr><td colspan="8"><input type="checkbox" checked disabled> <b> Has the principal operator had their drivers license suspended?</b></td>
+</tr> <tr><td><b>When</b></td>
+	<td><%=rec.When%></td>
+ </tr>
+<%
+				}
+				else
+				{
+					%>
+<tr><td colspan="8"><input type="checkbox" disabled> <b>Has the principal operator had their drivers license suspended?</b></td></tr>
+<%
+				}
+				%>
+<tr>
+	<th style = "background-color:#8ADAB2" class="mt-4" colspan="8"><h4 >Boat Specs</h4></th>
+</tr>
+	<tr>
+	<td><b>Length</b></td>
+	<td><%=rec.Lengths%></td>
+	</tr>
+	<tr>
+	<td><b>Hull ID/Serial #</b></td>
+	<td><%=rec.Hull_ID_Serial%></td>
+	</tr>
+	<tr>
+	<td><b>Hull Type</b></td>
+	<td><%=rec.Hull_Type%></td>
+	</tr>
+	<tr>
+	<td><b>Other Hull Type</b></td>
+	<td><%=rec.Other_Hull_Type%></td>
+	</tr>
+	<tr>
+	<td><b>Estimated max. speed/b></td>
+	<td><%=rec.Estimated_max_speed%></td>
+	</tr>
+	
+	<tr>
+	<th style = "background-color:#8ADAB2" class="mt-4" colspan="8"><h4 >Main Engine</h4></th>
+</tr>
+	<tr>
+	<td><b>Types</b></td>
+	<td><%=rec.Types%></td>
+	</tr>
+	<tr>
+	<td><b>Fuel Type</b></td>
+	<td><%=rec.Fuel_Type%></td>
+	</tr>
+	<tr>
+	<td><b>Model Year</b></td>
+	<td><%=rec.Model_Year%></td>
+	</tr>
+	<tr>
+	<td><b>Manufacturer</b></td>
+	<td><%=rec.Manufacturer%></td>
+	</tr>
+	<tr>
+	<td><b>Serial #</b></td>
+	<td><%=rec.Serial%></td>
+	</tr>
+	<tr>
+	<td><b>Horsepower</b></td>
+	<td><%=rec.Horsepower%></td>
+	</tr>
+		<tr>
+	<th style = "background-color:#8ADAB2" class="mt-4" colspan="8"><h4 >Main Engine 2</h4></th>
+</tr>
+	<tr>
+	<td><b>Types</b></td>
+	<td><%=rec.Types1%></td>
+	</tr>
+	<tr>
+	<td><b>Fuel Type</b></td>
+	<td><%=rec.Fuel_Type1%></td>
+	</tr>
+	<tr>
+	<td><b>Model Year</b></td>
+	<td><%=rec.Model_Year1%></td>
+	</tr>
+	<tr>
+	<td><b>Manufacturer</b></td>
+	<td><%=rec.Manufacturer1%></td>
+	</tr>
+	<tr>
+	<td><b>Serial #</b></td>
+	<td><%=rec.Serial1%></td>
+	</tr>
+	<tr>
+	<td><b>Horsepower</b></td>
+	<td><%=rec.Horsepower1%></td>
+	</tr>
+	
+	<tr>
+	<th style = "background-color:#8ADAB2" class="mt-4" colspan="8"><h4 > Addons </h4></th>
+</tr>
+<%
+				if(rec.Add_a_trailer == "Yes")
+				{
+					%>
+<tr><td colspan="8"><input type="checkbox" checked disabled> <b> Add a trailer</b></td>
+</tr>
+<tr><td><b>Trailer Value</b></td>
+	<td><%=rec.Trailer_Value%></td>
+ </tr>
+  <tr><td><b>Trailer Model Year</b></td>
+	<td><%=rec.Trailer_Model_Year%></td>
+ </tr>
+  <tr><td><b>Trailer Manufacturer</b></td>
+	<td><%=rec.Trailer_Manufacturer%></td>
+ </tr>
+ <tr><td><b>Trailer VIN</b></td>
+	<td><%=rec.Trailer_VIN%></td>
+ </tr>
+  <tr><td><b>Trailer Length</b></td>
+	<td><%=rec.Trailer_Length%></td>
+ </tr>
+<%
+				}
+				else
+				{
+					%>
+<tr><td colspan="8"><input type="checkbox" disabled> <b>Add a trailer</b></td></tr>
+<%
+				}
+				if(rec.Add_a_tender == "Yes")
+				{
+					%>
+<tr><td colspan="8"><input type="checkbox" checked disabled> <b>Add a tender</b></td>
+</tr>
+<tr><td><b>Tender Value </b></td>
+	<td><%=rec.Tender_Value%></td>
+ </tr>
+  <tr><td><b>Tender Model Year</b></td>
+	<td><%=rec.Tender_Model_Year%></td>
+ </tr>
+  <tr><td><b>Tender Manufacturer</b></td>
+	<td><%=rec.Tender_Manufacturer%></td>
+ </tr>
+ <tr><td><b>Tender Serial #</b></td>
+	<td><%=rec.Tender_Serial%></td>
+ </tr>
+  <tr><td><b>Tender Length</b></td>
+	<td><%=rec.Tender_Length%></td>
+ </tr>
+<%
+				}
+				else
+				{
+					%>
+<tr><td colspan="8"><input type="checkbox" disabled> <b>Add a tender</b></td></tr>
+<%
+				}
+				if(rec.Add_an_auxiliary_motor == "Yes")
+				{
+					%>
+<tr><td colspan="8"><input type="checkbox" checked disabled> <b>Add an auxiliary motor</b></td>
+</tr>
+<tr><td><b>Aux Engine Value</b></td>
+	<td><%=rec.Aux_Engine_Value%></td>
+ </tr>
+  <tr><td><b>Aux Engine Model Year</b></td>
+	<td><%=rec.Aux_Engine_Model_Year%></td>
+ </tr>
+  <tr><td><b>Aux Engine Manufacturer</b></td>
+	<td><%=rec.Aux_Engine_Manufacturer%></td>
+ </tr>
+ <tr><td><b>Auxiliary Engine Serial #</b></td>
+	<td><%=rec.Auxiliary_Engine_Serial%></td>
+ </tr>
+  <tr><td><b>Aux Engine HP/Thrust</b></td>
+	<td><%=rec.Aux_Engine_HP_Thrust%></td>
+ </tr>
+<%
+				}
+				else
+				{
+					%>
+<tr><td colspan="8"><input type="checkbox" disabled> <b>Add an auxiliary motor</b></td></tr>
+<%
+				}
+				%>
+<tr>
+	<th style = "background-color:#8ADAB2" class="mt-4" colspan="8"><h4 >Financier info</h4></th>
+</tr>
+<%
+				if(rec.Is_this_boat_financed == "Yes")
+				{
+					%>
+<tr><td colspan="8"><input type="checkbox" checked disabled> <b>Is this boat financed</b></td>
+</tr>
+<tr><td><b>Leinholder</b></td>
+	<td><%=rec.Lein_holder.Name_of_Financier%></td>
+ </tr>
+  <tr><td><b>Name of Financier</b></td>
+	<td><%=rec.Name_of_Financier%></td>
+ </tr>
+  <tr><td><b> Address line1</b></td>
+	<td><%=rec.Address_line1%></td>
+ </tr>
+  <tr><td><b> Address line2</b></td>
+	<td><%=rec.Address_line2%></td>
+ </tr>
+ <tr><td><b>City</b></td>
+	<td><%=rec.City%></td>
+ </tr>
+  <tr><td><b>Province</b></td>
+	<td><%=rec.Province%></td>
+ </tr>
+ <tr><td><b>Postal Code</b></td>
+	<td><%=rec.Postal_Code%></td>
+ </tr>
+  <tr><td><b>Country</b></td>
+	<td><%=rec.Country%></td>
+ </tr>
+<%
+				}
+				else
+				{
+					%>
+<tr><td colspan="8"><input type="checkbox" disabled> <b>Is this boat financed</b></td></tr>
+<%
+				}
+				%>
+</table>
+	</div>
+<%
+			}
+		}
+	}
+	if(input.process == "TRAILER")
+	{
+		getTrailerqoute = Trailer_Policy_Change_Request[ID == input.recID];
+		f_tax1 = Tax_Lists[ID == getTrailerqoute.Override_Tax];
+		if(getTrailerqoute.count() > 0)
+		{
+			%>
+<div class="container" style="margin-top:3%;margin-bottom:3%;">
+			 <table class="table">
+			 <th style = "background-color:#8ADAB2;"colspan="4"><h4>Trailer Information - <%=getTrailerqoute.Quote_ID%> - Trailer - <%=getTrailerqoute.Deal_Type%> - Type- <%=getTrailerqoute.Select_Type%> </h4></th>
+			 <br>
+			 <tr>	
+	        <td style=colspan="4"><u><h6>Basic Info</h6></u></td>       	    
+			</tr>
+			 <tr>
+				<td><b>Deal Type</b></td>
+				<td><%=getTrailerqoute.Deal_Type%></td>
+			 </tr>
+			 <tr>
+				<td><b>Quote ID</b></td>
+				<td><%=getTrailerqoute.Quote_ID%></td>
+			 </tr>
+			  <tr>
+				<td><b>Quote Status</b></td>
+				<td><%=getTrailerqoute.Quote_Status%></td>
+			 </tr>	
+			 <tr>
+				<td><b>Policy Number</b></td>
+				<td><%=getTrailerqoute.Policy_Number%></td>
+			 </tr>		
+			<tr>
+				<td><b>Policy Status</b></td>
+				<td><%=getTrailerqoute.Policy_Status%></td>
+			 </tr>
+			<tr>
+				<td><b>Policy AutoRenewal Status</b></td>
+				<td><%=getTrailerqoute.Policy_AutoRenewal_Status%></td>
+			 </tr>
+			<tr>
+				<td><b>Policy Reason Code</b></td>
+				<td><%=getTrailerqoute.Policy_Reason_Code%></td>
+			 </tr>
+			<tr>	
+	        <td style=colspan="4"><u><h6>Other Information</h6></u></td>       	    
+			</tr>
+			<tr>
+				<td><b>Referral Reason</b></td>
+				<td><%=getTrailerqoute.Referral_Reason%></td>
+			 </tr>
+			<tr>
+				<td><b>Reason For Rejection</b></td>
+				<td><%=getTrailerqoute.Reason_For_Rejection1%></td>
+			 </tr>
+			<tr>	
+	        <td style=colspan="4"><u><h6>Customer Information</h6></u></td>       	    
+			</tr>
+			 <tr>
+				<td><b>Customer Name</b></td>
+				<td><%=getTrailerqoute.Insured_First_Name%> <%=getTrailerqoute.Insured_Last_Name%></td>
+			 </tr>	
+			  <tr>
+				<td><b>Insured First Name</b></td>
+				<td><%=getTrailerqoute.Insured_First_Name%></td>
+			 </tr>	
+			 <tr>
+				<td><b>Insured Middle Name</b></td>
+				<td><%=getTrailerqoute.Insured_Middle_Name%></td>
+			 </tr>	
+			   <tr>
+				<td><b>Insured Last Name</b></td>
+				<td><%=getTrailerqoute.Insured_Last_Name%></td>
+			</tr>	
+			   <tr>
+				<td><b>Email</b></td>
+				<td><%=getTrailerqoute.Email%></td>
+			 </tr>
+			   <tr>
+				<td><b>Phone</b></td>
+				<td><%=getTrailerqoute.Phone_Number%></td>
+			</tr>
+			   <tr>
+				<td><b>Date of Birth</b></td>
+				<td><%=getTrailerqoute.Date_of_Birth%></td>
+			</tr>
+			   <tr>
+				<td><b>Where Did You Find Us?</b></td>
+				<td><%=getTrailerqoute.Where_Did_You_Find_Us%></td>
+			 </tr>
+			 <tr>
+<%
+			if(getTrailerqoute.Where_Did_You_Find_Us == "Friend or Family")
+			{
+				%>
+<tr>
+			    <td><b>Referred By</b></td>	
+                <td><%=getTrailerqoute.Name%></td>
+			</tr>
+<%
+			}
+			if(getTrailerqoute.Where_Did_You_Find_Us == "Dealership")
+			{
+				%>
+<tr>
+			    <td><b>Referred By</b></td>	
+                <td><%=getTrailerqoute.Name_of_Dealership%></td>
+			</tr>
+<%
+			}
+			if(getTrailerqoute.Where_Did_You_Find_Us == "Campground")
+			{
+				%>
+<tr>
+			    <td><b>Referred By</b></td>	
+                <td><%=getTrailerqoute.Name_of_Campground%></td>
+				 </tr>
+<%
+			}
+			if(getTrailerqoute.Where_Did_You_Find_Us == "Marina")
+			{
+				%>
+<tr>
+			    <td><b>Referred By</b></td>	
+               <td><%=getTrailerqoute.Name_of_Marina%></td>
+             </tr>
+<%
+			}
+			if(getTrailerqoute.Where_Did_You_Find_Us == "Other")
+			{
+				%>
+<tr>
+			    <td><b>Referred By</b></td>	
+              <td><%=getTrailerqoute.Tell_us_more%></td>
+			 </tr>
+<%
+			}
+			%>
+<tr>	
+	        <td style=colspan="4"><u><h6>General Information</h6></u></td>       	    
+			</tr>
+			 <tr>
+				<td><b>Please select the province your trailer is located in</b></td>
+				<td><%=getTrailerqoute.Please_select_the_province_your_trailer_is_located_in%></td>
+			</tr>
+			  <tr>
+				<td><b>How many trailers would you like to insure?</b></td>
+				<td><%=getTrailerqoute.How_many_trailers_would_you_like_to_insure%></td>
+			</tr>
+		
+		 <tr>	
+	        <td style=colspan="4"><u><h6>Policy Details</h6></u></td>       	    
+			</tr>
+			 <tr>
+				<td><b>Inception Date</b></td>
+				<td><%=getTrailerqoute.Inception_Date%></td>
+			 </tr>
+			  <tr>
+				<td><b>Expiry Date</b></td>
+				<td><%=getTrailerqoute.Expiry_Date%></td>
+			</tr>
+			 <tr>
+				<td><b>Payment Date</b></td>
+				<td><%=getTrailerqoute.Payment_Date%></td>
+			</tr>	
+			<tr>
+				<td><b>Sales Date</b></td>
+				<td><%=getTrailerqoute.Sales_Date%></td>
+			</tr>
+			<tr>
+				<td><b>Bind Date</b></td>
+				<td><%=getTrailerqoute.Bind_Date%></td>
+			</tr>
+			<tr>
+				<td><b>Effective Date</b></td>
+				<td><%=getTrailerqoute.Inception_Date%></td>
+			</tr>
+			<tr>
+				<td><b>Last Modified Date</b></td>
+				<td><%=getTrailerqoute.Last_Modified_Date%></td>
+			</tr>
+			<tr>
+				<td><b>End Date</b></td>
+				<td><%=getTrailerqoute.Expiry_Date%></td>
+			</tr>
+			<td style=colspan="4"><u><h6>Mailing Address</h6></u></td>       	    
+			</tr>
+			  <tr>
+				<td><b>Country</b></td>
+				<td><%=getTrailerqoute.Country%></td>
+			 </tr>
+			 <tr>
+				<td><b>Address</b></td>
+				<td><%=getTrailerqoute.Address%></td>
+			</tr>
+			  <tr>
+				<td><b>Suite/Apt#</b></td>
+				<td><%=getTrailerqoute.Suite_Apt%></td>
+			 </tr>
+			 <tr>
+				<td><b>City</b></td>
+				<td><%=getTrailerqoute.City%></td>
+			</tr>
+			 <tr>
+				<td><b>Province</b></td>
+				<td><%=getTrailerqoute.Province%></td>
+			 </tr>
+			 <tr>
+				<td><b>Postal code/ZIP Code</b></td>
+				<td><%=getTrailerqoute.Postal_code_ZIP_Code%></td>
+			 </tr>
+			  <tr>	
+	        <td style=colspan="4"><u><h6>Payment</h6></u></td>       	    
+			</tr>
+			 <tr>
+				<td><b>Enter payment info</b></td>
+				<td><%=getTrailerqoute.Enter_payment_info%></td>
+			</tr>
+			 <tr>
+				<td><b>Total Premium (before tax)</b></td>
+				<td><%=getTrailerqoute.Total_Premium_before_tax%></td>
+			</tr>
+			 <tr>
+				<td><b>Fee</b></td>
+				<td><%=getTrailerqoute.Fee%></td>
+			</tr>
+			 <tr>
+				<td><b>Tax Province</b></td>
+				<td><%=getTrailerqoute.Tax_Province%></td>
+			</tr>
+			 <tr>
+				<td><b>Tax Precent</b></td>
+				<td><%=getTrailerqoute.Tax_Precent%></td>
+			</tr>
+			 <tr>
+				<td><b>Total Tax</b></td>
+				<td><%=getTrailerqoute.Total_Tax%></td>
+			</tr>
+			 <tr>
+				<td><b>Total Payable Premium(after tax)</b></td>
+				<td><%=getTrailerqoute.Total_Payable_Premium_after_tax%></td>
+			</tr>
+			
+			
+			  <tr>	
+	        <td style=colspan="4"><u><h6> New Premiums</h6></u></td>       	    
+			</tr>
+			 <tr>
+				<td><b>New Total Premium (before tax)</b></td>
+				<td><%=getTrailerqoute.New_Total_Premium_before_tax%></td>
+			</tr>
+			 <tr>
+				<td><b>New Tax Province</b></td>
+				<td><%=getTrailerqoute.New_Tax_Province%></td>
+			</tr>
+			 <tr>
+				<td><b>New Tax Percent</b></td>
+				<td><%=getTrailerqoute.New_Tax_Percent%></td>
+			</tr>
+			 <tr>
+				<td><b>New Total Tax</b></td>
+				<td><%=getTrailerqoute.New_Total_Tax%></td>
+			</tr>
+			 <tr>
+				<td><b>New Admin Fee</b></td>
+				<td><%=getTrailerqoute.New_Admin_Fee%></td>
+			</tr>
+			 <tr>
+				<td><b>New Total Payable Premium(after tax)</b></td>
+				<td><%=getTrailerqoute.New_Total_Payable_Premium_after_tax%></td>
+			</tr>
+			<tr>	
+	        <td style=colspan="4"><u><h6>Adjusted Premium</h6></u></td>       	    
+			</tr>
+			  <tr>
+				<td><b>Outstanding</b></td>
+				<td><%=getTrailerqoute.Outstanding%></td>
+			</tr>
+			  <tr>
+				<td><b>Prorated</b></td>
+				<td><%=getTrailerqoute.Prorated%></td>
+			 </tr>
+			  <tr>
+				<td><b>Tax</b></td>
+				<td><%=getTrailerqoute.Tax%></td>
+			</tr>
+			  <tr>
+				<td><b>Total</b></td>
+				<td><%=getTrailerqoute.Total%></td>
+			 </tr>
+			  <tr>
+				<td><b>Prorate From</b></td>
+				<td><%=getTrailerqoute.Prorate_From%></td>
+			</tr>
+			  <tr>
+				<td><b>Waive Fee?</b></td>
+<%
+			if(getTrailerqoute.Waive_Fee == true)
+			{
+				%>
+<td>Yes</td>
+<%
+			}
+			else
+			{
+				%>
+<td>No</td>
+<%
+			}
+			%>
+</tr>	
+
+<tr>	
+	        <td style=colspan="4"><u><h6>Policy Change Request Info</h6></u></td>       	    
+			</tr>
+			<tr>
+				<td><b>Effective Date</b></td>
+				<td><%=getTrailerqoute.Inception_Date%></td>
+			</tr>
+			  <tr>
+				<td><b>Spoke With</b></td>
+				<td><%=getTrailerqoute.Spoke_With%></td>
+			 </tr>
+			 
+			  <tr>
+				<td><b>Confirmed Client</b></td>
+<%
+			if(getTrailerqoute.Confirmed_Client == true)
+			{
+				%>
+<td>Yes</td>
+<%
+			}
+			else
+			{
+				%>
+<td>No</td>
+<%
+			}
+			%>
+</tr>	
+
+			 
+			  <tr>
+				<td><b>Update Email</b></td>
+				<td><%=getTrailerqoute.Update_Email%></td>
+			</tr>
+			  <tr>
+				<td><b>Update Phone</b></td>
+				<td><%=getTrailerqoute.Update_Phone%></td>
+			 </tr>
+			<tr>
+				<td><b>Confirmed Email/Phone</b></td>
+<%
+			if(getTrailerqoute.Confirmed_Email_Phone == true)
+			{
+				%>
+<td>Yes</td>
+<%
+			}
+			else
+			{
+				%>
+<td>No</td>
+<%
+			}
+			%>
+</tr>	
+<tr>
+				<td><b>X-Sell</b></td>
+<%
+			if(getTrailerqoute.X_Sell == true)
+			{
+				%>
+<td>Yes</td>
+<%
+			}
+			else
+			{
+				%>
+<td>No</td>
+<%
+			}
+			%>
+</tr>				
+ <tr>
+				<td><b>Highlights and Comments</b></td>
+				<td><%=getTrailerqoute.Highlights_and_Comments%></td>
+			 </tr>			
+<tr>	
+	        <td style=colspan="4"><u><h6>Admin Changes</h6></u></td>       	    
+			</tr>
+			<tr>
+				<td><b>Select Rate</b></td>
+				<td><%=getTrailerqoute.Select_Rate%></td>
+			</tr>
+			  <tr>
+				<td><b>Override Tax by Admin</b></td>
+				<td><%=getTrailerqoute.Override_Tax_by_Admin%></td>
+			 </tr>						
+			 <tr>
+				<td><b>Overriden Tax%</b></td>
+				<td><%=f_tax1.Tax%></td>
+			 </tr>	
+			 </table>
+			 </div>
+<%
+			count = 0;
+			for each  rec1 in getTrailerqoute.Trailer
+			{
+				count = count + 1;
+				%>
+<div class="container" style="margin-top:3%;">
+			 <table class="table">
+		  <tr>
+	<th  style = "background-color:#5C8374"class="mt-4" colspan="4"><h4 ><%=count%>. Trailer Details - <%=rec1.Trailer_Manufacturer%></h4></th>
+</tr>
+<tr>
+	<td><b>Select Trailer Type</b></td>
+	<td><%=rec1.Select_Trailer_Type%></td>
+	<td><b>Trailer Model Year</b></td>
+	<td><%=rec1.Trailer_Model_Year%></td>
+	</tr>
+	<tr>
+<%
+				if(rec1.Are_you_the_original_owner_of_the_trailer == "Yes")
+				{
+					%>
+<td><input type="checkbox" checked disabled> <b> Are you the original owner of the trailer?</b></td>
+<%
+				}
+				else
+				{
+					%>
+<td><input type="checkbox" disabled> <b> Are you the original owner of the trailer?</b></td>
+<%
+				}
+				%>
+<td></td>
+	<td><b>How long have you owned this trailer?</b></td>
+	<td><%=rec1.How_long_have_you_owned_this_trailer%></td>
+</tr>
+<tr>
+	<td><b>Actual Cash Value</b></td>
+	<td><%=rec1.Actual_Cash_Value%></td>
+<%
+				if(rec1.Is_your_trailer_parked_within_500_feet_of_a_body_of_water == "Yes")
+				{
+					%>
+<td><input type="checkbox" checked disabled> <b> Is your trailer parked within 50 feet of a body of water?</b></td>
+<%
+				}
+				else
+				{
+					%>
+<td><input type="checkbox" disabled> <b> Is your trailer parked within 50 feet of a body of water?</b></td>
+<%
+				}
+				%>
+</tr>
+<tr>
+<%
+				if(rec1.Is_the_trailer_permanently_or_seasonally_parked_at_an_accredited_campground == "Yes")
+				{
+					%>
+<td><input type="checkbox" checked disabled> <b> Is the trailer permanently parked at an accredited campground?</b></td>
+	<td></td>
+<%
+				}
+				else
+				{
+					%>
+<td><input type="checkbox" disabled> <b> Is the trailer permanently parked at an accredited campground?</b></td>
+			<td><b>Where is the trailer stored while not in use?</b></td>
+	         <td><%=rec1.Where_is_the_trailer_stored_while_not_in_use%></td>
+<%
+				}
+				%>
+</tr>
+<tr>
+<%
+				if(rec1.Is_the_trailer_removed_from_the_park_in_the_off_season == "Yes")
+				{
+					%>
+<td><input type="checkbox" checked disabled> <b>Is the trailer removed from the park in the off season?</b></td>
+<td></td>
+<td><b>Please provide address of storage location</b></td>
+<td><%=rec1.Please_provide_address_of_storage_location%></td>
+<%
+				}
+				else
+				{
+					%>
+<td><input type="checkbox"  disabled> <b>Is the trailer removed from the park in the off season?</b></td>
+<td></td>
+<%
+				}
+				%>
+<tr>
+<%
+				if(rec1.Do_you_have_a_deck == "Yes")
+				{
+					%>
+<td><input type="checkbox" checked disabled> <b>Do you have a deck?</b></td>
+<%
+				}
+				else
+				{
+					%>
+<td><input type="checkbox"  disabled> <b>Do you have a deck?</b></td>
+<%
+				}
+				%>
+</tr>
+<tr>
+<%
+				if(rec1.Do_you_have_a_screened_in_room_or_a_Florida_room == "Yes")
+				{
+					%>
+<td><input type="checkbox" checked disabled> <b>Do you have a screened in room or a Florida room?/b></td>
+<%
+				}
+				else
+				{
+					%>
+<td><input type="checkbox"  disabled> <b>Do you have a screened in room or a Florida room?</b></td>
+<%
+				}
+				%>
+</tr>
+		<tr>
+<%
+				if(rec1.Do_you_have_a_hard_awning == "Yes")
+				{
+					%>
+<td><input type="checkbox" checked disabled> <b>Do you have a hard awning?/b></td>
+<%
+				}
+				else
+				{
+					%>
+<td><input type="checkbox"  disabled> <b>Do you have a hard awning?</b></td>
+<%
+				}
+				%>
+</tr>
+			<tr>
+<%
+				if(rec1.Would_you_like_to_insure_a_golf_cart == "Yes")
+				{
+					%>
+<td><input type="checkbox" checked disabled> <b>Would you like to insure a golf cart?</b></td>
+		<td></td>
+<td><b>Number of Golf Carts</b></td>
+<td><%=rec1.Number_of_Golf_Cart%></td>
+<%
+				}
+				else
+				{
+					%>
+<td><input type="checkbox"  disabled> <b>Would you like to insure a golf cart?</b></td>
+<%
+				}
+				%>
+</tr>
+<%
+				if(rec1.Is_the_trailer_permanently_or_seasonally_parked_at_an_accredited_campground == "Yes")
+				{
+					%>
+<tr>
+	<th style = "background-color:#8ADAB2" class="mt-4" colspan="4"><h4 >Park Details</h4></th>
+</tr>
+	<tr>
+	<td ><b>Address Lines1</b></td>
+	<td><%=rec1.Address_Lines1%></td>
+	</tr>
+<tr>
+	<td><b>City</b></td>
+	<td><%=rec1.City%></td>
+	<td ><b>Province</b></td>
+	<td><%=rec1.Province%></td>
+	</tr>
+	<tr>
+	<td><b>PostalCode</b></td>
+	<td><%=rec1.PostalCode%></td>
+	<td ><b>Site Number</b></td>
+	<td><%=rec1.Site_Number%></td>
+	</tr>
+<%
+				}
+				%>
+<tr>
+	<th style = "background-color:#8ADAB2" class="mt-4" colspan="4"><h4 >Quote & Coverages</h4></th>
+</tr>
+<tr>
+	<td><b>Select coverage for policy</b></td>
+	<td><%=rec1.Select_coverage_for_policy%></td>
+	<td ><b>Premium Per Year</b></td>
+	<td><%=rec1.Premium_Per_Year%></td>
+	</tr>
+	<tr>
+<%
+				if(rec1.Overland_Water_Protection == true)
+				{
+					%>
+<td><input type="checkbox" checked disabled> <b> Overland Water Protection</b></td>
+<%
+				}
+				else
+				{
+					%>
+<td><input type="checkbox"  disabled> <b> Overland Water Protection</b></td>
+<%
+				}
+				%>
+<td></td>
+<td ><b>Trailer Coverage</b></td>
+	<td></td>
+</tr>
+<tr>
+	<td><b>Detached Private Structure Coverage (Sheds etc.)</b></td>
+	<td><%=rec1.Detached_Private_Structure_Coverage_Sheds_etc%></td>
+	<td ><b>Personal Property Coverage (T.V., Furniture etc.)</b></td>
+	<td><%=rec1.Personal_Property_Coverage_T_V_Furniture_etc%></td>
+	</tr>
+	<tr>
+	<td><b>Premises Liability</b></td>
+	<td><%=rec1.Premises_Liability%></td>
+	<td ><b>Deductible</b></td>
+	<td><%=rec1.Deductible%></td>
+	</tr>
+<tr>
+
+	<th style = "background-color:#8ADAB2" class="mt-4" colspan="4"><h4 >Additional Information</h4></th>
+</tr>
+	<tr>
+<%
+				if(rec1.Do_you_live_in_the_trailer_full_time_all_year_round_as_a_principal_residence == "Yes")
+				{
+					%>
+<td><input type="checkbox" checked  disabled> <b> Do you live in the trailer full time, all year round as a principal residence?</b></td>
+<td></td>
+<%
+				}
+				else
+				{
+					%>
+<td><input type="checkbox"   disabled> <b> Do you live in the trailer full time, all year round as a principal residence?</b></td>
+<%
+				}
+				%>
+</tr>
+<tr>
+<%
+				if(rec1.Is_the_unit_used_strictly_for_pleasure_purposes_with_no_rental_or_business_use_of_any_kind == "Yes")
+				{
+					%>
+<td><input type="checkbox" checked disabled> <b> Is the unit used strictly for pleasure purposes with no rental or business use of any kind?</b></td>
+<td></td>
+<%
+				}
+				else
+				{
+					%>
+<td><input type="checkbox" checked disabled> <b> Is the unit used strictly for pleasure purposes with no rental or business use of any kind?</b></td>
+<%
+				}
+				%>
+</tr>
+	<tr>
+<%
+				if(rec1.Is_there_any_heating_that_wasn_t_factory_installed_wood_stove_pellet_stove_etc == "Yes")
+				{
+					%>
+<td><input type="checkbox" checked disabled> <b>Is there any heating that wasn't factory installed? (wood stove, pellet stove, etc.)</b></td>
+		<td><b>Select the heating type</b></td>
+		<td><%=rec1.Heating_Type%></td>
+<%
+				}
+				else
+				{
+					%>
+<td><input type="checkbox"  disabled> <b>Is there any heating that wasn't factory installed? (wood stove, pellet stove, etc.)</b></td>
+<%
+				}
+				%>
+</tr>
+	<tr>
+<%
+				if(rec1.Is_this_a_dual_purpose_trailer_toy_hauler_horse_trailer == "Yes")
+				{
+					%>
+<td><input type="checkbox" checked disabled> <b>Is this a dual purpose trailer? (toy hauler/horse trailer)</b></td>
+	<td><b>Trailer Purpose Type</b></td>
+	<td><%=rec1.Trailer_Purpose_Type%></td>
+<%
+				}
+				else
+				{
+					%>
+<td><input type="checkbox"  disabled> <b>Is this a dual purpose trailer? (toy hauler/horse trailer)</b></td>
+	<td></td>
+<%
+				}
+				%>
+</tr>
+	<tr>
+<%
+				if(rec1.Are_there_any_modifications_to_the_trailer_ie_Addition_of_permanently_installed_solar_panels == "Yes")
+				{
+					%>
+<td><input type="checkbox" checked disabled> <b>Are there any modifications to the trailer? (ie. Addition of permanently installed solar panels)</b></td>
+	<td></td>
+	<td><b>Select the modification trailer type</b></td>
+	<td><%=rec1.select_the_modification_trailer_type%></td>
+<%
+				}
+				else
+				{
+					%>
+<td><input type="checkbox"  disabled> <b>Are there any modifications to the trailer? (ie. Addition of permanently installed solar panels)</b></td>
+<%
+				}
+				%>
+</tr>
+	<tr>
+<%
+				if(rec1.Is_the_trailer_motorized_and_able_to_travel_on_its_own_without_a_towing_vehicle == "Yes")
+				{
+					%>
+<td><input type="checkbox" checked disabled> <b>Is the trailer motorized and able to travel on its own without a towing vehicle</b></td>
+	<td></td>
+<%
+				}
+				else
+				{
+					%>
+<td><input type="checkbox"  disabled> <b>Is the trailer motorized and able to travel on its own without a towing vehicle</b></td>
+<%
+				}
+				%>
+</tr>
+	<tr>
+	<th style = "background-color:#8ADAB2" class="mt-4" colspan="4"><h4 >Trailer Specs</h4></th>
+</tr>
+<tr>
+	<td><b>Trailer Manufacturer</b></td>
+	<td><%=rec1.Trailer_Manufacturer%></td>
+	<td ><b>Trailer Model</b></td>
+	<td><%=rec1.Trailer_Model%></td>
+	</tr>	
+<tr>
+	<td><b>Trailer Length</b></td>
+	<td><%=rec1.Trailer_Length%></td>
+	</tr>
+	
+<tr>
+<%
+				if(rec1.Do_you_live_in_the_trailer_full_time_all_year_round_as_a_principal_residence == "Yes")
+				{
+					if(rec1.Add_Snowbird_Endorsement == true)
+					{
+						%>
+<td><input type="checkbox" checked disabled> <b>Do you live in the trailer full time, all year round as a principal residence?</b></td>
+	<td></td>
+<%
+					}
+					else
+					{
+						%>
+<td><input type="checkbox"  disabled> <b>Do you live in the trailer full time, all year round as a principal residence?</b></td>
+<%
+					}
+					%>
+</tr>	
+
+<tr>
+	<td><b>Non-Domestic Address</b></td>
+	<td><%=rec1.Non_Domestic_Address%></td>
+	</tr>
+	<tr>
+<%
+					if(rec1.Is_this_trailer_financed == "Yes")
+					{
+						%>
+<td><input type="checkbox" checked  disabled> <b>Is this trailer financed</b></td>
+	<td></td>
+	<td><b>Leinholder</b></td>
+	<td><%=rec1.Lein_holder.Name_of_Financier%></td>
+<%
+					}
+					else
+					{
+						%>
+<td><input type="checkbox"  disabled> <b>Is this trailer financed</b></td>
+<%
+					}
+					%>
+</tr>
+	<tr>
+<%
+				}
+				else
+				{
+					%>
+<tr>
+<%
+					if(rec1.Is_this_trailer_financed == "Yes")
+					{
+						%>
+<td><input type="checkbox" checked disabled> <b>Is this trailer financed</b></td>
+	<td></td>
+	<td><b>Leinholder</b></td>
+	<td><%=rec1.Lein_holder.Name_of_Financier%></td>
+	</tr>
+	<tr>
+	<td><b> Address line1</b></td>
+	<td><%=rec1.Address_line1%></td>
+	<td><b>Address line2</b></td>
+	<td><%=rec1.Address_line2%></td>
+	</tr>
+	<tr>
+	<td><b> City</b></td>
+	<td><%=rec1.City1%></td>
+	<td><b>Province</b></td>
+	<td><%=rec1.Province1%></td>
+	</tr>
+	<tr>
+	<td><b> Postal Code</b></td>
+	<td><%=rec1.Postal_Code%></td>
+	<td><b>Country</b></td>
+	<td><%=rec1.Country%></td>
+	</tr>
+<%
+					}
+					else
+					{
+						%>
+<td><input type="checkbox"  disabled> <b>Is this trailer financed</b></td>
+<%
+					}
+					%>
+</tr>
+<%
+				}
+				%>
+<th style = "background-color:#8ADAB2" class="mt-4" colspan="4"><h4 >Premium Breakdown</h4></th>
+</tr>
+	<tr>
+	<td><b>Trailer Base Premium</b></td>
+	<td><%=rec1.Trailer_Base_Premium%></td>
+	<td><b>Ol Water Protection Prem</b></td>
+	<td><%=rec1.Ol_Water_Protection_Prem%></td>
+	</tr>
+		<tr>
+	<td><b>Liability Prem</b></td>
+	<td><%=rec1.Liability_Prem%></td>
+	<td><b>Trailer over 25 years sur</b></td>
+	<td><%=rec1.Trailer_over_25_years_sur%></td>
+	</tr>
+	<tr>
+	<td><b>Seasonally Parked disc</b></td>
+	<td><%=rec1.Seasonally_Parked_disc%></td>
+	<td><b>Preferred Parks Disc</b></td>
+	<td><%=rec1.Preferred_Parks_Disc%></td>
+	</tr>
+	<tr>
+	<td><b>Detached Priv Stru Cov</b></td>
+	<td><%=rec1.Detached_Priv_Stru_Cov%></td>
+	<td><b>Personal Prop Cov</b></td>
+	<td><%=rec1.Personal_Prop_Cov%></td>
+	</tr>
+	<tr>
+	<td><b>Golf Prem Base</b></td>
+	<td><%=rec1.Golf_Prem_Base%></td>
+	<td><b>Golf Excess Prem</b></td>
+	<td><%=rec1.Golf_Excess_Prem%></td>
+	</tr>
+</table>
+	</div>
+<%
+			}
+		}
+	}
+	%>
+</body>
+	
+</html>
+<%
+
+}%>

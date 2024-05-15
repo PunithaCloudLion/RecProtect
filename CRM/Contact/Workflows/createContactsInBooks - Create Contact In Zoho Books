@@ -1,0 +1,90 @@
+getContacts = zoho.crm.getRecordById("Contacts",contactID);
+info getContacts.get("Full_Name");
+searchContacts = zoho.crm.searchRecords("Contacts","(Full_Name:equals:" + getContacts.get("Full_Name") + ")");
+// info searchContacts;
+// searchContacts.get(0).get("Customer_Display_Name") == getContacts.get("Full_Name") && 
+if(searchContacts.size() == 1)
+{
+	newName = getContacts.get("Full_Name");
+}
+else if(searchContacts.size() == 2)
+{
+	newName = getContacts.get("Full_Name") + "_" + "1";
+}
+else if(searchContacts.size() > 2)
+{
+	newText = searchContacts.get(0).get("Customer_Display_Name").getSuffix("_");
+	num = newText.toLong() + 1;
+	newName = getContacts.get("Full_Name") + "_" + num;
+	// 	info newName;
+}
+info "New Name " + newName;
+updateMap = Map();
+updateMap.put("Customer_Display_Name",newName);
+updateContactName = zoho.crm.updateRecord("Contacts",getContacts.get("id"),updateMap,Map());
+info "UpdateContactName " + updateContactName;
+//// getContacts = zoho.crm.getRecordById("Contacts",contactID);
+//// info getContacts;
+contList = list();
+contactMap = Map();
+parametersMap = Map();
+parametersMap.put("contact_type","customer");
+parametersMap.put("company_name",ifNull(getContacts.get("Full_Name"),""));
+contactMap.put("first_name",ifNull(getContacts.get("First_Name"),""));
+contactMap.put("last_name",ifNull(getContacts.get("Last_Name"),""));
+// contName = ifNull(getContacts.get("First_Name"),"") + " " + ifNull(getContacts.get("Last_Name"),"");
+// parametersMap.put("contact_name",contName);
+parametersMap.put("contact_name",newName);
+contactMap.put("email",getContacts.get("Email"));
+contactMap.put("mobile",getContacts.get("Mobile"));
+contactMap.put("phone",getContacts.get("Phone"));
+contactMap.put("is_primary_contact",true);
+billingAddressMap = Map();
+billingAddressMap.put("address",getContacts.get("Mailing_Address"));
+billingAddressMap.put("street2",getContacts.get("Mailing_Street"));
+billingAddressMap.put("city",getContacts.get("Mailing_City"));
+billingAddressMap.put("state",getContacts.get("Mailing_State"));
+billingAddressMap.put("country",getContacts.get("Mailing_Country"));
+billingAddressMap.put("zip",getContacts.get("Mailing_Zip"));
+parametersMap.put("billing_address",billingAddressMap);
+contList.add(contactMap);
+parametersMap.put("contact_persons",contList);
+customFieldsList = List();
+custom_map = Map();
+custom_map.put("label","zoho crm id");
+custom_map.put("value",getContacts.get("id"));
+customFieldsList.add(custom_map);
+parametersMap.put("custom_fields",customFieldsList);
+createContact = invokeurl
+[
+	url :"https://www.zohoapis.com/books/v3/contacts?organization_id=830242518"
+	type :POST
+	parameters:parametersMap.toString()
+	connection:"zbooks"
+];
+// 		info "Create Conatct " + createContact;
+if(createContact.get("code") == 0)
+{
+	//	sucessCount = sucessCount + 1;
+	updateMap = Map();
+	updateMap.put("Zoho_Books_ID",createContact.get("contact").get("contact_id"));
+	updateContactID = zoho.crm.updateRecord("Contacts",getContacts.get("id"),updateMap,Map());
+	info "update Contact " + updateContactID;
+}
+else
+{
+	info "Err " + getContacts.get("id");
+}
+// searchContacts = zoho.crm.searchRecords("Contacts","(Full_Name:equals:" + getContacts.get("Full_Name") + ")");
+// // info searchContacts.size();
+// if(searchContacts.size() == 1)
+// {
+// 	newName = getContacts.get("Full_Name");
+// }
+// else
+// {
+// 	number = searchContacts.size() - 1;
+// 	//	info number ;
+// 	newName = getContacts.get("Full_Name") + "_" + number;
+// }
+// // info newName;

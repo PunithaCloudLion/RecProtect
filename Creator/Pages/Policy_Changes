@@ -1,0 +1,15 @@
+<%{
+	if(input.type == "boat")
+	{
+		%>
+<div elName='zc-component' formLinkName='Boat_Policy_change_Request'params='zc_Header=false&zc_SuccMsg=Data Added Sucessfully!&zc_SubmitVal=Submit&zc_ResetVal=Reset&zc_HdrFontClr=Blue&zc_HdrFontSize=20&BoatQuote_ID=<%=input.policy_id%>'>Loading Form..</div>
+<%
+	}
+	if(input.type == "trailer")
+	{
+		%>
+<div elName='zc-component' formLinkName='Trailer_Policy_Change_Request'params='zc_Header=false&zc_SuccMsg=Data Added Sucessfully!&zc_SubmitVal=Submit&zc_ResetVal=Reset&zc_HdrFontClr=Blue&TrailerQuote_ID=<%=input.policy_id%>'>Loading Form..</div>
+<%
+	}
+
+}%>

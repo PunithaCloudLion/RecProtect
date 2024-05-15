@@ -1,0 +1,315 @@
+<%{
+	%>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.th_clssIn {
+  border: 1px solid #dddddd;
+  text-align: center;
+  padding: 9px;
+  font-weight: 800;
+  background:#f0e6e6;
+}
+.td_clssIn {
+  border: 1px solid #dddddd;
+  text-align: center;
+  padding: 10px;
+}
+.tr_clssIn {
+  border: 1px solid #dddddd;
+  text-align: center;
+  padding: 8px;
+}
+.mainOuterSection
+{
+	width : 90%;
+	padding: 40px;
+    display: flex;
+    justify-content: center;
+	
+}
+</style>
+<div class="mainOuterSection">
+<div style="width : 70%;border : 1px solid #dddddd;padding:30px;">
+<%
+	if(input.ViewOptionFor == "Boat")
+	{
+		getBoatInfo = BoatQuote[ID == input.recID];
+		%>
+<! ---- Main Form Data ------!>
+		
+		<div class="" style="margin-top:3%;">
+			 <table class="table">
+			 <th style = "background-color:#8ADAB2;text-align:left;padding: 10px 20px;font-size:18px;"colspan="4"><h4>Boat Information - <%=getBoatInfo.Quote_ID%> -  <%=input.ViewOptionFor%> - <%=getBoatInfo.Deal_Type%></h4></th>
+			 <tr><td><b style ="text-decoration:underline; font-size:16px"> Basic Information</b></td></tr> 
+			 <tr><td><b>Quote ID</b></td><td><%=getBoatInfo.Quote_ID%></td></tr>	
+			 <tr><td><b>Quote Status</b></td><td><%=getBoatInfo.Quote_Status%></td></tr>
+			 <tr><td><b>Policy Number</b></td><td><%=getBoatInfo.Policy_Number%></td></tr>
+			 <tr><td><b>Deal Type</b></td><td><%=getBoatInfo.Deal_Type%></td></tr>
+			 <tr><td><b>Referral Reason</b></td><td><%=getBoatInfo.Referral_Reason%></td></tr>
+			 <tr><td><b>Carrier</b></td><td><%=getBoatInfo.Carrier%></td></tr>
+			  <tr><td><b style ="text-decoration:underline; font-size:16px">Customer Information</b></td></tr>
+			 <tr><td><b>Customer Name</b></td><td><%=getBoatInfo.Customer_ID.First_Name%> <%=getBoatInfo.Customer_ID.Last_Name%></td></tr>
+			 <tr><td><b>Email</b></td><td><%=getBoatInfo.Email%></td></tr>
+			 <tr><td><b>Insured First Name</b></td><td><%=getBoatInfo.Insured_First_Name%></td></tr>
+			 <tr><td><b>Insured Last Name</b></td><td><%=getBoatInfo.Insured_Last_Name%></td></tr>
+			 <tr><td><b>Phone</b></td><td><%=getBoatInfo.Phone_Number%></td></tr>
+			 <tr><td><b>Date of Birth</b></td><td><%=getBoatInfo.Date_of_Birth%></td></tr>
+			 <tr><td><b>Where Did You Find Us?</b></td><td><%=getBoatInfo.Where_Did_You_Find_Us%></td></tr>
+<%
+		if(getBoatInfo.Where_Did_You_Find_Us == "Friend or Family")
+		{
+			%>
+<tr>
+			    <td><b>Referred By</b></td>	
+               <td><%=getBoatInfo.Name%></td>
+			</tr>
+<%
+		}
+		if(getBoatInfo.Where_Did_You_Find_Us == "Dealership")
+		{
+			%>
+<tr>
+			    <td><b>Referred By</b></td>	
+               <td><%=getBoatInfo.Name_of_Dealership%></td>
+			</tr>
+<%
+		}
+		if(getBoatInfo.Where_Did_You_Find_Us == "Campground")
+		{
+			%>
+<tr>
+			    <td><b>Referred By</b></td>	
+                <td><%=getBoatInfo.Name_of_Campground%></td>
+				 </tr>
+<%
+		}
+		if(getBoatInfo.Where_Did_You_Find_Us == "Marina")
+		{
+			%>
+<tr>
+			    <td><b>Referred By</b></td>	
+             <td><%=getBoatInfo.Name_of_Marina%></td>
+             </tr>
+<%
+		}
+		if(getBoatInfo.Where_Did_You_Find_Us == "Other")
+		{
+			%>
+<tr>
+			    <td><b>Referred By</b></td>	
+              	<td><%=getBoatInfo.Tell_us_more%></td>
+			 </tr>
+<%
+		}
+		%>
+<tr><td><b>Tell us more</b></td><td><%=getBoatInfo.Tell_us_more%></td></tr>
+			  <tr><td><b style ="text-decoration:underline; font-size:16px">Quote Information</b></td></tr>
+			 
+			 <tr><td><b>Boat approve for being over 15 years old?</b></td><td><%=getBoatInfo.Boat_approve_for_being_over_15_years_old%></td></tr>
+			
+			 <tr><td><b>Please select the province your boat is used in</b></td><td><%=getBoatInfo.Please_select_the_province_your_boat_is_used_in%></td></tr>
+			 
+			 <tr><td><b>How many boats would you like to insure?</b></td><td><%=getBoatInfo.How_many_boats_would_you_like_to_insure%></td></tr>
+			 <tr><td><b>Are there any additional names on the boat ownership ownership?</b></td><td><%=getBoatInfo.Are_there_any_additional_names_on_the_boat_ownership%></td></tr>
+<%
+		// if(getBoatInfo.Are_there_any_additional_names_on_the_boat_ownership1 == true)
+		if(getBoatInfo.Are_there_any_additional_names_on_the_boat_ownership == "Yes")
+		{
+			getBoatAdditionalName = Additional_Names[Boats == input.recID];
+			%>
+<tr><td><b style ="text-decoration:underline; font-size:16px">Additional Names</b></td></tr>
+<tr><td><b>Additional Insured First Name</b></td><td><%=getBoatAdditionalName.Additional_Insured_First_Name%></td></tr>
+			 <tr><td><b>Additional Insured Last Name</b></td><td><%=getBoatAdditionalName.Additional_Insured_Last_Name%></td></tr>
+<%
+		}
+		%>
+<tr><td><b style ="text-decoration:underline; font-size:16px"> Policy Details</b></td></tr>
+			 <tr><td><b>Inception Date</b></td><td><%=getBoatInfo.Inception_Date%></td></tr>
+			 <tr><td><b>Expiry Date</b></td><td><%=getBoatInfo.Expiry_Date%></td></tr>
+			  <tr><td><b>Payment Date</b></td><td><%=getBoatInfo.Payment_Date%></td></tr>
+			 <tr><td><b style ="text-decoration:underline; font-size:16px">Signature</b></td></tr>
+			 <tr><td><b>Signature</b></td><td><%=getBoatInfo.Signature%></td></tr> 
+			  <tr><td><b style ="text-decoration:underline; font-size:16px">Terms</b></td></tr>
+			 <tr><td><b>Agree to terms and conditions</b></td><td><%=getBoatInfo.Agree_to_terms_and_conditions%></td></tr> 
+			  <tr><td><b style ="text-decoration:underline; font-size:16px">Payment</b></td></tr>
+			   <tr><td><b>Enter Payment Info</b></td><td><%=getBoatInfo.Enter_payment_info%></td></tr>
+			   <tr><td><b>Is AutoCharge Enabled ?</b></td><td><%=getBoatInfo.Is_AutoCharge_Enabled%></td></tr>
+			    <tr><td><b>Total Premium (before tax)</b></td><td><%=getBoatInfo.Total_Premium_before_tax%></td></tr>
+			    <tr><td><b>Fee</b></td><td><%=getBoatInfo.Fee%></td></tr>
+			    <tr><td><b>Tax Province</b></td><td><%=getBoatInfo.Tax_Province%></td></tr>
+			    <tr><td><b>Tax Precent</b></td><td><%=getBoatInfo.Tax_Precent%></td></tr>
+			   <tr><td><b>Total Payable Premium(after tax)</b></td><td><%=getBoatInfo.Total_Tax%></td></tr>
+				<tr><td><b>Total Tax</b></td><td><%=getBoatInfo.Total_Payable_Premium_after_tax%></td></tr>
+				<tr><td><b style ="text-decoration:underline; font-size:16px">Mailing Address</b></td></tr>
+				<tr><td><b>Country</b></td><td><%=getBoatInfo.Country%></td></tr>
+				<tr><td><b>Address</b></td><td><%=getBoatInfo.Address%></td></tr>
+				<tr><td><b>Suite/Apt#</b></td><td><%=getBoatInfo.Suite_Apt%></td></tr>
+				<tr><td><b>City</b></td><td><%=getBoatInfo.City%></td></tr>
+				<tr><td><b>Province</b></td><td><%=getBoatInfo.Province%></td></tr>
+				<tr><td><b>Postal code/ZIP Code</b></td><td><%=getBoatInfo.Postal_code_ZIP_Code%></td></tr>
+			<tr><td><b style ="text-decoration:underline; font-size:16px">Adjusted Premium</b></td></tr>
+			 <tr><td><b>Outstanding</b></td><td><%=getBoatInfo.Outstanding%></td></tr>
+			 <tr><td><b>Prorated</b></td><td><%=getBoatInfo.Prorated%></td></tr>
+			 <tr><td><b>Tax</b></td><td><%=getBoatInfo.Tax%></td></tr>
+			 <tr><td><b>Total</b></td><td><%=getBoatInfo.Total%></td></tr>
+			 <tr><td><b>Prorate From</b></td><td><%=getBoatInfo.Prorate_From%></td></tr>
+			 <tr><td><b>Waive Fee?</b></td><td><%=getBoatInfo.Waive_Free%></td></tr>
+			  <tr><td><b>Reason For Rejection</b></td><td><%=getBoatInfo.Reason_For_Rejection1%></td></tr>
+			  <tr><td><b style ="text-decoration:underline; font-size:16px">Other Information</b></td></tr>
+			 <tr><td><b>Is Watercraft Ineligible For Coverage</b></td><td><%=getBoatInfo.Is_Watercraft_Ineligible_For_Coverage%></td></tr>
+			 <tr><td><b>Does Watercraft Meet Safety And Usage Requirements</b></td><td><%=getBoatInfo.Does_Watercraft_Meet_Safety_And_Usage_Requirements%></td></tr>
+			 <tr><td><b> Is Applicant Ineligible For Coverage</b></td><td><%=getBoatInfo.Is_Applicant_Ineligible_For_Coverage%></td></tr>
+			<tr><td><b> Is Operator Ineligible For Coverage</b></td><td><%=getBoatInfo.Is_Operator_Ineligible_For_Coverage%></td></tr>
+			 <tr><td><b>Renewal Eligibility</b></td><td><%=getBoatInfo.Renewal_Eligibility%></td></tr>
+			 <tr><td><b style ="text-decoration:underline; font-size:16px">Tax Exemption</b></td></tr>
+			 <tr><td><b>Override Tax by Admin</b></td><td><%=getBoatInfo.Override_Tax_by_Admin%></td></tr>
+			<tr><td><b>Overriden Tax%</b></td><td><%=getBoatInfo.Override_Tax.Tax%></td></tr>
+      </table>
+	    </div>		 
+		<! ---- Main Form Data  End------!>
+		<div style="margin-top: 2%;font-size: 18px;font-weight: 700;background-color: #8ADAB2;padding: 10px 20px;">Boats</div>
+		<table style="margin-top:2%">
+			<tr class="tr_clssIn">
+   			<th class="th_clssIn"></th>
+    		<th class="th_clssIn">Type</th>
+	 		<th class="th_clssIn">Manufacturer</th>
+	  		<th class="th_clssIn">Model</th>
+	   		<th class="th_clssIn"></th>
+  </tr>
+<%
+		count = 0;
+		for each  boatRec in getBoatInfo.Boat
+		{
+			count = count + 1;
+			%>
+<tr class="tr_clssIn">
+    				<td class="td_clssIn"><%=count%></td>
+	 				<td class="td_clssIn"><%=boatRec.Select_the_type_of_watercraft%></td>
+	  				<td class="td_clssIn"><%=boatRec.Boat_Manufacturer%></td>
+	  				<td class="td_clssIn"><%=boatRec.Boat_Model_Year%></td>
+    				<td class="td_clssIn"><u><a href="#Page:Boat_Subform_Page?recID=<%=boatRec.ID%>&zc_LoadIn=dialog">View Boat</a></u></td>
+  				</tr>
+<%
+		}
+		%>
+</table>
+<%
+	}
+	if(input.ViewOptionFor == "Trailer")
+	{
+		getTrailerInfo = TrailerQuote[ID == input.recID];
+		%>
+<! ---- Main Form Data ------!>
+		
+		<div class="" style="margin-top:3%;">
+			 <table class="table">
+			 <th style = "background-color:#8ADAB2;text-align:left;padding: 10px 20px;font-size:18px;" colspan="4"><h4>Trailer Information - <%=getTrailerInfo.Quote_ID%> -  <%=input.ViewOptionFor%> - <%=getTrailerInfo.Deal_Type%></h4></th>
+			 <tr><td><b style ="text-decoration:underline; font-size:16px"> Basic Information</b></td></tr>
+			 <tr><td><b>Quote ID</b></td><td><%=getTrailerInfo.Quote_ID%></td></tr>
+			 <tr><td><b>Quote Status</b></td><td><%=getTrailerInfo.Quote_Status%></td></tr>
+			 <tr><td><b>Policy Number</b></td><td><%=getTrailerInfo.Policy_Number%></td></tr>
+			 <tr><td><b>Deal Type</b></td><td><%=getTrailerInfo.Deal_Type%></td></tr>
+			  <tr><td><b>Referral Reason</b></td><td><%=getTrailerInfo.Referral_Reason%></td></tr>
+			  <tr><td><b>Carrier</b></td><td><%=getTrailerInfo.Carrier%></td></tr>
+			  <tr><td><b style ="text-decoration:underline; font-size:16px">Customer Information</b></td></tr>
+			  <tr><td><b>Customer Name</b></td><td><%=getTrailerInfo.Customer_ID.First_Name%> <%=getTrailerInfo.Customer_ID.Last_Name%></td></tr>
+			  <tr><td><b>Insured First Name</b></td><td><%=getTrailerInfo.Insured_First_Name%></td></tr>
+			 <tr><td><b>Insured Last Name</b></td><td><%=getTrailerInfo.Insured_Last_Name%></td></tr>
+			 <tr><td><b>Email</b></td><td><%=getTrailerInfo.Email%></td></tr>
+			  <tr><td><b>Phone</b></td><td><%=getTrailerInfo.Phone_Number%></td></tr>
+			  <tr><td><b>Date of Birth</b></td><td><%=getTrailerInfo.Date_of_Birth%></td></tr>
+			  <tr><td><b>Where Did You Find Us?</b></td><td><%=getTrailerInfo.Where_Did_You_Find_Us%></td></tr>
+			  <tr><td><b style ="text-decoration:underline; font-size:16px">General Information</b></td></tr>
+			  <tr><td><b>Please select the province your trailer is located in</b></td><td><%=getTrailerInfo.Please_select_the_province_your_trailer_is_located_in%></td></tr>
+			  <tr><td><b>How many trailers would you like to insure?</b></td><td><%=getTrailerInfo.How_many_trailers_would_you_like_to_insure%></td></tr>
+			  
+			  <tr><td><b>Are there any additional names on the trailer ownership?</b></td><td><%=getTrailerInfo.Are_there_any_additional_names_on_the_trailer_ownership%></td></tr>
+<%
+		if(getTrailerInfo.Are_there_any_additional_names_on_the_trailer_ownership == "Yes")
+		{
+			getAdditionalName = Additional_Names_Trailer[Trailer_Quotation == input.recID];
+			%>
+<tr><td><b style ="text-decoration:underline; font-size:16px">Additional Names</b></td></tr>
+<tr><td><b>Additional Insured First Name</b></td><td><%=getAdditionalName.First_Name%></td></tr>
+			 <tr><td><b>Additional Insured Last Name</b></td><td><%=getAdditionalName.Last_Name%></td></tr>
+<%
+		}
+		%>
+<tr><td><b style ="text-decoration:underline; font-size:16px">Policy Details</b></td></tr>
+			   <tr><td><b>Inception Date</b></td><td><%=getTrailerInfo.Inception_Date%></td></tr>
+			 <tr><td><b>Expiry Date</b></td><td><%=getTrailerInfo.Expiry_Date%></td></tr>
+			  <tr><td><b>Payment Date</b></td><td><%=getTrailerInfo.Payment_Date%></td></tr>
+			  <tr><td><b style ="text-decoration:underline; font-size:16px"> Mailing Address</b></td></tr>
+			  <tr><td><b>Country</b></td><td><%=getTrailerInfo.Country%></td></tr>
+			 <tr><td><b>Address</b></td><td><%=getTrailerInfo.Address%></td></tr>
+			 <tr><td><b>Suite/Apt#</b></td><td><%=getTrailerInfo.Suite_Apt%></td></tr>
+			 <tr><td><b>City</b></td><td><%=getTrailerInfo.City%></td></tr>
+			 <tr><td><b>Province</b></td><td><%=getTrailerInfo.Province%></td></tr>
+			 <tr><td><b>Postal code/ZIP Code</b></td><td><%=getTrailerInfo.Postal_code_ZIP_Code%></td></tr>
+			 <tr><td><b style ="text-decoration:underline; font-size:16px">Signature</b></td></tr>
+			 <tr><td><b>Signature</b></td><td><%=getTrailerInfo.Signature%></td></tr>
+			<tr><td><b style ="text-decoration:underline; font-size:16px">Terms</b></td></tr>
+			 <tr><td><b>Agree to terms and conditions</b></td><td><%=getTrailerInfo.Agree_to_terms_and_conditions%></td></tr>
+			 <tr><td><b style ="text-decoration:underline; font-size:16px">Payment</b></td></tr> 
+			  <tr><td><b>Enter Payment Info</b></td><td><%=getTrailerInfo.Enter_payment_info%></td></tr>
+			  <tr><td><b>Is AutoCharge Enabled ?</b></td><td><%=getTrailerInfo.Is_AutoCharge_Enabled%></td></tr>
+			  <tr><td><b>Total Premium (before tax)</b></td><td><%=getTrailerInfo.Total_Premium_before_tax%></td></tr>
+			  <tr><td><b>Fee</b></td><td><%=getTrailerInfo.Fee%></td></tr>
+			  <tr><td><b>Tax Province</b></td><td><%=getTrailerInfo.Tax_Province%></td></tr>
+			   <tr><td><b>Tax Precent</b></td><td><%=getTrailerInfo.Tax_Precent%></td></tr>
+			  <tr><td><b>Total Tax</b></td><td><%=getTrailerInfo.Total_Tax%></td></tr>
+			     <tr><td><b>Total Payable Premium(after tax)</b></td><td><%=getTrailerInfo.Total_Payable_Premium_after_tax%></td></tr>
+			 <tr><td><b style ="text-decoration:underline; font-size:16px">Adjusted Premium</b></td></tr>  
+			  <tr><td><b>Outstanding</b></td><td><%=getTrailerInfo.Outstanding%></td></tr>
+			 <tr><td><b>Prorated</b></td><td><%=getTrailerInfo.Prorated%></td></tr>
+			 <tr><td><b>Tax</b></td><td><%=getTrailerInfo.Tax%></td></tr>
+			 <tr><td><b>Total</b></td><td><%=getTrailerInfo.Total%></td></tr>
+			 <tr><td><b>Prorate From</b></td><td><%=getTrailerInfo.Prorate_From%></td></tr>
+			 <tr><td><b>Waive Fee?</b></td><td><%=getTrailerInfo.Waive_Fee%></td></tr>
+			 
+			  <tr><td><b>Renewal Eligibility</b></td><td><%=getTrailerInfo.Renewal_Eligibility%></td></tr>
+			  <tr><td><b style ="text-decoration:underline; font-size:16px">Tax Exemption</b></td></tr>  
+			  <tr><td><b>Override Tax by Admin</b></td><td><%=getTrailerInfo.Override_Tax_by_Admin%></td></tr>
+			 <tr><td><b>Overriden Tax%</b></td><td><%=getTrailerInfo.Override_Tax.Tax%></td></tr>
+			 </table>
+	    </div>		 
+		<! ---- Main Form Data  End------!>
+		<div style="margin-top: 2%;font-size: 18px;font-weight: 700;background-color: #8ADAB2;padding: 10px 20px;">Trailers</div>
+		<table style="margin-top:2%">
+			<tr class="tr_clssIn">
+    			<th class="th_clssIn"></th>
+    			<th class="th_clssIn">Type</th>
+	 			<th class="th_clssIn">Manufacturer</th>
+	  			<th class="th_clssIn">Model</th>
+	   			<th class="th_clssIn"></th>
+ 			</tr>
+<%
+		count = 0;
+		for each  trailerRec in getTrailerInfo.Trailer
+		{
+			count = count + 1;
+			%>
+<tr class="tr_clssIn">
+    				<td class="td_clssIn"><%=count%></td>
+	 				<td class="td_clssIn"><%=trailerRec.Select_Trailer_Type%></td>
+	  				<td class="td_clssIn"><%=trailerRec.Trailer_Manufacturer%></td>
+	  				<td class="td_clssIn"><%=trailerRec.Trailer_Model_Year%></td>
+    				<td class="td_clssIn"><u><a href="#Page:Trailer_Subform_Page?recID=<%=trailerRec.ID%>&zc_LoadIn=dialog">View Trailer</a></u></td>
+  				</tr>
+<%
+		}
+		%>
+</table>
+<%
+	}
+	%>
+</div>
+</div>
+<%
+
+}%>
